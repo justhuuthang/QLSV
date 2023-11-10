@@ -1,0 +1,70 @@
+﻿@model test3.Models.MonHoc
+
+@{
+    ViewBag.Title = "ThemMonHoc";
+    ViewBag.ac = 10;
+}
+
+<h2>Thêm môn học</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaMon, "Mã môn học", new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.MaMon, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MaMon, "", new { @class = "text-danger" })
+
+                @if (ViewBag.MaMonError != null)
+                {
+                    <p class="text-danger small-text" style="font-size: 12px;">@ViewBag.MaMonError</p>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TenMon, "Tên môn học", new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.TenMon, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TenMon, "", new { @class = "text-danger" })
+
+                @if (ViewBag.TenMonError != null)
+                {
+                    <p class="text-danger small-text" style="font-size: 12px;">@ViewBag.TenMonError</p>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaKhoa, "Mã khoa", new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @{
+                    test3.Models.QLSVEntities db = new test3.Models.QLSVEntities();
+                    List<test3.Models.Khoa> dsKhoa = db.Khoas.ToList();
+                }
+
+                @Html.DropDownListFor(model => model.MaKhoa, new SelectList(dsKhoa, "MaKhoa", "TenKhoa"), "Chọn khoa...", new { @class = "form-control", id = "MaKhoa" })
+
+                @Html.ValidationMessageFor(model => model.MaKhoa, "", new { @class = "text-danger" })
+
+                @if (ViewBag.MaKhoaError != null)
+                {
+                    <p class="text-danger small-text" style="font-size: 12px;">@ViewBag.MaKhoaError</p>
+                }
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Thêm" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

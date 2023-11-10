@@ -1,0 +1,52 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.Lop>
+@{
+    ViewBag.ac = 11;
+    ViewBag.Title = "DanhSachLop";
+}
+
+<h2>Danh sách lớp </h2>
+<form action="/QLL/Search" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            <input type="text" style="width:30%" name="search" class="form-control" placeholder="Nhập mã lớp hoặc mã khoa cần tìm kiếm" />
+            &nbsp;
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            @Html.ActionLink("Export", "ExportLop", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+        </div>
+    </div>
+</form>
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Mã lớp </th>
+                        <th>Mã khoa</th>
+                        <th>Edit</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var lop in Model)
+                        {
+                            <tr>
+                                <td>@lop.MaLop</td>
+                                <td>@lop.MaKhoa</td>
+                                <td><a href="~/QLL/Xoa?maLop=@lop.MaLop">Xóa</a></td>
+                                <td><a href="~/QLL/Suathongtin?maLop=@lop.MaLop">Sửa</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+        </div>
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachLop", new { page, pageSize = ViewBag.PageSize }))
+    </div>
+</div>

@@ -1,0 +1,67 @@
+﻿@model test3.Models.TinTuc
+
+@{
+    ViewBag.Title = "ThemMoiTinTuc";
+    ViewBag.ac = 6;
+}
+
+<h2>Thêm mới tin tức</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Id, "ID", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TieuDe, "Tiêu đề", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.TieuDe, new { htmlAttributes = new { @class = "form-control", type = "text" } })
+            @Html.ValidationMessageFor(model => model.TieuDe, "", new { @class = "text-danger" })
+            @if (ViewBag.TieuDeError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.TieuDeError</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NoiDung, "Nội dung", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            <!-- Thay đổi col-md-3 thành col-md-8 để có 8 cột -->
+            <textarea class="form-control" rows="8" id="NoiDung" name="NoiDung"></textarea> <!-- Sử dụng <textarea> với 8 dòng -->
+            @Html.ValidationMessageFor(model => model.NoiDung, "", new { @class = "text-danger" })
+            @if (ViewBag.NoiDungError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.NoiDungError</p>
+            }
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Ngay, "Ngày", new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Ngay, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+            @Html.ValidationMessageFor(model => model.Ngay, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Thêm" class="btn btn-default" />
+
+
+        </div>
+    </div>
+</div>
+}

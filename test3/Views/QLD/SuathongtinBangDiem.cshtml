@@ -1,0 +1,67 @@
+﻿@model test3.Models.BangDiem
+
+@{
+    ViewBag.Title = "SuathongtinBangDiem";
+}
+
+<h2>SuathongtinBangDiem</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>BangDiem</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.MSSV)
+    <div class="form-group">
+        @Html.LabelFor(model => model.MaMon, "Mã môn", new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @{
+                test3.Models.QLSVEntities db = new test3.Models.QLSVEntities();
+                List<test3.Models.MonHoc> dsMon = db.MonHocs.ToList();
+            }
+
+            @Html.DropDownListFor(model => model.MaMon, new SelectList(dsMon, "MaMon", "TenMon"), "Chọn Môn...", new { @class = "form-control", id = "MaMon" })
+            @Html.ValidationMessageFor(model => model.MaMon, "", new { @class = "text-danger" })
+            @if (ViewBag.MaMonError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.MaMonError</p>
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.MaLop, "Mã lớp", new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @{
+                List<test3.Models.Lop> dsLop = db.Lops.ToList();
+            }
+            @Html.DropDownListFor(model => model.MaLop, new SelectList(dsLop, "MaLop", "MaLop"), "Chọn lớp...", new { @class = "form-control", id = "MaLop" })
+
+            @Html.ValidationMessageFor(model => model.MaLop, "", new { @class = "text-danger" })
+            @if (ViewBag.MaLopError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.MaLopError</p>
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Diem, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Diem, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Diem, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

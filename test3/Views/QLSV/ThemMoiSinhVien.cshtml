@@ -1,0 +1,55 @@
+﻿@model test3.Models.Student
+@{
+    ViewBag.ac = 3;
+}
+
+<h2>Thêm sinh viên</h2>
+
+<form action="@Url.Action("AddNewStudent", "Student")" method="post">
+    <label for="FullName">Full Name:</label>
+    <input type="text" name="FullName" id="FullName" required>
+
+    <label for="DateOfBirth">Date of Birth:</label>
+    <input type="date" name="DateOfBirth" id="DateOfBirth" required>
+
+    <label for="Gender">Gender:</label>
+    <select name="Gender" id="Gender" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    <label for="Address">Address:</label>
+    <textarea name="Address" id="Address" required></textarea>
+
+    <label for="ContactNumber">Contact Number:</label>
+    <input type="text" name="ContactNumber" id="ContactNumber" required>
+
+    <label for="Email">Email:</label>
+    <input type="email" name="Email" id="Email" required>
+
+    <input type="submit" value="Add Student">
+</form>
+
+@*<script>
+        $(document).ready(function () {
+            $("#btn-them").click(function () {
+                var form = $('form')[0];
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "POST",
+                    data: formData,
+                    contentType: "application/json; charset = utf-8",
+                    url: window.location.origin + '/QLSV/ThemMoiSinhVien',
+                    processData: false,
+                    contentType: false,
+                    Cache: false,
+                    success: function (reponse) {
+                        window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
+                    },
+                    error: function (response) {
+                        alert("Thêm mới thất bại");
+                    }
+                })
+            })
+        })
+    </script>*@

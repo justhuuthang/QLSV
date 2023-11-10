@@ -1,0 +1,152 @@
+﻿@model test3.Models.SinhVien
+
+@{
+    ViewBag.Title = "Suathongtin";
+}
+
+<h2>Sửa thông tin sinh viên</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.MSSV)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SvUser,"Tài khoản", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @Html.EditorFor(model => model.SvUser, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+            @Html.ValidationMessageFor(model => model.SvUser, "", new { @class = "text-danger" })
+            @if (ViewBag.SvUserError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.SvUserError</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SvPass,"Mật khẩu", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @Html.EditorFor(model => model.SvPass, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+            @Html.ValidationMessageFor(model => model.SvPass, "", new { @class = "text-danger" })
+            @if (ViewBag.SvPassError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.SvPassError</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.HoTenSV,"Họ tên", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @Html.EditorFor(model => model.HoTenSV, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+            @Html.ValidationMessageFor(model => model.HoTenSV, "", new { @class = "text-danger" })
+            @if (ViewBag.HoTenSVError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.HoTenSVError</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NgaySinhSV,"Ngày sinh", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(model => model.NgaySinhSV, "{0:yyyy-MM-dd}", new { @class = "form-control", style = "width: 300px;", type = "date" })
+            @Html.ValidationMessageFor(model => model.NgaySinhSV, "", new { @class = "text-danger" })
+            @if (ViewBag.NgaySinhSVError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.NgaySinhSVError</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.GioiTinh, "Giới tính", new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            <div>
+                @Html.RadioButtonFor(model => model.GioiTinh, true, new { id = "Nam", name = "GioiTinh" }) Nam
+                @Html.RadioButtonFor(model => model.GioiTinh, false, new { id = "Nu", name = "GioiTinh" }) Nữ
+            </div>
+            @Html.ValidationMessageFor(model => model.GioiTinh, "", new { @class = "text-danger" })
+            @if (ViewBag.GioiTinhError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.GioiTinhError</p>
+            }
+
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.MaKhoa, "Mã khoa", new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @{
+                test3.Models.QLSVEntities db = new test3.Models.QLSVEntities();
+                List<test3.Models.Khoa> dsKhoa = db.Khoas.ToList();
+            }
+
+            @Html.DropDownListFor(model => model.MaKhoa, new SelectList(dsKhoa, "MaKhoa", "TenKhoa"), "Chọn khoa...", new { @class = "form-control", style = "width: 300px;", id = "MaKhoa" })
+
+            @Html.ValidationMessageFor(model => model.MaKhoa, "", new { @class = "text-danger" })
+            @if (ViewBag.MaKhoaError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.MaKhoaError</p>
+            }
+
+            <script>
+            $(document).ready(function () {
+                // Gán giá trị ban đầu từ ViewBag vào dropdownlist
+                $("#MaKhoa").val('@ViewBag.KhoaCu');
+            });
+            </script>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.MaLop, "Mã lớp", new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @{
+                List<test3.Models.Lop> dsLop = db.Lops.ToList();
+            }
+
+            @Html.DropDownListFor(model => model.MaLop, new SelectList(dsLop, "MaLop", "MaLop"), "Chọn lớp...", new { @class = "form-control", style = "width: 300px;", id = "MaLop" })
+
+            @Html.ValidationMessageFor(model => model.MaLop, "", new { @class = "text-danger" })
+            @if (ViewBag.MaLopError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.MaLopError</p>
+            }
+
+            <script>
+            $(document).ready(function () {
+                // Gán giá trị ban đầu từ ViewBag vào dropdownlist
+                $("#MaLop").val('@ViewBag.LopCu');
+            });
+            </script>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NoiSinh, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            @Html.EditorFor(model => model.NoiSinh, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+            @Html.ValidationMessageFor(model => model.NoiSinh, "", new { @class = "text-danger" })
+            @if (ViewBag.NoiSinhError != null)
+            {
+                <p class="text-danger small-text">@ViewBag.NoiSinhError</p>
+            }
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Lưu" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
