@@ -77,7 +77,7 @@
           <Property Name="StudentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FullName" Type="varchar" MaxLength="255" />
           <Property Name="DateOfBirth" Type="date" />
-          <Property Name="Gender" Type="bit" />
+          <Property Name="Gender" Type="bit" Nullable="false" />
           <Property Name="Address" Type="varchar" MaxLength="255" />
           <Property Name="ContactNumber" Type="varchar" MaxLength="20" />
           <Property Name="Email" Type="varchar" MaxLength="255" />
@@ -132,7 +132,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Students__ClassI__4AB81AF0">
+        <Association Name="FK__Students__ClassI__4CA06362">
           <End Role="Classes" Type="Self.Classes" Multiplicity="0..1" />
           <End Role="Students" Type="Self.Students" Multiplicity="*" />
           <ReferentialConstraint>
@@ -144,7 +144,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Students__Depart__4BAC3F29">
+        <Association Name="FK__Students__Depart__4D94879B">
           <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
           <End Role="Students" Type="Self.Students" Multiplicity="*" />
           <ReferentialConstraint>
@@ -204,11 +204,11 @@
             <End Role="Students" EntitySet="Students" />
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
-          <AssociationSet Name="FK__Students__ClassI__4AB81AF0" Association="Self.FK__Students__ClassI__4AB81AF0">
+          <AssociationSet Name="FK__Students__ClassI__4CA06362" Association="Self.FK__Students__ClassI__4CA06362">
             <End Role="Classes" EntitySet="Classes" />
             <End Role="Students" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="FK__Students__Depart__4BAC3F29" Association="Self.FK__Students__Depart__4BAC3F29">
+          <AssociationSet Name="FK__Students__Depart__4D94879B" Association="Self.FK__Students__Depart__4D94879B">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Students" EntitySet="Students" />
           </AssociationSet>
@@ -236,7 +236,7 @@
           <Property Name="HeadTeacher" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="MaxStudents" Type="Int32" />
           <NavigationProperty Name="Courses" Relationship="Self.FK_Courses_Classes" FromRole="Classes" ToRole="Courses" />
-          <NavigationProperty Name="Students" Relationship="QuanliSVModel.FK__Students__ClassI__4AB81AF0" FromRole="Class" ToRole="Student" />
+          <NavigationProperty Name="Students" Relationship="QuanliSVModel.FK__Students__ClassI__4CA06362" FromRole="Class" ToRole="Student" />
         </EntityType>
         <EntityType Name="Cours">
           <Key>
@@ -262,7 +262,7 @@
           <Property Name="DepartmentName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Departm__3D5E1FD2" FromRole="Departments" ToRole="Courses" />
-          <NavigationProperty Name="Students" Relationship="QuanliSVModel.FK__Students__Depart__4BAC3F29" FromRole="Department" ToRole="Student" />
+          <NavigationProperty Name="Students" Relationship="QuanliSVModel.FK__Students__Depart__4D94879B" FromRole="Department" ToRole="Student" />
         </EntityType>
         <EntityType Name="Grade">
           <Key>
@@ -310,15 +310,15 @@
           <Property Name="StudentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FullName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
-          <Property Name="Gender" Type="String" />
+          <Property Name="Gender" Type="Boolean" Nullable="false" />
           <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="ContactNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Grades" Relationship="Self.FK__Grades__StudentI__4316F928" FromRole="Students" ToRole="Grades" />
           <Property Name="ClassID" Type="Int32" />
           <Property Name="DepartmentID" Type="Int32" />
-          <NavigationProperty Name="Class" Relationship="QuanliSVModel.FK__Students__ClassI__4AB81AF0" FromRole="Student" ToRole="Class" />
-          <NavigationProperty Name="Department" Relationship="QuanliSVModel.FK__Students__Depart__4BAC3F29" FromRole="Student" ToRole="Department" />
+          <NavigationProperty Name="Class" Relationship="QuanliSVModel.FK__Students__ClassI__4CA06362" FromRole="Student" ToRole="Class" />
+          <NavigationProperty Name="Department" Relationship="QuanliSVModel.FK__Students__Depart__4D94879B" FromRole="Student" ToRole="Department" />
         </EntityType>
         <Association Name="FK_Courses_Classes">
           <End Role="Classes" Type="Self.Class" Multiplicity="0..1" />
@@ -424,16 +424,16 @@
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
-          <AssociationSet Name="FK__Students__ClassI__4AB81AF0" Association="QuanliSVModel.FK__Students__ClassI__4AB81AF0">
+          <AssociationSet Name="FK__Students__ClassI__4CA06362" Association="QuanliSVModel.FK__Students__ClassI__4CA06362">
             <End Role="Class" EntitySet="Classes" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="FK__Students__Depart__4BAC3F29" Association="QuanliSVModel.FK__Students__Depart__4BAC3F29">
+          <AssociationSet Name="FK__Students__Depart__4D94879B" Association="QuanliSVModel.FK__Students__Depart__4D94879B">
             <End Role="Department" EntitySet="Departments" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
         </EntityContainer>
-        <Association Name="FK__Students__ClassI__4AB81AF0">
+        <Association Name="FK__Students__ClassI__4CA06362">
           <End Type="QuanliSVModel.Class" Role="Class" Multiplicity="0..1" />
           <End Type="QuanliSVModel.Student" Role="Student" Multiplicity="*" />
           <ReferentialConstraint>
@@ -445,7 +445,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Students__Depart__4BAC3F29">
+        <Association Name="FK__Students__Depart__4D94879B">
           <End Type="QuanliSVModel.Department" Role="Department" Multiplicity="0..1" />
           <End Type="QuanliSVModel.Student" Role="Student" Multiplicity="*" />
           <ReferentialConstraint>

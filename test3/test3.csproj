@@ -212,11 +212,6 @@
     <Compile Include="Controllers\DangnhapController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\QLDController.cs" />
-    <Compile Include="Controllers\QLGVController.cs" />
-    <Compile Include="Controllers\QLKController.cs" />
-    <Compile Include="Controllers\QLLController.cs" />
-    <Compile Include="Controllers\QLMHController.cs" />
     <Compile Include="Controllers\QLSVController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -457,23 +452,8 @@
     <Content Include="Views\Dangnhap\Login.cshtml" />
     <Content Include="Views\Home\DashBoard.cshtml" />
     <Content Include="Views\QLSV\DanhSachSinhVien.cshtml" />
-    <Content Include="Views\QLSV\ThemMoiSinhVien.cshtml" />
     <Content Include="Views\QLSV\Suathongtin.cshtml" />
-    <Content Include="Views\QLGV\DanhSachGiangVien.cshtml" />
-    <Content Include="Views\QLGV\ThemMoiGiangVien.cshtml" />
-    <Content Include="Views\QLGV\Suathongtin.cshtml" />
-    <Content Include="Views\QLMH\DanhSachMonHoc.cshtml" />
-    <Content Include="Views\QLMH\ThemMonHoc.cshtml" />
-    <Content Include="Views\QLK\DanhSachKhoa.cshtml" />
-    <Content Include="Views\QLK\Suathongtin.cshtml" />
-    <Content Include="Views\QLK\ThemMoiKhoa.cshtml" />
-    <Content Include="Views\QLL\DanhSachLop.cshtml" />
-    <Content Include="Views\QLL\Suathongtin.cshtml" />
-    <Content Include="Views\QLL\ThemMoiLop.cshtml" />
-    <Content Include="Views\QLMH\Suathongtinmonhoc.cshtml" />
-    <Content Include="Views\QLD\DanhSachBangDiem.cshtml" />
-    <Content Include="Views\QLD\ThemBangDiem.cshtml" />
-    <Content Include="Views\QLD\SuathongtinBangDiem.cshtml" />
+    <Content Include="Views\QLSV\AddNewStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

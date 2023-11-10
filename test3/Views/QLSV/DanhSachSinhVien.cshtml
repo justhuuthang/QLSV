@@ -1,7 +1,7 @@
 ﻿@*@model List<test3.Models.SinhVien>*@
 @using PagedList.Mvc;
 @using PagedList;
-@model IPagedList<test3.Models.SinhVien>
+@model IPagedList<test3.Models.Student>
 @{
     ViewBag.ac = 2;
 }
@@ -31,16 +31,15 @@
             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thead>
                     <tr>
-                        <th>MSSV</th>
-                        @*
-                            <th>SvUser</th>
-                            <th>SvPass</th>*@
-                        <th>Họ tên</th>
+                        <th>Mã sinh viên</th>
+                        <th>Họ và tên</th>
                         <th>Ngày sinh</th>
                         <th>Giới tính</th>
+                        <th>Địa chỉ</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
                         <th>Mã lớp</th>
-                        <th>Nơi sinh</th>
-                        <th>Mã khoa </th>
+                        <th>Mã khoa</th>
                         <th>Edit</th>
                         <th>Edit</th>
                     </tr>
@@ -51,15 +50,17 @@
                         @foreach (var sinhVien in Model)
                         {
                             <tr>
-                                <td>@sinhVien.MSSV</td>
-                                <td>@sinhVien.HoTenSV</td>
-                                <td>@sinhVien.NgaySinhSV.ToString("dd/MM/yyyy")</td>
-                                <td>@(sinhVien.GioiTinh ? "Nam" : "Nữ")</td>
-                                <td>@sinhVien.MaLop</td>
-                                <td>@sinhVien.NoiSinh</td>
-                                <td>@sinhVien.MaKhoa</td>
-                                <td><a href="~/QLSV/Xoa?id=@sinhVien.MSSV">Xóa</a></td>
-                                <td><a href="~/QLSV/Suathongtin?id=@sinhVien.MSSV">Sửa</a></td>
+                                <td>@sinhVien.StudentID</td>
+                                <td>@sinhVien.FullName</td>
+                                <td>@sinhVien.DateOfBirth</td>
+                                <td>@(sinhVien.Gender ? "Nam" : "Nữ")</td>
+                                <td>@sinhVien.ClassID</td>
+                                <td>@sinhVien.Address</td>
+                                <td>@sinhVien.ContactNumber</td>
+                                <td>@sinhVien.Email</td>
+                                <td>@sinhVien.DepartmentID</td>
+                                <td><a href="~/QLSV/Xoa?id=@sinhVien.StudentID">Xóa</a></td>
+                                <td><a href="~/QLSV/Suathongtin?id=@sinhVien.StudentID">Sửa</a></td>
                             </tr>
                         }
 

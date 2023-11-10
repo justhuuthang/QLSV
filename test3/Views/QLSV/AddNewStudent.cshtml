@@ -5,7 +5,7 @@
 
 <h2>Thêm sinh viên</h2>
 
-<form action="@Url.Action("AddNewStudent", "Student")" method="post">
+<form action="@Url.Action("AddNewStudent", "QLSV")" method="post">
     <label for="FullName">Full Name:</label>
     <input type="text" name="FullName" id="FullName" required>
 
@@ -26,6 +26,12 @@
 
     <label for="Email">Email:</label>
     <input type="email" name="Email" id="Email" required>
+    <label for="ClassID">Class:</label>
+    <input type="text" name="ClassID" id="ClassID" required>
+
+    <label for="DepartmentID">Department:</label>
+    <input type="text" name="DepartmentID" id="DepartmentID" required>
+
 
     <input type="submit" value="Add Student">
 </form>

@@ -68,13 +68,13 @@ namespace test3.Controllers
         }
 
         [HttpGet]
-        public ActionResult ThemMoiSinhVien()
+        public ActionResult AddNewStudent()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult ThemMoiSinhVien(Student sinhVien)
+        public ActionResult AddNewStudent(Student sinhVien)
         {
             if (string.IsNullOrEmpty(sinhVien.FullName))
             {
@@ -123,11 +123,11 @@ namespace test3.Controllers
 
 
         [HttpGet]
-        public ActionResult Suathongtin(string id)
+        public ActionResult Suathongtin(int id)
         {
             QuanliSVEntities db = new QuanliSVEntities();
             var sinhVien = db.Students.Find(id);
-            if (sinhVien.Gender)
+            /*if (sinhVien.Gender)
             {
                 ViewBag.NamChecked = true;
                 ViewBag.NuChecked = false;
@@ -136,12 +136,12 @@ namespace test3.Controllers
             {
                 ViewBag.NamChecked = false;
                 ViewBag.NuChecked = true;
-            }
+            }*/
             ViewBag.KhoaCu = sinhVien.DepartmentID;
             ViewBag.LopCu = sinhVien.ClassID;
             return View(sinhVien);
         }
-        public ActionResult Xoa(string id)
+        public ActionResult Xoa(int id)
         {
             QuanliSVEntities db = new QuanliSVEntities();
             var sinhVien = db.Students.Find(id);
