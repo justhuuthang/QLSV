@@ -4,37 +4,95 @@
     ViewBag.Title = "Suathongtin";
 }
 
-<h2>Sửa thông tin sinh viên</h2>
+<h2>Thông tin sinh viên</h2>
+<form action="/QLSV/Suathongtin" method="post" class="form-horizontal">
+    @Html.HiddenFor(model => model.StudentID)
 
-<form action="@Url.Action("AddNewStudent", "QLSV")" method="post">
-    {
-    <label for="FullName">Full Name:</label>
-    @Html.TextBoxFor(model => model.FullName, new { @required = "required" })
+    <div class="form-group">
+        <label for="FullName" class="col-md-2 control-label">Full Name:</label>
+        <div class="col-md-3">
+            <input type="text" name="FullName" id="FullName" class="form-control" value="@Model.FullName" required>
+        </div>
+    </div>
 
-    <label for="DateOfBirth">Date of Birth:</label>
-    @Html.TextBoxFor(model => model.DateOfBirth, new { @type = "date", @required = "required" })
+    <div class="form-group">
+        <label for="DateOfBirth" class="col-md-2 control-label">Date of Birth:</label>
+        <div class="col-md-3">
+            <input type="date" name="DateOfBirth" id="DateOfBirth" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.DateOfBirth)" required>
+        </div>
+    </div>
 
-    <label for="Gender">Gender:</label>
-    @Html.DropDownListFor(model => model.Gender, new SelectList(new[]
-    {
-        new { Value = "Male", Text = "Male" },
-        new { Value = "Female", Text = "Female" }
-    }, "Value", "Text"), new { @required = "required" })
+    <div class="form-group">
+        <label for="Gender" class="col-md-2 control-label">Gender:</label>
+        <div class="col-md-3">
+            <select name="Gender" id="Gender" class="form-control" required>
+                <option value="Male" @(Model.Gender.ToString() == "Male" ? "selected" : "")>Male</option>
+                <option value="Female" @(Model.Gender.ToString() == "Female" ? "selected" : "")>Female</option>
+            </select>
+        </div>
+    </div>
 
-    <label for="Address">Address:</label>
-    @Html.TextAreaFor(model => model.Address, new { @required = "required" })
+    <div class="form-group">
+        <label for="Address" class="col-md-2 control-label">Address:</label>
+        <div class="col-md-3">
+            <textarea name="Address" id="Address" class="form-control" required>@Model.Address</textarea>
+        </div>
+    </div>
 
-    <label for="ContactNumber">Contact Number:</label>
-    @Html.TextBoxFor(model => model.ContactNumber, new { @required = "required" })
+    <div class="form-group">
+        <label for="ContactNumber" class="col-md-2 control-label">Contact Number:</label>
+        <div class="col-md-3">
+            <input type="text" name="ContactNumber" id="ContactNumber" class="form-control" value="@Model.ContactNumber" required>
+        </div>
+    </div>
 
-    <label for="Email">Email:</label>
-    @Html.TextBoxFor(model => model.Email, new { @type = "email", @required = "required" })
+    <div class="form-group">
+        <label for="Email" class="col-md-2 control-label">Email:</label>
+        <div class="col-md-3">
+            <input type="email" name="Email" id="Email" class="form-control" value="@Model.Email" required>
+        </div>
+    </div>
 
-    <label for="ClassID">Class ID:</label>
-    @Html.TextBoxFor(model => model.ClassID, new { @required = "required" })
+    <div class="form-group">
+        <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
+        <div class="col-md-3">
+            @{
+                test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+                List<test3.Models.Department> dsKhoa = db.Departments.ToList();
+            }
 
-    <label for="DepartmentID">Department ID:</label>
-    @Html.TextBoxFor(model => model.DepartmentID, new { @required = "required" })
+            @Html.DropDownListFor(model => model.DepartmentID, new SelectList(dsKhoa, "DepartmentID", "DepartmentName"), "Chọn khoa...", new { @class = "form-control", id = "DepartmentID" })
+        </div>
+    </div>
 
-    <input type="submit" value="Edit Student">
+    <div class="form-group">
+        <label class="control-label col-md-2" for="ClassID">Tên lớp:</label>
+        <div class="col-md-3">
+            @{
+                List<test3.Models.Class> dslop = db.Classes.ToList();
+            }
+
+            @Html.DropDownListFor(model => model.ClassID, new SelectList(dslop, "ClassID", "ClassName"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-3">
+
+            <input type="submit" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
+            <input type="submit" name="action" value="Xóa" class="btn btn-primary">
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "DanhSachSinhVien")
+    </div>
 </form>
+
+
+<style>
+    .btn-primary-margin {
+        margin-right: 70px;
+    }
+</style>
+

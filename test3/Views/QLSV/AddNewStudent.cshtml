@@ -7,59 +7,87 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
-            <form action="@Url.Action("AddNewStudent", "QLSV")" method="post">
-                <label for="FullName">Full Name:</label>
-                <input type="text" name="FullName" id="FullName" required>
+            <form action="@Url.Action("AddNewStudent", "QLSV")" method="post" class="form-horizontal">
+                @Html.HiddenFor(model => model.StudentID)
 
-                <label for="DateOfBirth">Date of Birth:</label>
-                <input type="date" name="DateOfBirth" id="DateOfBirth" required>
+                <div class="form-group">
+                    <label for="FullName" class="col-md-2 control-label">Full Name:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="FullName" id="FullName" class="form-control" required>
+                    </div>
+                </div>
 
-                <label for="Gender">Gender:</label>
-                <select name="Gender" id="Gender" required>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
+                <div class="form-group">
+                    <label for="DateOfBirth" class="col-md-2 control-label">Date of Birth:</label>
+                    <div class="col-md-3">
+                        <input type="date" name="DateOfBirth" id="DateOfBirth" class="form-control" required>
+                    </div>
+                </div>
 
-                <label for="Address">Address:</label>
-                <textarea name="Address" id="Address" required></textarea>
+                <div class="form-group">
+                    <label for="Gender" class="col-md-2 control-label">Gender:</label>
+                    <div class="col-md-3">
+                        <select name="Gender" id="Gender" class="form-control" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                </div>
 
-                <label for="ContactNumber">Contact Number:</label>
-                <input type="text" name="ContactNumber" id="ContactNumber" required>
+                <div class="form-group">
+                    <label for="Address" class="col-md-2 control-label">Address:</label>
+                    <div class="col-md-3">
+                        <textarea name="Address" id="Address" class="form-control" required></textarea>
+                    </div>
+                </div>
 
-                <label for="Email">Email:</label>
-                <input type="email" name="Email" id="Email" required>
-                <label for="ClassID">Class:</label>
-                <input type="text" name="ClassID" id="ClassID" required>
+                <div class="form-group">
+                    <label for="ContactNumber" class="col-md-2 control-label">Contact Number:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="ContactNumber" id="ContactNumber" class="form-control" required>
+                    </div>
+                </div>
 
-                <label for="DepartmentID">Department:</label>
-                <input type="text" name="DepartmentID" id="DepartmentID" required>
+                <div class="form-group">
+                    <label for="Email" class="col-md-2 control-label">Email:</label>
+                    <div class="col-md-3">
+                        <input type="email" name="Email" id="Email" class="form-control" required>
+                    </div>
+                </div>
 
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
+                    <div class="col-md-3">
+                        @{
+                            test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+                            List<test3.Models.Department> dsKhoa = db.Departments.ToList();
+                        }
 
-                <input type="submit" value="Add Student">
+                        @Html.DropDownListFor(model => model.DepartmentID, new SelectList(dsKhoa, "DepartmentID", "DepartmentName"), "Chọn khoa...", new { @class = "form-control", id = "DepartmentID" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="ClassID">Tên lớp:</label>
+                    <div class="col-md-3">
+                        @{
+                            List<test3.Models.Class> dslop = db.Classes.ToList();
+                        }
+
+                        @Html.DropDownListFor(model => model.ClassID, new SelectList(dslop, "ClassID", "ClassName"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-3">
+                        <input type="submit" value="Thêm" class="btn btn-primary">
+                    </div>
+                </div>
+
+                <div>
+                    @Html.ActionLink("Back to List", "DanhSachSinhVien")
+                </div>
             </form>
         </div>
     </div>
 </div>
-            @*<script>
-                    $(document).ready(function () {
-                        $("#btn-them").click(function () {
-                            var form = $('form')[0];
-                            var formData = new FormData(form);
-                            $.ajax({
-                                type: "POST",
-                                data: formData,
-                                contentType: "application/json; charset = utf-8",
-                                url: window.location.origin + '/QLSV/ThemMoiSinhVien',
-                                processData: false,
-                                contentType: false,
-                                Cache: false,
-                                success: function (reponse) {
-                                    window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
-                                },
-                                error: function (response) {
-                                    alert("Thêm mới thất bại");
-                                }
-                            })
-                        })
-                    })
-                </script>*@
