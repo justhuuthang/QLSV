@@ -76,43 +76,7 @@ namespace test3.Controllers
         [HttpPost]
         public ActionResult AddNewStudent(Student sinhVien)
         {
-            if (string.IsNullOrEmpty(sinhVien.FullName))
-            {
-                ViewBag.FullNameError = "Yêu cầu nhập họ tên sinh viên.";
-            }
-
-            if (sinhVien.DateOfBirth == null || sinhVien.DateOfBirth == DateTime.MinValue)
-            {
-                ModelState.Remove("DateOfBirth");
-                ViewBag.DateOfBirthError = "Yêu cầu nhập ngày sinh sinh viên.";
-            }
-            if (sinhVien.Gender == null)
-            {
-                ModelState.AddModelError("Gender", "Yêu cầu chọn giới tính sinh viên.");
-            }
-
-
-
-            if (sinhVien.DepartmentID == ' ')
-            {
-                ViewBag.DepartmentIDError = "Yêu cầu chọn mã khoa sinh viên.";
-            }
-
-            if (sinhVien.ClassID == ' ')
-            {
-                ViewBag.ClassIDError = "Yêu cầu chọn mã lớp sinh viên.";
-            }
-            if (string.IsNullOrEmpty(sinhVien.Address))
-            {
-                ViewBag.AddressError = "Yêu cầu nhập nơi sinh sinh viên.";
-            }
-
-            if (string.IsNullOrEmpty(sinhVien.FullName) ||
-                sinhVien.DateOfBirth == null || sinhVien.Gender == null || sinhVien.DepartmentID == 0 || sinhVien.ClassID == 0 || string.IsNullOrEmpty(sinhVien.Address))
-            {
-                ViewBag.ErrorMessage = "Yêu cầu nhập đủ thông tin.";
-                return View(sinhVien);
-            }
+            
 
             // Nếu dữ liệu hợp lệ, tiến hành thêm mới giảng viên
             QuanliSVEntities db = new QuanliSVEntities();
@@ -121,96 +85,74 @@ namespace test3.Controllers
             return RedirectToAction("DanhSachSinhVien");
         }
 
-
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {
+            if (id == 0)
+            {
+                // Giá trị id không hợp lệ, xử lý theo ý của bạn, có thể chuyển hướng hoặc hiển thị thông báo lỗi
+                return RedirectToAction("DanhSachSinhVien");
+            }
+
             QuanliSVEntities db = new QuanliSVEntities();
             var sinhVien = db.Students.Find(id);
-            /*if (sinhVien.Gender)
+
+            if (sinhVien == null)
             {
-                ViewBag.NamChecked = true;
-                ViewBag.NuChecked = false;
+                // Sinh viên không tồn tại, xử lý theo ý của bạn, có thể chuyển hướng hoặc hiển thị thông báo lỗi
+                return RedirectToAction("DanhSachSinhVien");
             }
-            else
-            {
-                ViewBag.NamChecked = false;
-                ViewBag.NuChecked = true;
-            }*/
+
             ViewBag.KhoaCu = sinhVien.DepartmentID;
             ViewBag.LopCu = sinhVien.ClassID;
             return View(sinhVien);
         }
-        public ActionResult Xoa(int id)
+
+        [HttpPost]
+        public ActionResult Suathongtin(Student sinhVien, string action)
         {
             QuanliSVEntities db = new QuanliSVEntities();
-            var sinhVien = db.Students.Find(id);
-            db.Students.Remove(sinhVien);
-            db.SaveChanges();
-            return RedirectToAction("DanhSachSinhVien");
-        }
-       
-        [HttpPost]
-        public ActionResult Suathongtin(Student sinhVien)
-        {
-            if (string.IsNullOrEmpty(sinhVien.FullName))
+            var existingStudent = db.Students.Find(sinhVien.StudentID);
+
+            if (existingStudent == null)
             {
-                ViewBag.FullNameError = "Yêu cầu nhập họ tên sinh viên.";
+                // Sinh viên không tồn tại, xử lý theo ý của bạn
+                return RedirectToAction("DanhSachSinhVien");
             }
 
-            if (string.IsNullOrEmpty(sinhVien.Address))
+            if (action == "Xóa")
             {
-                ViewBag.AddressError = "Yêu cầu nhập nơi sinh sinh viên.";
+                // Xóa sinh viên
+                db.Students.Remove(existingStudent);
+                db.SaveChanges();
+
+                return RedirectToAction("DanhSachSinhVien");
+            }
+            else if (action == "Sửa")
+            {
+                // Cập nhật thông tin sinh viên
+                existingStudent.FullName = sinhVien.FullName;
+                existingStudent.DateOfBirth = sinhVien.DateOfBirth;
+                existingStudent.Gender = sinhVien.Gender;
+                existingStudent.Address = sinhVien.Address;
+                existingStudent.ContactNumber = sinhVien.ContactNumber;
+                existingStudent.Email = sinhVien.Email;
+                existingStudent.ClassID = sinhVien.ClassID;
+                existingStudent.DepartmentID = sinhVien.DepartmentID;
+
+                // Lưu thay đổi vào cơ sở dữ liệu
+                db.SaveChanges();
+
+                return RedirectToAction("DanhSachSinhVien");
             }
 
-            if (sinhVien.DateOfBirth == null )
-            {
-                ModelState.Remove("DateOfBirth");
-                ViewBag.DateOfBirthError = "Yêu cầu nhập ngày sinh sinh viên.";
-            }
-
-            // Kiểm tra trường "Gender"
-            if (sinhVien.Gender == null)
-            {
-                ModelState.AddModelError("Gender", "Yêu cầu chọn giới tính sinh viên.");
-            }
-
-            if (sinhVien.DepartmentID == ' ')
-            {
-                ViewBag.DepartmentIDError = "Yêu cầu chọn mã khoa sinh viên.";
-            }
-
-            if (sinhVien.ClassID == ' ')
-            {
-                ViewBag.ClassIDError = "Yêu cầu chọn mã lớp sinh viên.";
-            }
-
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    QuanliSVEntities db = new QuanliSVEntities();
-                    db.Entry(sinhVien).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("DanhSachSinhVien");
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    foreach (var validationErrors in ex.EntityValidationErrors)
-                    {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            // In lỗi kiểm tra cụ thể
-                            Console.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
-                        }
-                    }
-                }
-            }
-
-            ViewBag.ErrorMessage = "Yêu cầu nhập đủ thông tin.";
+            // Nếu không phải là "Sửa" hoặc "Xóa", quay lại View với dữ liệu nhập
             return View(sinhVien);
         }
+
+
+
+
 
     }
 }
