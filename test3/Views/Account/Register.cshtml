@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+    Layout = null;
+}
+
+<main>
+    <head>
+        <title>@ViewBag.Title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--===============================================================================================-->
+        <link rel="icon" type="image/png" href="~/Content/login/images/icons/favicon.ico" />
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/bootstrap/css/bootstrap.min.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/fonts/iconic/css/material-design-iconic-font.min.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/animate/animate.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/css-hamburgers/hamburgers.min.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/animsition/css/animsition.min.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/select2/select2.min.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/daterangepicker/daterangepicker.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="~/Content/login/css/util.css">
+        <link rel="stylesheet" type="text/css" href="~/Content/login/css/main.css">
+        <!--===============================================================================================-->
+    </head>
+
+    <body>
+        <div class="limiter">
+            <div class="container-login100">
+                <div class="wrap-login100">
+                    <form action="~/Account/Register" method="post" login100-form validate-form">
+                        <span class="login100-form-title p-b-26">
+                            Register
+                        </span>
+
+                        <div class="wrap-input100 validate-input" @*data-validate="Valid email is: a@b.c"*@>
+                            <input class="input100" type="text" name="Username">
+                            <span class="focus-input100" data-placeholder="UserName"></span>
+                        </div>
+
+                        <div class="wrap-input100 validate-input" data-validate="Enter password">
+                            <span class="btn-show-pass">
+                                <i class="zmdi zmdi-eye"></i>
+                            </span>
+                            <input class="input100" type="password" name="Password">
+                            <span class="focus-input100" data-placeholder="Password"></span>
+                        </div>
+                        <div class="wrap-input100 validate-input" data-validate="Enter  ConfirmPassword">
+                            <span class="btn-show-pass">
+                                <i class="zmdi zmdi-eye"></i>
+                            </span>
+                            <input class="input100" type="password" name="ConfirmPassword">
+                            <span class="focus-input100" data-placeholder="Confirm Password"></span>
+                        </div>
+                        <div class="wrap-input100 validate-input" data-validate="Valid email is: a@b.c">
+                            <input class="input100" type="text" name="Email">
+                            <span class="focus-input100" data-placeholder="Email"></span>
+                        </div>
+                        <p style="color: red; font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif"></p>
+                        <div class="container-login100-form-btn">
+                            <div class="wrap-login100-form-btn">
+                                <div class="login100-form-bgbtn"></div>
+                                <button type="submit" class="login100-form-btn">
+                                    Sign Up
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <span style="font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif">You have any account? </span>
+                            <a href="~/Account/Login" style="display: inline-block;">Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="dropDownSelect1"></div>
+
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/animsition/js/animsition.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/bootstrap/js/popper.js"></script>
+        <script src="~/Content/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/select2/select2.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/daterangepicker/moment.min.js"></script>
+        <script src="~/Content/login/vendor/daterangepicker/daterangepicker.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/countdowntime/countdowntime.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Scripts/login/js/main.js"></script>
+
+    </body>
+</main>

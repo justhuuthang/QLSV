@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using test3.Models;
 using PagedList;
 using System.Data.Entity.Validation;
+using test3.App_Start;
 
 namespace test3.Controllers
 {
@@ -16,6 +17,7 @@ namespace test3.Controllers
     {
         // GET: QLSV
         QuanliSVEntities db = new QuanliSVEntities();
+        [Role_User(FunctionID = "Admin_XemDanhSach")]
         public ActionResult DanhSachSinhVien(int? page, int? pageSize)
         {
             if (page == null)

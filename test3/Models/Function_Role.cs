@@ -12,27 +12,19 @@ namespace test3.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Student
+    public partial class Function_Role
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Student()
+        public Function_Role()
         {
-            this.Grades = new HashSet<Grade>();
+            this.Roles = new HashSet<Role>();
         }
     
-        public int StudentID { get; set; }
-        public string FullName { get; set; }
-        public Nullable<System.DateTime> DateOfBirth { get; set; }
-        public bool Gender { get; set; }
-        public string Address { get; set; }
-        public string ContactNumber { get; set; }
-        public string Email { get; set; }
-        public Nullable<int> ClassID { get; set; }
-        public Nullable<int> DepartmentID { get; set; }
+        public string FunctionID { get; set; }
+        public string FuctionName { get; set; }
+        public string Nhom { get; set; }
     
-        public virtual Class Class { get; set; }
-        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Grade> Grades { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }
