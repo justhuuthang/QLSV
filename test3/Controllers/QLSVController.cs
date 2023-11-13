@@ -10,6 +10,7 @@ using test3.Models;
 using PagedList;
 using System.Data.Entity.Validation;
 using test3.App_Start;
+using System.Net;
 
 namespace test3.Controllers
 {
@@ -78,22 +79,15 @@ namespace test3.Controllers
         [HttpPost]
         public ActionResult AddNewStudent(Student sinhVien)
         {
-            QuanliSVEntities db = new QuanliSVEntities();
             string contactNumber = Request["ContactNumber"];
-            /*if (!string.IsNullOrEmpty(contactNumber))
+
+            var existingStudent = db.Students.FirstOrDefault(s => s.ContactNumber == contactNumber);
+
+            if (existingStudent != null)
             {
-                try
-                {
-                    var qr = db.Students.Where(s => s.ContactNumber == contactNumber);
-                    if (qr.Any())
-                    {
-                        db.Students.Add(sinhVien);
-            db.SaveChanges();
-            return RedirectToAction("DanhSachSinhVien");
-                    }
-                }
-                catch { }
-            }*/
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Sinh viên đã tồn tại với số điện thoại này.");
+            }
 
             db.Students.Add(sinhVien);
             db.SaveChanges();
