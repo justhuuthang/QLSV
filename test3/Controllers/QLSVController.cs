@@ -17,7 +17,7 @@ namespace test3.Controllers
     public class QLSVController : Controller
     {
         // GET: QLSV
-        QuaniSVEntities db = new QuaniSVEntities();
+        QuanliSVEntities db = new QuanliSVEntities();
         [Role_User(FunctionID = "Admin_XemDanhSach")]
         public ActionResult DanhSachSinhVien(int? page, int? pageSize)
         {
@@ -101,7 +101,7 @@ namespace test3.Controllers
                 return RedirectToAction("DanhSachSinhVien");
             }
 
-            QuaniSVEntities db = new QuaniSVEntities();
+            QuanliSVEntities db = new QuanliSVEntities();
             var sinhVien = db.Students.Find(id);
 
             if (sinhVien == null)
@@ -118,7 +118,7 @@ namespace test3.Controllers
         [HttpPost]
         public ActionResult Suathongtin(Student sinhVien, string action)
         {
-            QuaniSVEntities db = new QuaniSVEntities();
+            QuanliSVEntities db = new QuanliSVEntities();
             var existingStudent = db.Students.Find(sinhVien.StudentID);
 
             if (existingStudent == null)

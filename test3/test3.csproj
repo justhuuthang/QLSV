@@ -214,6 +214,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\QLDController.cs" />
+    <Compile Include="Controllers\QLLController.cs" />
     <Compile Include="Controllers\QLSVController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Global.asax.cs">
@@ -262,9 +264,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Student.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -473,6 +472,12 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Home\LoiPhanQuyen.cshtml" />
     <Content Include="Views\Role\DanhSachTaiKhoan.cshtml" />
+    <Content Include="Views\QLD\DanhSachDiem.cshtml" />
+    <Content Include="Views\QLD\Suathongtin.cshtml" />
+    <Content Include="Views\QLD\ThemMoiDiem.cshtml" />
+    <Content Include="Views\QLL\DanhSachLop.cshtml" />
+    <Content Include="Views\QLL\Suathongtin.cshtml" />
+    <Content Include="Views\QLL\ThemMoiLop.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

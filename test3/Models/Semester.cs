@@ -18,7 +18,6 @@ namespace test3.Models
         public Semester()
         {
             this.Courses = new HashSet<Cours>();
-            this.GradeBySemesters = new HashSet<GradeBySemester>();
             this.Grades = new HashSet<Grade>();
         }
     
@@ -29,8 +28,6 @@ namespace test3.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cours> Courses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GradeBySemester> GradeBySemesters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Grade> Grades { get; set; }
     }

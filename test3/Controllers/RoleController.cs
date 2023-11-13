@@ -11,7 +11,7 @@ namespace test3.Controllers
     public class RoleController : Controller
     {
         // GET: Role
-        QuaniSVEntities db = new QuaniSVEntities();
+        QuanliSVEntities db = new QuanliSVEntities();
         public ActionResult DanhSachTaiKhoan(int? page, int? pageSize)
         {
             if (page == null)

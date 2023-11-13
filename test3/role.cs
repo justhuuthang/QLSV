@@ -8,7 +8,7 @@ namespace test3
 {
     public class role
     {
-        QuaniSVEntities db= new QuaniSVEntities();
+        QuanliSVEntities db= new QuanliSVEntities();
         public bool kiemtra(int accountID, string functionID)
         {
             var dem = db.Roles.Count(m => m.AccountID == accountID & m.FunctionID == functionID);

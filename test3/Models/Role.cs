@@ -14,20 +14,11 @@ namespace test3.Models
     
     public partial class Role
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Role()
-        {
-            this.RolePermissions = new HashSet<RolePermission>();
-            this.UserRoles = new HashSet<UserRole>();
-        }
+        public int AccountID { get; set; }
+        public string FunctionID { get; set; }
+        public string Description { get; set; }
     
-        public int RoleID { get; set; }
-        public string RoleName { get; set; }
-        public string RoleDescription { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual Account Account { get; set; }
+        public virtual Function_Role Function_Role { get; set; }
     }
 }

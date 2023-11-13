@@ -14,15 +14,10 @@ namespace test3.Models
     
     public partial class Grade
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Grade()
-        {
-            this.GradeBySemesters = new HashSet<GradeBySemester>();
-        }
-    
         public int GradeID { get; set; }
         public Nullable<int> StudentID { get; set; }
         public Nullable<int> CourseID { get; set; }
+        public Nullable<decimal> Score { get; set; }
         public Nullable<System.DateTime> ExamDate { get; set; }
         public Nullable<int> SemesterID { get; set; }
         public Nullable<decimal> ScoreScale10 { get; set; }
@@ -30,8 +25,6 @@ namespace test3.Models
         public string LetterGrade { get; set; }
     
         public virtual Cours Cours { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GradeBySemester> GradeBySemesters { get; set; }
         public virtual Student Student { get; set; }
         public virtual Semester Semester { get; set; }
     }

@@ -12,19 +12,19 @@ namespace test3.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Permission
+    public partial class Function_Role
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Permission()
+        public Function_Role()
         {
-            this.RolePermissions = new HashSet<RolePermission>();
+            this.Roles = new HashSet<Role>();
         }
     
-        public int PermissionID { get; set; }
-        public string PermissionName { get; set; }
-        public string PermissionDescription { get; set; }
+        public string FunctionID { get; set; }
+        public string FuctionName { get; set; }
+        public string Nhom { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }

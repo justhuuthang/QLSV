@@ -10,9 +10,10 @@
             <PropertyRef Name="UserID" />
           </Key>
           <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Username" Type="varchar" MaxLength="50" />
-          <Property Name="PasswordHash" Type="varchar" MaxLength="255" />
-          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ConfirmPassword" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="Classes">
           <Key>
@@ -45,15 +46,13 @@
           <Property Name="DepartmentName" Type="varchar" MaxLength="255" />
           <Property Name="Description" Type="text" />
         </EntityType>
-        <EntityType Name="GradeBySemester">
+        <EntityType Name="Function_Role">
           <Key>
-            <PropertyRef Name="SemesterID" />
-            <PropertyRef Name="GradeID" />
+            <PropertyRef Name="FunctionID" />
           </Key>
-          <Property Name="SemesterID" Type="int" Nullable="false" />
-          <Property Name="StudentID" Type="nchar" MaxLength="10" />
-          <Property Name="GradeID" Type="int" Nullable="false" />
-          <Property Name="AverageScore" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="FunctionID" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="FuctionName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Nhom" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Grades">
           <Key>
@@ -62,35 +61,21 @@
           <Property Name="GradeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StudentID" Type="int" />
           <Property Name="CourseID" Type="int" />
+          <Property Name="Score" Type="decimal" Precision="5" Scale="2" />
           <Property Name="ExamDate" Type="date" />
           <Property Name="SemesterID" Type="int" />
           <Property Name="ScoreScale10" Type="decimal" Precision="5" Scale="2" />
           <Property Name="ScoreScale4" Type="decimal" Precision="2" Scale="1" />
           <Property Name="LetterGrade" Type="varchar" MaxLength="2" />
         </EntityType>
-        <EntityType Name="Permissions">
+        <EntityType Name="Role">
           <Key>
-            <PropertyRef Name="PermissionID" />
+            <PropertyRef Name="AccountID" />
+            <PropertyRef Name="FunctionID" />
           </Key>
-          <Property Name="PermissionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PermissionName" Type="varchar" MaxLength="50" />
-          <Property Name="PermissionDescription" Type="varchar" MaxLength="255" />
-        </EntityType>
-        <EntityType Name="RolePermissions">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RoleID" Type="int" />
-          <Property Name="PermissionID" Type="int" />
-        </EntityType>
-        <EntityType Name="Roles">
-          <Key>
-            <PropertyRef Name="RoleID" />
-          </Key>
-          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RoleName" Type="varchar" MaxLength="50" />
-          <Property Name="RoleDescription" Type="varchar" MaxLength="255" />
+          <Property Name="AccountID" Type="int" Nullable="false" />
+          <Property Name="FunctionID" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Scholarships">
           <Key>
@@ -126,15 +111,7 @@
           <Property Name="ClassID" Type="int" />
           <Property Name="DepartmentID" Type="int" />
         </EntityType>
-        <EntityType Name="UserRoles">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserID" Type="int" />
-          <Property Name="RoleID" Type="int" />
-        </EntityType>
-        <Association Name="FK__Courses__Departm__4F7CD00D">
+        <Association Name="FK__Courses__Departm__49C3F6B7">
           <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
           <ReferentialConstraint>
@@ -146,7 +123,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Courses__Semeste__5070F446">
+        <Association Name="FK__Courses__Semeste__4AB81AF0">
           <End Role="Semesters" Type="Self.Semesters" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
           <ReferentialConstraint>
@@ -158,7 +135,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Grades__CourseID__5441852A">
+        <Association Name="FK__Grades__CourseID__4CA06362">
           <End Role="Courses" Type="Self.Courses" Multiplicity="0..1" />
           <End Role="Grades" Type="Self.Grades" Multiplicity="*" />
           <ReferentialConstraint>
@@ -179,30 +156,6 @@
             </Principal>
             <Dependent Role="Grades">
               <PropertyRef Name="StudentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__RolePermi__Permi__571DF1D5">
-          <End Role="Permissions" Type="Self.Permissions" Multiplicity="0..1" />
-          <End Role="RolePermissions" Type="Self.RolePermissions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Permissions">
-              <PropertyRef Name="PermissionID" />
-            </Principal>
-            <Dependent Role="RolePermissions">
-              <PropertyRef Name="PermissionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__RolePermi__RoleI__5812160E">
-          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
-          <End Role="RolePermissions" Type="Self.RolePermissions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="RolePermissions">
-              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -230,30 +183,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__UserRoles__RoleI__5AEE82B9">
-          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
-          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="UserRoles">
-              <PropertyRef Name="RoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__UserRoles__UserI__5BE2A6F2">
-          <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
-          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Accounts">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="UserRoles">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Courses_Classes">
           <End Role="Classes" Type="Self.Classes" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
@@ -263,34 +192,6 @@
             </Principal>
             <Dependent Role="Courses">
               <PropertyRef Name="ClassID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GradeBySemester_Grades">
-          <End Role="Grades" Type="Self.Grades" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Grades">
-              <PropertyRef Name="GradeID" />
-            </Principal>
-            <Dependent Role="GradeBySemester">
-              <PropertyRef Name="GradeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GradeBySemester_Semesters">
-          <End Role="Semesters" Type="Self.Semesters" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Semesters">
-              <PropertyRef Name="SemesterID" />
-            </Principal>
-            <Dependent Role="GradeBySemester">
-              <PropertyRef Name="SemesterID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -306,43 +207,60 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Role_Accounts">
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Role" Type="Self.Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Role">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Role_Function">
+          <End Role="Function_Role" Type="Self.Function_Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Role" Type="Self.Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Function_Role">
+              <PropertyRef Name="FunctionID" />
+            </Principal>
+            <Dependent Role="Role">
+              <PropertyRef Name="FunctionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="QuanliSVModelStoreContainer">
           <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Classes" EntityType="Self.Classes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="GradeBySemester" EntityType="Self.GradeBySemester" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Function_Role" EntityType="Self.Function_Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Grades" EntityType="Self.Grades" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="RolePermissions" EntityType="Self.RolePermissions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Scholarships" EntityType="Self.Scholarships" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semesters" EntityType="Self.Semesters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Courses__Departm__4F7CD00D" Association="Self.FK__Courses__Departm__4F7CD00D">
+          <AssociationSet Name="FK__Courses__Departm__49C3F6B7" Association="Self.FK__Courses__Departm__49C3F6B7">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Courses__Semeste__5070F446" Association="Self.FK__Courses__Semeste__5070F446">
+          <AssociationSet Name="FK__Courses__Semeste__4AB81AF0" Association="Self.FK__Courses__Semeste__4AB81AF0">
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Grades__CourseID__5441852A" Association="Self.FK__Grades__CourseID__5441852A">
+          <AssociationSet Name="FK__Grades__CourseID__4CA06362" Association="Self.FK__Grades__CourseID__4CA06362">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
           <AssociationSet Name="FK__Grades__StudentI__4316F928" Association="Self.FK__Grades__StudentI__4316F928">
             <End Role="Students" EntitySet="Students" />
             <End Role="Grades" EntitySet="Grades" />
-          </AssociationSet>
-          <AssociationSet Name="FK__RolePermi__Permi__571DF1D5" Association="Self.FK__RolePermi__Permi__571DF1D5">
-            <End Role="Permissions" EntitySet="Permissions" />
-            <End Role="RolePermissions" EntitySet="RolePermissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK__RolePermi__RoleI__5812160E" Association="Self.FK__RolePermi__RoleI__5812160E">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="RolePermissions" EntitySet="RolePermissions" />
           </AssociationSet>
           <AssociationSet Name="FK__Students__ClassI__4CA06362" Association="Self.FK__Students__ClassI__4CA06362">
             <End Role="Classes" EntitySet="Classes" />
@@ -352,29 +270,21 @@
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Students" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="FK__UserRoles__RoleI__5AEE82B9" Association="Self.FK__UserRoles__RoleI__5AEE82B9">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="UserRoles" EntitySet="UserRoles" />
-          </AssociationSet>
-          <AssociationSet Name="FK__UserRoles__UserI__5BE2A6F2" Association="Self.FK__UserRoles__UserI__5BE2A6F2">
-            <End Role="Accounts" EntitySet="Accounts" />
-            <End Role="UserRoles" EntitySet="UserRoles" />
-          </AssociationSet>
           <AssociationSet Name="FK_Courses_Classes" Association="Self.FK_Courses_Classes">
             <End Role="Classes" EntitySet="Classes" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK_GradeBySemester_Grades" Association="Self.FK_GradeBySemester_Grades">
-            <End Role="Grades" EntitySet="Grades" />
-            <End Role="GradeBySemester" EntitySet="GradeBySemester" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GradeBySemester_Semesters" Association="Self.FK_GradeBySemester_Semesters">
-            <End Role="Semesters" EntitySet="Semesters" />
-            <End Role="GradeBySemester" EntitySet="GradeBySemester" />
-          </AssociationSet>
           <AssociationSet Name="FK_Grades_Semesters" Association="Self.FK_Grades_Semesters">
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="Grades" EntitySet="Grades" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Role_Accounts" Association="Self.FK_Role_Accounts">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Role" EntitySet="Role" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Role_Function" Association="Self.FK_Role_Function">
+            <End Role="Function_Role" EntitySet="Function_Role" />
+            <End Role="Role" EntitySet="Role" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -387,10 +297,11 @@
             <PropertyRef Name="UserID" />
           </Key>
           <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="UserRoles" Relationship="Self.FK__UserRoles__UserI__5BE2A6F2" FromRole="Accounts" ToRole="UserRoles" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ConfirmPassword" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Role_Accounts" FromRole="Accounts" ToRole="Role" />
         </EntityType>
         <EntityType Name="Class">
           <Key>
@@ -417,9 +328,9 @@
           <Property Name="SemesterID" Type="Int32" />
           <Property Name="ClassID" Type="Int32" />
           <NavigationProperty Name="Class" Relationship="Self.FK_Courses_Classes" FromRole="Courses" ToRole="Classes" />
-          <NavigationProperty Name="Department" Relationship="Self.FK__Courses__Departm__4F7CD00D" FromRole="Courses" ToRole="Departments" />
-          <NavigationProperty Name="Semester" Relationship="Self.FK__Courses__Semeste__5070F446" FromRole="Courses" ToRole="Semesters" />
-          <NavigationProperty Name="Grades" Relationship="Self.FK__Grades__CourseID__5441852A" FromRole="Courses" ToRole="Grades" />
+          <NavigationProperty Name="Department" Relationship="Self.FK__Courses__Departm__49C3F6B7" FromRole="Courses" ToRole="Departments" />
+          <NavigationProperty Name="Semester" Relationship="Self.FK__Courses__Semeste__4AB81AF0" FromRole="Courses" ToRole="Semesters" />
+          <NavigationProperty Name="Grades" Relationship="Self.FK__Grades__CourseID__4CA06362" FromRole="Courses" ToRole="Grades" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -428,20 +339,17 @@
           <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DepartmentName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Departm__4F7CD00D" FromRole="Departments" ToRole="Courses" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Departm__49C3F6B7" FromRole="Departments" ToRole="Courses" />
           <NavigationProperty Name="Students" Relationship="Self.FK__Students__Depart__4D94879B" FromRole="Departments" ToRole="Students" />
         </EntityType>
-        <EntityType Name="GradeBySemester">
+        <EntityType Name="Function_Role">
           <Key>
-            <PropertyRef Name="SemesterID" />
-            <PropertyRef Name="GradeID" />
+            <PropertyRef Name="FunctionID" />
           </Key>
-          <Property Name="SemesterID" Type="Int32" Nullable="false" />
-          <Property Name="StudentID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="GradeID" Type="Int32" Nullable="false" />
-          <Property Name="AverageScore" Type="Decimal" Precision="5" Scale="2" />
-          <NavigationProperty Name="Grade" Relationship="Self.FK_GradeBySemester_Grades" FromRole="GradeBySemester" ToRole="Grades" />
-          <NavigationProperty Name="Semester" Relationship="Self.FK_GradeBySemester_Semesters" FromRole="GradeBySemester" ToRole="Semesters" />
+          <Property Name="FunctionID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FuctionName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Nhom" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Role_Function" FromRole="Function_Role" ToRole="Role" />
         </EntityType>
         <EntityType Name="Grade">
           <Key>
@@ -450,44 +358,26 @@
           <Property Name="GradeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StudentID" Type="Int32" />
           <Property Name="CourseID" Type="Int32" />
+          <Property Name="Score" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="ExamDate" Type="DateTime" Precision="0" />
           <Property Name="SemesterID" Type="Int32" />
           <Property Name="ScoreScale10" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="ScoreScale4" Type="Decimal" Precision="2" Scale="1" />
           <Property Name="LetterGrade" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Cours" Relationship="Self.FK__Grades__CourseID__5441852A" FromRole="Grades" ToRole="Courses" />
-          <NavigationProperty Name="GradeBySemesters" Relationship="Self.FK_GradeBySemester_Grades" FromRole="Grades" ToRole="GradeBySemester" />
+          <NavigationProperty Name="Cours" Relationship="Self.FK__Grades__CourseID__4CA06362" FromRole="Grades" ToRole="Courses" />
           <NavigationProperty Name="Student" Relationship="Self.FK__Grades__StudentI__4316F928" FromRole="Grades" ToRole="Students" />
           <NavigationProperty Name="Semester" Relationship="Self.FK_Grades_Semesters" FromRole="Grades" ToRole="Semesters" />
         </EntityType>
-        <EntityType Name="Permission">
-          <Key>
-            <PropertyRef Name="PermissionID" />
-          </Key>
-          <Property Name="PermissionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PermissionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PermissionDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="RolePermissions" Relationship="Self.FK__RolePermi__Permi__571DF1D5" FromRole="Permissions" ToRole="RolePermissions" />
-        </EntityType>
-        <EntityType Name="RolePermission">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoleID" Type="Int32" />
-          <Property Name="PermissionID" Type="Int32" />
-          <NavigationProperty Name="Permission" Relationship="Self.FK__RolePermi__Permi__571DF1D5" FromRole="RolePermissions" ToRole="Permissions" />
-          <NavigationProperty Name="Role" Relationship="Self.FK__RolePermi__RoleI__5812160E" FromRole="RolePermissions" ToRole="Roles" />
-        </EntityType>
         <EntityType Name="Role">
           <Key>
-            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="AccountID" />
+            <PropertyRef Name="FunctionID" />
           </Key>
-          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RoleDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="RolePermissions" Relationship="Self.FK__RolePermi__RoleI__5812160E" FromRole="Roles" ToRole="RolePermissions" />
-          <NavigationProperty Name="UserRoles" Relationship="Self.FK__UserRoles__RoleI__5AEE82B9" FromRole="Roles" ToRole="UserRoles" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" />
+          <Property Name="FunctionID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Role_Accounts" FromRole="Role" ToRole="Accounts" />
+          <NavigationProperty Name="Function_Role" Relationship="Self.FK_Role_Function" FromRole="Role" ToRole="Function_Role" />
         </EntityType>
         <EntityType Name="Scholarship">
           <Key>
@@ -508,8 +398,7 @@
           <Property Name="SemesterName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="StartDate" Type="DateTime" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Semeste__5070F446" FromRole="Semesters" ToRole="Courses" />
-          <NavigationProperty Name="GradeBySemesters" Relationship="Self.FK_GradeBySemester_Semesters" FromRole="Semesters" ToRole="GradeBySemester" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Semeste__4AB81AF0" FromRole="Semesters" ToRole="Courses" />
           <NavigationProperty Name="Grades" Relationship="Self.FK_Grades_Semesters" FromRole="Semesters" ToRole="Grades" />
         </EntityType>
         <EntityType Name="Student">
@@ -529,25 +418,17 @@
           <NavigationProperty Name="Department" Relationship="Self.FK__Students__Depart__4D94879B" FromRole="Students" ToRole="Departments" />
           <NavigationProperty Name="Grades" Relationship="Self.FK__Grades__StudentI__4316F928" FromRole="Students" ToRole="Grades" />
         </EntityType>
-        <EntityType Name="UserRole">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="RoleID" Type="Int32" />
-          <NavigationProperty Name="Account" Relationship="Self.FK__UserRoles__UserI__5BE2A6F2" FromRole="UserRoles" ToRole="Accounts" />
-          <NavigationProperty Name="Role" Relationship="Self.FK__UserRoles__RoleI__5AEE82B9" FromRole="UserRoles" ToRole="Roles" />
-        </EntityType>
-        <Association Name="FK__UserRoles__UserI__5BE2A6F2">
-          <End Role="Accounts" Type="Self.Account" Multiplicity="0..1" />
-          <End Role="UserRoles" Type="Self.UserRole" Multiplicity="*" />
+        <Association Name="FK_Role_Accounts">
+          <End Role="Accounts" Type="Self.Account" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Role" Type="Self.Role" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Accounts">
               <PropertyRef Name="UserID" />
             </Principal>
-            <Dependent Role="UserRoles">
-              <PropertyRef Name="UserID" />
+            <Dependent Role="Role">
+              <PropertyRef Name="AccountID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -575,7 +456,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Courses__Departm__4F7CD00D">
+        <Association Name="FK__Courses__Departm__49C3F6B7">
           <End Role="Departments" Type="Self.Department" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
           <ReferentialConstraint>
@@ -587,7 +468,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Courses__Semeste__5070F446">
+        <Association Name="FK__Courses__Semeste__4AB81AF0">
           <End Role="Semesters" Type="Self.Semester" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
           <ReferentialConstraint>
@@ -599,7 +480,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Grades__CourseID__5441852A">
+        <Association Name="FK__Grades__CourseID__4CA06362">
           <End Role="Courses" Type="Self.Cours" Multiplicity="0..1" />
           <End Role="Grades" Type="Self.Grade" Multiplicity="*" />
           <ReferentialConstraint>
@@ -623,31 +504,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GradeBySemester_Grades">
-          <End Role="Grades" Type="Self.Grade" Multiplicity="1">
+        <Association Name="FK_Role_Function">
+          <End Role="Function_Role" Type="Self.Function_Role" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <End Role="Role" Type="Self.Role" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Grades">
-              <PropertyRef Name="GradeID" />
+            <Principal Role="Function_Role">
+              <PropertyRef Name="FunctionID" />
             </Principal>
-            <Dependent Role="GradeBySemester">
-              <PropertyRef Name="GradeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GradeBySemester_Semesters">
-          <End Role="Semesters" Type="Self.Semester" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Semesters">
-              <PropertyRef Name="SemesterID" />
-            </Principal>
-            <Dependent Role="GradeBySemester">
-              <PropertyRef Name="SemesterID" />
+            <Dependent Role="Role">
+              <PropertyRef Name="FunctionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -675,59 +542,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RolePermi__Permi__571DF1D5">
-          <End Role="Permissions" Type="Self.Permission" Multiplicity="0..1" />
-          <End Role="RolePermissions" Type="Self.RolePermission" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Permissions">
-              <PropertyRef Name="PermissionID" />
-            </Principal>
-            <Dependent Role="RolePermissions">
-              <PropertyRef Name="PermissionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__RolePermi__RoleI__5812160E">
-          <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
-          <End Role="RolePermissions" Type="Self.RolePermission" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="RolePermissions">
-              <PropertyRef Name="RoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__UserRoles__RoleI__5AEE82B9">
-          <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
-          <End Role="UserRoles" Type="Self.UserRole" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="UserRoles">
-              <PropertyRef Name="RoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="QuanliSVEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Accounts" EntityType="Self.Account" />
           <EntitySet Name="Classes" EntityType="Self.Class" />
           <EntitySet Name="Courses" EntityType="Self.Cours" />
           <EntitySet Name="Departments" EntityType="Self.Department" />
-          <EntitySet Name="GradeBySemesters" EntityType="Self.GradeBySemester" />
+          <EntitySet Name="Function_Role" EntityType="Self.Function_Role" />
           <EntitySet Name="Grades" EntityType="Self.Grade" />
-          <EntitySet Name="Permissions" EntityType="Self.Permission" />
-          <EntitySet Name="RolePermissions" EntityType="Self.RolePermission" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="Scholarships" EntityType="Self.Scholarship" />
           <EntitySet Name="Semesters" EntityType="Self.Semester" />
           <EntitySet Name="Students" EntityType="Self.Student" />
-          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
-          <AssociationSet Name="FK__UserRoles__UserI__5BE2A6F2" Association="Self.FK__UserRoles__UserI__5BE2A6F2">
+          <AssociationSet Name="FK_Role_Accounts" Association="Self.FK_Role_Accounts">
             <End Role="Accounts" EntitySet="Accounts" />
-            <End Role="UserRoles" EntitySet="UserRoles" />
+            <End Role="Role" EntitySet="Roles" />
           </AssociationSet>
           <AssociationSet Name="FK__Students__ClassI__4CA06362" Association="Self.FK__Students__ClassI__4CA06362">
             <End Role="Classes" EntitySet="Classes" />
@@ -737,15 +565,15 @@
             <End Role="Classes" EntitySet="Classes" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Courses__Departm__4F7CD00D" Association="Self.FK__Courses__Departm__4F7CD00D">
+          <AssociationSet Name="FK__Courses__Departm__49C3F6B7" Association="Self.FK__Courses__Departm__49C3F6B7">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Courses__Semeste__5070F446" Association="Self.FK__Courses__Semeste__5070F446">
+          <AssociationSet Name="FK__Courses__Semeste__4AB81AF0" Association="Self.FK__Courses__Semeste__4AB81AF0">
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Grades__CourseID__5441852A" Association="Self.FK__Grades__CourseID__5441852A">
+          <AssociationSet Name="FK__Grades__CourseID__4CA06362" Association="Self.FK__Grades__CourseID__4CA06362">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
@@ -753,13 +581,9 @@
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Students" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="FK_GradeBySemester_Grades" Association="Self.FK_GradeBySemester_Grades">
-            <End Role="Grades" EntitySet="Grades" />
-            <End Role="GradeBySemester" EntitySet="GradeBySemesters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GradeBySemester_Semesters" Association="Self.FK_GradeBySemester_Semesters">
-            <End Role="Semesters" EntitySet="Semesters" />
-            <End Role="GradeBySemester" EntitySet="GradeBySemesters" />
+          <AssociationSet Name="FK_Role_Function" Association="Self.FK_Role_Function">
+            <End Role="Function_Role" EntitySet="Function_Role" />
+            <End Role="Role" EntitySet="Roles" />
           </AssociationSet>
           <AssociationSet Name="FK__Grades__StudentI__4316F928" Association="Self.FK__Grades__StudentI__4316F928">
             <End Role="Students" EntitySet="Students" />
@@ -768,18 +592,6 @@
           <AssociationSet Name="FK_Grades_Semesters" Association="Self.FK_Grades_Semesters">
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="Grades" EntitySet="Grades" />
-          </AssociationSet>
-          <AssociationSet Name="FK__RolePermi__Permi__571DF1D5" Association="Self.FK__RolePermi__Permi__571DF1D5">
-            <End Role="Permissions" EntitySet="Permissions" />
-            <End Role="RolePermissions" EntitySet="RolePermissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK__RolePermi__RoleI__5812160E" Association="Self.FK__RolePermi__RoleI__5812160E">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="RolePermissions" EntitySet="RolePermissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK__UserRoles__RoleI__5AEE82B9" Association="Self.FK__UserRoles__RoleI__5AEE82B9">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="UserRoles" EntitySet="UserRoles" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -793,7 +605,8 @@
               <MappingFragment StoreEntitySet="Accounts">
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ConfirmPassword" ColumnName="ConfirmPassword" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -832,13 +645,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="GradeBySemesters">
-            <EntityTypeMapping TypeName="QuanliSVModel.GradeBySemester">
-              <MappingFragment StoreEntitySet="GradeBySemester">
-                <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
-                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
-                <ScalarProperty Name="GradeID" ColumnName="GradeID" />
-                <ScalarProperty Name="AverageScore" ColumnName="AverageScore" />
+          <EntitySetMapping Name="Function_Role">
+            <EntityTypeMapping TypeName="QuanliSVModel.Function_Role">
+              <MappingFragment StoreEntitySet="Function_Role">
+                <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
+                <ScalarProperty Name="FuctionName" ColumnName="FuctionName" />
+                <ScalarProperty Name="Nhom" ColumnName="Nhom" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -848,6 +660,7 @@
                 <ScalarProperty Name="GradeID" ColumnName="GradeID" />
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
                 <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
                 <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
                 <ScalarProperty Name="ScoreScale10" ColumnName="ScoreScale10" />
@@ -856,30 +669,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Permissions">
-            <EntityTypeMapping TypeName="QuanliSVModel.Permission">
-              <MappingFragment StoreEntitySet="Permissions">
-                <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
-                <ScalarProperty Name="PermissionName" ColumnName="PermissionName" />
-                <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RolePermissions">
-            <EntityTypeMapping TypeName="QuanliSVModel.RolePermission">
-              <MappingFragment StoreEntitySet="RolePermissions">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="QuanliSVModel.Role">
-              <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-                <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -917,15 +712,6 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserRoles">
-            <EntityTypeMapping TypeName="QuanliSVModel.UserRole">
-              <MappingFragment StoreEntitySet="UserRoles">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
