@@ -27,10 +27,10 @@
                 <div class="form-group">
                     <label for="Gender" class="col-md-2 control-label">Gender:</label>
                     <div class="col-md-3">
-                        <select name="Gender" id="Gender" class="form-control" required>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
+                        <div>
+                            @Html.RadioButtonFor(model => model.Gender, true, new { id = "Male", name = "Gender" }) Nam
+                            @Html.RadioButtonFor(model => model.Gender, false, new { id = "Female", name = "Gender" }) Nữ
+                        </div>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-3">
-                        <input type="submit" value="Thêm" class="btn btn-primary">
+                        <input type="button" value="Thêm" id="btn-them" class="btn btn-primary">
                     </div>
                 </div>
 
@@ -91,3 +91,31 @@
         </div>
     </div>
 </div>
+<script>
+        $(document).ready(function () {
+            $("#btn-them").click(function () {
+                var form = $('form')[0];
+                if (form.checkValidity() === false) {
+                    // Nếu biểu mẫu không hợp lệ, không gửi đi
+                    form.reportValidity();
+                    return;
+                }
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "POST",
+                    data: formData,
+                    contentType: "application/json; charset = utf-8",
+                    url: window.location.origin + '/QLSV/AddNewStudent',
+                    processData: false,
+                    contentType: false,
+                    Cache: false,
+                    success: function (reponse) {
+                        window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
+                    },
+                    error: function (response) {
+                        alert("Thêm mới thất bại");
+                    }
+                })
+            })
+        })
+    </script>

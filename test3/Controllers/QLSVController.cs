@@ -68,7 +68,7 @@ namespace test3.Controllers
 
             return View("DanhSachSinhVien", searchResults);
         }
-
+        [Role_User]
         [HttpGet]
         public ActionResult AddNewStudent()
         {
@@ -78,10 +78,23 @@ namespace test3.Controllers
         [HttpPost]
         public ActionResult AddNewStudent(Student sinhVien)
         {
-            
-
-            // Nếu dữ liệu hợp lệ, tiến hành thêm mới giảng viên
             QuanliSVEntities db = new QuanliSVEntities();
+            string contactNumber = Request["ContactNumber"];
+            /*if (!string.IsNullOrEmpty(contactNumber))
+            {
+                try
+                {
+                    var qr = db.Students.Where(s => s.ContactNumber == contactNumber);
+                    if (qr.Any())
+                    {
+                        db.Students.Add(sinhVien);
+            db.SaveChanges();
+            return RedirectToAction("DanhSachSinhVien");
+                    }
+                }
+                catch { }
+            }*/
+
             db.Students.Add(sinhVien);
             db.SaveChanges();
             return RedirectToAction("DanhSachSinhVien");

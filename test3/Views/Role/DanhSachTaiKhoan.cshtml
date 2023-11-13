@@ -1,0 +1,40 @@
+﻿@model IEnumerable<test3.Models.Account>
+
+@{
+    ViewBag.Title = "DanhSachTaiKhoan";
+}
+
+<h2>DanhSachTaiKhoan</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            <a href="~/Role/Phanquyen?AcoountID=@item.UserID">Phân quyền</a>
+        </td>
+    </tr>
+}
+
+</table>

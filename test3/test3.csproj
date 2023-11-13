@@ -215,6 +215,7 @@
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QLSVController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -471,6 +472,7 @@
     <Content Include="Views\QLSV\AddNewStudent.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Home\LoiPhanQuyen.cshtml" />
+    <Content Include="Views\Role\DanhSachTaiKhoan.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

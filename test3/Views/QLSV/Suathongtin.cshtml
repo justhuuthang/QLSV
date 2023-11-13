@@ -25,10 +25,10 @@
     <div class="form-group">
         <label for="Gender" class="col-md-2 control-label">Gender:</label>
         <div class="col-md-3">
-            <select name="Gender" id="Gender" class="form-control" required>
-                <option value="Male" @(Model.Gender.ToString() == "Male" ? "selected" : "")>Male</option>
-                <option value="Female" @(Model.Gender.ToString() == "Female" ? "selected" : "")>Female</option>
-            </select>
+            <div>
+                @Html.RadioButtonFor(model => model.Gender, true, new { id = "Male", name = "Gender" }) Nam
+                @Html.RadioButtonFor(model => model.Gender, false, new { id = "Female", name = "Gender" }) Nữ
+            </div>
         </div>
     </div>
 

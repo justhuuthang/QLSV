@@ -22,12 +22,21 @@
 </head>
 <body>
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+        @{ 
+            var user = test3.App_Start.SessionConfig.getUser();
+        }
+        @if(user != null) { 
+            <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
             </div>
-            <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;"> <a href="#" class="btn btn-danger square-btn-adjust">Tin tức</a> &nbsp; <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a> </div>
+            <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
+                <span>Welcome @user.Username</span>&nbsp;
+                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+            </div>
         </nav>
+        }
+        
 
         <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
@@ -106,6 +115,18 @@
                                 <a class="@Html.Raw(ViewBag.ac == 14 ? "active-menu" : "")" href="@Url.Action("ThemBangDiem", "QLD")">Nhập điểm</a>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Tài khoản & phân quyền<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a class="@Html.Raw(ViewBag.ac == 13 ? "active-menu" : "")" href="@Url.Action("DanhSachTaiKhoan", "Role" )">Danh sách tài khoản</a>
+                            </li>
+                            <li>
+                                <a class="@Html.Raw(ViewBag.ac == 14 ? "active-menu" : "")" href="@Url.Action("ThemBangDiem", "QLD")">Nhập điểm</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
 
             </div>
