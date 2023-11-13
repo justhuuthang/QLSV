@@ -17,6 +17,7 @@ namespace test3.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Student()
         {
+            this.GradeBySemesters = new HashSet<GradeBySemester>();
             this.Grades = new HashSet<Grade>();
         }
     
@@ -32,6 +33,8 @@ namespace test3.Models
     
         public virtual Class Class { get; set; }
         public virtual Department Department { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GradeBySemester> GradeBySemesters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Grade> Grades { get; set; }
     }

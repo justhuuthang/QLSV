@@ -54,6 +54,17 @@
           <Property Name="FuctionName" Type="nvarchar" MaxLength="500" />
           <Property Name="Nhom" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="GradeBySemester">
+          <Key>
+            <PropertyRef Name="StudentID" />
+            <PropertyRef Name="SemesterID" />
+            <PropertyRef Name="GradeID" />
+          </Key>
+          <Property Name="StudentID" Type="int" Nullable="false" />
+          <Property Name="SemesterID" Type="int" Nullable="false" />
+          <Property Name="GradeID" Type="int" Nullable="false" />
+          <Property Name="AverageScore" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+        </EntityType>
         <EntityType Name="Grades">
           <Key>
             <PropertyRef Name="GradeID" />
@@ -61,7 +72,6 @@
           <Property Name="GradeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StudentID" Type="int" />
           <Property Name="CourseID" Type="int" />
-          <Property Name="Score" Type="decimal" Precision="5" Scale="2" />
           <Property Name="ExamDate" Type="date" />
           <Property Name="SemesterID" Type="int" />
           <Property Name="ScoreScale10" Type="decimal" Precision="5" Scale="2" />
@@ -111,7 +121,7 @@
           <Property Name="ClassID" Type="int" />
           <Property Name="DepartmentID" Type="int" />
         </EntityType>
-        <Association Name="FK__Courses__Departm__49C3F6B7">
+        <Association Name="FK__Courses__Departm__4BAC3F29">
           <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
           <ReferentialConstraint>
@@ -123,7 +133,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Courses__Semeste__4AB81AF0">
+        <Association Name="FK__Courses__Semeste__4CA06362">
           <End Role="Semesters" Type="Self.Semesters" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
           <ReferentialConstraint>
@@ -135,7 +145,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Grades__CourseID__4CA06362">
+        <Association Name="FK__Grades__CourseID__5165187F">
           <End Role="Courses" Type="Self.Courses" Multiplicity="0..1" />
           <End Role="Grades" Type="Self.Grades" Multiplicity="*" />
           <ReferentialConstraint>
@@ -195,6 +205,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GradeBySemester_Grades">
+          <End Role="Grades" Type="Self.Grades" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grades">
+              <PropertyRef Name="GradeID" />
+            </Principal>
+            <Dependent Role="GradeBySemester">
+              <PropertyRef Name="GradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GradeBySemester_Semesters">
+          <End Role="Semesters" Type="Self.Semesters" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semesters">
+              <PropertyRef Name="SemesterID" />
+            </Principal>
+            <Dependent Role="GradeBySemester">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GradeBySemester_Students">
+          <End Role="Students" Type="Self.Students" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="GradeBySemester">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Grades_Semesters">
           <End Role="Semesters" Type="Self.Semesters" Multiplicity="0..1" />
           <End Role="Grades" Type="Self.Grades" Multiplicity="*" />
@@ -241,20 +293,21 @@
           <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Function_Role" EntityType="Self.Function_Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GradeBySemester" EntityType="Self.GradeBySemester" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Grades" EntityType="Self.Grades" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Scholarships" EntityType="Self.Scholarships" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semesters" EntityType="Self.Semesters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Courses__Departm__49C3F6B7" Association="Self.FK__Courses__Departm__49C3F6B7">
+          <AssociationSet Name="FK__Courses__Departm__4BAC3F29" Association="Self.FK__Courses__Departm__4BAC3F29">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Courses__Semeste__4AB81AF0" Association="Self.FK__Courses__Semeste__4AB81AF0">
+          <AssociationSet Name="FK__Courses__Semeste__4CA06362" Association="Self.FK__Courses__Semeste__4CA06362">
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Grades__CourseID__4CA06362" Association="Self.FK__Grades__CourseID__4CA06362">
+          <AssociationSet Name="FK__Grades__CourseID__5165187F" Association="Self.FK__Grades__CourseID__5165187F">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
@@ -273,6 +326,18 @@
           <AssociationSet Name="FK_Courses_Classes" Association="Self.FK_Courses_Classes">
             <End Role="Classes" EntitySet="Classes" />
             <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GradeBySemester_Grades" Association="Self.FK_GradeBySemester_Grades">
+            <End Role="Grades" EntitySet="Grades" />
+            <End Role="GradeBySemester" EntitySet="GradeBySemester" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GradeBySemester_Semesters" Association="Self.FK_GradeBySemester_Semesters">
+            <End Role="Semesters" EntitySet="Semesters" />
+            <End Role="GradeBySemester" EntitySet="GradeBySemester" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GradeBySemester_Students" Association="Self.FK_GradeBySemester_Students">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="GradeBySemester" EntitySet="GradeBySemester" />
           </AssociationSet>
           <AssociationSet Name="FK_Grades_Semesters" Association="Self.FK_Grades_Semesters">
             <End Role="Semesters" EntitySet="Semesters" />
@@ -328,9 +393,9 @@
           <Property Name="SemesterID" Type="Int32" />
           <Property Name="ClassID" Type="Int32" />
           <NavigationProperty Name="Class" Relationship="Self.FK_Courses_Classes" FromRole="Courses" ToRole="Classes" />
-          <NavigationProperty Name="Department" Relationship="Self.FK__Courses__Departm__49C3F6B7" FromRole="Courses" ToRole="Departments" />
-          <NavigationProperty Name="Semester" Relationship="Self.FK__Courses__Semeste__4AB81AF0" FromRole="Courses" ToRole="Semesters" />
-          <NavigationProperty Name="Grades" Relationship="Self.FK__Grades__CourseID__4CA06362" FromRole="Courses" ToRole="Grades" />
+          <NavigationProperty Name="Department" Relationship="Self.FK__Courses__Departm__4BAC3F29" FromRole="Courses" ToRole="Departments" />
+          <NavigationProperty Name="Semester" Relationship="Self.FK__Courses__Semeste__4CA06362" FromRole="Courses" ToRole="Semesters" />
+          <NavigationProperty Name="Grades" Relationship="Self.FK__Grades__CourseID__5165187F" FromRole="Courses" ToRole="Grades" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -339,7 +404,7 @@
           <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DepartmentName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Departm__49C3F6B7" FromRole="Departments" ToRole="Courses" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Departm__4BAC3F29" FromRole="Departments" ToRole="Courses" />
           <NavigationProperty Name="Students" Relationship="Self.FK__Students__Depart__4D94879B" FromRole="Departments" ToRole="Students" />
         </EntityType>
         <EntityType Name="Function_Role">
@@ -351,6 +416,20 @@
           <Property Name="Nhom" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Roles" Relationship="Self.FK_Role_Function" FromRole="Function_Role" ToRole="Role" />
         </EntityType>
+        <EntityType Name="GradeBySemester">
+          <Key>
+            <PropertyRef Name="StudentID" />
+            <PropertyRef Name="SemesterID" />
+            <PropertyRef Name="GradeID" />
+          </Key>
+          <Property Name="StudentID" Type="Int32" Nullable="false" />
+          <Property Name="SemesterID" Type="Int32" Nullable="false" />
+          <Property Name="GradeID" Type="Int32" Nullable="false" />
+          <Property Name="AverageScore" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Grade" Relationship="Self.FK_GradeBySemester_Grades" FromRole="GradeBySemester" ToRole="Grades" />
+          <NavigationProperty Name="Semester" Relationship="Self.FK_GradeBySemester_Semesters" FromRole="GradeBySemester" ToRole="Semesters" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_GradeBySemester_Students" FromRole="GradeBySemester" ToRole="Students" />
+        </EntityType>
         <EntityType Name="Grade">
           <Key>
             <PropertyRef Name="GradeID" />
@@ -358,13 +437,13 @@
           <Property Name="GradeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StudentID" Type="Int32" />
           <Property Name="CourseID" Type="Int32" />
-          <Property Name="Score" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="ExamDate" Type="DateTime" Precision="0" />
           <Property Name="SemesterID" Type="Int32" />
           <Property Name="ScoreScale10" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="ScoreScale4" Type="Decimal" Precision="2" Scale="1" />
           <Property Name="LetterGrade" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Cours" Relationship="Self.FK__Grades__CourseID__4CA06362" FromRole="Grades" ToRole="Courses" />
+          <NavigationProperty Name="Cours" Relationship="Self.FK__Grades__CourseID__5165187F" FromRole="Grades" ToRole="Courses" />
+          <NavigationProperty Name="GradeBySemesters" Relationship="Self.FK_GradeBySemester_Grades" FromRole="Grades" ToRole="GradeBySemester" />
           <NavigationProperty Name="Student" Relationship="Self.FK__Grades__StudentI__4316F928" FromRole="Grades" ToRole="Students" />
           <NavigationProperty Name="Semester" Relationship="Self.FK_Grades_Semesters" FromRole="Grades" ToRole="Semesters" />
         </EntityType>
@@ -398,7 +477,8 @@
           <Property Name="SemesterName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="StartDate" Type="DateTime" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Semeste__4AB81AF0" FromRole="Semesters" ToRole="Courses" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Semeste__4CA06362" FromRole="Semesters" ToRole="Courses" />
+          <NavigationProperty Name="GradeBySemesters" Relationship="Self.FK_GradeBySemester_Semesters" FromRole="Semesters" ToRole="GradeBySemester" />
           <NavigationProperty Name="Grades" Relationship="Self.FK_Grades_Semesters" FromRole="Semesters" ToRole="Grades" />
         </EntityType>
         <EntityType Name="Student">
@@ -416,6 +496,7 @@
           <Property Name="DepartmentID" Type="Int32" />
           <NavigationProperty Name="Class" Relationship="Self.FK__Students__ClassI__4CA06362" FromRole="Students" ToRole="Classes" />
           <NavigationProperty Name="Department" Relationship="Self.FK__Students__Depart__4D94879B" FromRole="Students" ToRole="Departments" />
+          <NavigationProperty Name="GradeBySemesters" Relationship="Self.FK_GradeBySemester_Students" FromRole="Students" ToRole="GradeBySemester" />
           <NavigationProperty Name="Grades" Relationship="Self.FK__Grades__StudentI__4316F928" FromRole="Students" ToRole="Grades" />
         </EntityType>
         <Association Name="FK_Role_Accounts">
@@ -456,7 +537,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Courses__Departm__49C3F6B7">
+        <Association Name="FK__Courses__Departm__4BAC3F29">
           <End Role="Departments" Type="Self.Department" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
           <ReferentialConstraint>
@@ -468,7 +549,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Courses__Semeste__4AB81AF0">
+        <Association Name="FK__Courses__Semeste__4CA06362">
           <End Role="Semesters" Type="Self.Semester" Multiplicity="0..1" />
           <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
           <ReferentialConstraint>
@@ -480,7 +561,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Grades__CourseID__4CA06362">
+        <Association Name="FK__Grades__CourseID__5165187F">
           <End Role="Courses" Type="Self.Cours" Multiplicity="0..1" />
           <End Role="Grades" Type="Self.Grade" Multiplicity="*" />
           <ReferentialConstraint>
@@ -518,6 +599,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GradeBySemester_Grades">
+          <End Role="Grades" Type="Self.Grade" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grades">
+              <PropertyRef Name="GradeID" />
+            </Principal>
+            <Dependent Role="GradeBySemester">
+              <PropertyRef Name="GradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GradeBySemester_Semesters">
+          <End Role="Semesters" Type="Self.Semester" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semesters">
+              <PropertyRef Name="SemesterID" />
+            </Principal>
+            <Dependent Role="GradeBySemester">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GradeBySemester_Students">
+          <End Role="Students" Type="Self.Student" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="GradeBySemester">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Grades__StudentI__4316F928">
           <End Role="Students" Type="Self.Student" Multiplicity="0..1" />
           <End Role="Grades" Type="Self.Grade" Multiplicity="*" />
@@ -548,6 +671,7 @@
           <EntitySet Name="Courses" EntityType="Self.Cours" />
           <EntitySet Name="Departments" EntityType="Self.Department" />
           <EntitySet Name="Function_Role" EntityType="Self.Function_Role" />
+          <EntitySet Name="GradeBySemesters" EntityType="Self.GradeBySemester" />
           <EntitySet Name="Grades" EntityType="Self.Grade" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="Scholarships" EntityType="Self.Scholarship" />
@@ -565,15 +689,15 @@
             <End Role="Classes" EntitySet="Classes" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Courses__Departm__49C3F6B7" Association="Self.FK__Courses__Departm__49C3F6B7">
+          <AssociationSet Name="FK__Courses__Departm__4BAC3F29" Association="Self.FK__Courses__Departm__4BAC3F29">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Courses__Semeste__4AB81AF0" Association="Self.FK__Courses__Semeste__4AB81AF0">
+          <AssociationSet Name="FK__Courses__Semeste__4CA06362" Association="Self.FK__Courses__Semeste__4CA06362">
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Grades__CourseID__4CA06362" Association="Self.FK__Grades__CourseID__4CA06362">
+          <AssociationSet Name="FK__Grades__CourseID__5165187F" Association="Self.FK__Grades__CourseID__5165187F">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
@@ -584,6 +708,18 @@
           <AssociationSet Name="FK_Role_Function" Association="Self.FK_Role_Function">
             <End Role="Function_Role" EntitySet="Function_Role" />
             <End Role="Role" EntitySet="Roles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GradeBySemester_Grades" Association="Self.FK_GradeBySemester_Grades">
+            <End Role="Grades" EntitySet="Grades" />
+            <End Role="GradeBySemester" EntitySet="GradeBySemesters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GradeBySemester_Semesters" Association="Self.FK_GradeBySemester_Semesters">
+            <End Role="Semesters" EntitySet="Semesters" />
+            <End Role="GradeBySemester" EntitySet="GradeBySemesters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GradeBySemester_Students" Association="Self.FK_GradeBySemester_Students">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="GradeBySemester" EntitySet="GradeBySemesters" />
           </AssociationSet>
           <AssociationSet Name="FK__Grades__StudentI__4316F928" Association="Self.FK__Grades__StudentI__4316F928">
             <End Role="Students" EntitySet="Students" />
@@ -654,13 +790,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="GradeBySemesters">
+            <EntityTypeMapping TypeName="QuanliSVModel.GradeBySemester">
+              <MappingFragment StoreEntitySet="GradeBySemester">
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
+                <ScalarProperty Name="GradeID" ColumnName="GradeID" />
+                <ScalarProperty Name="AverageScore" ColumnName="AverageScore" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Grades">
             <EntityTypeMapping TypeName="QuanliSVModel.Grade">
               <MappingFragment StoreEntitySet="Grades">
                 <ScalarProperty Name="GradeID" ColumnName="GradeID" />
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
-                <ScalarProperty Name="Score" ColumnName="Score" />
                 <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
                 <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
                 <ScalarProperty Name="ScoreScale10" ColumnName="ScoreScale10" />
