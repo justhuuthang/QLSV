@@ -1,0 +1,64 @@
+﻿@model test3.Models.Class
+
+@{
+    ViewBag.Title = "Suathongtin";
+}
+
+<h2>Thông tin lớp</h2>
+<form action="/QLL/Suathongtin" method="post" class="form-horizontal">
+    @Html.HiddenFor(model => model.ClassID)
+
+    <div class="form-group">
+        <label for="CLassID" class="col-md-2 control-label">Mã lớp:</label>
+        <div class="col-md-3">
+            <input type="text" name="ClassID" id="ClassID" class="form-control" value="@Model.ClassID" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ClassName" class="col-md-2 control-label">Tên lớp:</label>
+        <div class="col-md-3">
+            <input type="text" name="ClassName" id="ClassName" class="form-control" value="@Model.ClassName" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="StartDate" class="col-md-2 control-label">Ngày bắt đầu:</label>
+        <div class="col-md-3">
+            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.StartDate)" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="EndDate" class="col-md-2 control-label">Ngày kết thúc:</label>
+        <div class="col-md-3">
+            <input type="date" name="EndDate" id="EndDate" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.EndDate)" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="HeadTeacher" class="col-md-2 control-label">Giảng viên:</label>
+        <div class="col-md-3">
+            <input type="text" name="HeadTeacher" id="HeadTeacher" class="form-control" value="@Model.HeadTeacher" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="MaxStudents" class="col-md-2 control-label">Số lượng sinh viên:</label>
+        <div class="col-md-3">
+            <input type="text" name="MaxStudents" id="MaxStudents" class="form-control" value="@Model.MaxStudents" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-3">
+
+            <input type="submit" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
+            <input type="submit" name="action" value="Xóa" class="btn btn-primary">
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "DanhSachLop")
+    </div>
+</form>
