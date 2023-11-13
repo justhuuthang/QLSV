@@ -1,0 +1,67 @@
+﻿@*@model List<test3.Models.SinhVien>*@
+@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.Grade>
+@{
+    ViewBag.ac = 13;
+}
+
+<h2>Danh sách điểm </h2>
+<form action="/QLD/Search" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            <select name="searchField" class="form-control" style="width: 30%;">
+                <option value="StudentID">MSSV</option>
+                <option value="CourseID">Mã môn</option>
+                <option value="ExamDate">Ngày thi</option>
+                <option value="SemesterID">Kì</option>
+            </select>
+            <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+        </div>
+    </div>
+</form>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Mã sinh viên</th>
+                        <th>Mã môn</th>
+                        <th>Ngày thi</th>
+                        <th>Kì</th>
+                        <th>Điểm hệ 10</th>
+                        <th>Điểm hệ 4</th>
+                        <th>Điểm chữ</th>
+                        <th> </th>
+
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var diem in Model)
+                        {
+                            <tr>
+                                <td>@diem.StudentID</td>
+                                <td>@diem.CourseID</td>
+                                <td>@(diem.ExamDate != null ? diem.ExamDate.Value.ToString("dd-MM-yyyy") : "")</td>
+                                <td>@diem.SemesterID</td>
+                                <td>@diem.ScoreScale10</td>
+                                <td>@diem.ScoreScale4</td>
+                                <td>@diem.LetterGrade</td>
+                                <td><a href="~/QLD/Suathongtin?id=@diem.GradeID">Xem</a></td>
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+
+            </table>
+        </div>
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachDiem", new { page, pageSize = ViewBag.PageSize }))
+    </div>
+</div>
+

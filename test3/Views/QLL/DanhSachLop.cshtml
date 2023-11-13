@@ -1,0 +1,50 @@
+﻿@*@model List<test3.Models.SinhVien>*@
+@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.Class>
+@{
+    ViewBag.ac = 11;
+}
+
+<h2>Danh sách lớp </h2>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Mã lớp</th>
+                        <th>Tên lớp</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Giảng viên</th>
+                        <th>Số lượng sinh viên</th>
+                        <th> </th>
+
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var lop in Model)
+                        {
+                            <tr>
+                                <td>@lop.ClassID</td>
+                                <td>@lop.ClassName</td>
+                                <td>@(lop.StartDate != null ? lop.StartDate.Value.ToString("dd-MM-yyyy") : "")</td>
+                                <td>@(lop.EndDate != null ? lop.EndDate.Value.ToString("dd-MM-yyyy") : "")</td>
+                                <td>@lop.HeadTeacher</td>
+                                <td>@lop.MaxStudents</td>
+                                <td><a href="~/QLL/Suathongtin?id=@lop.ClassID">Xem</a></td>
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+
+            </table>
+        </div>
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachSinhVien", new { page, pageSize = ViewBag.PageSize }))
+    </div>
+</div>
+

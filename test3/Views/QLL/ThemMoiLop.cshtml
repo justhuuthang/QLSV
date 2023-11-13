@@ -1,0 +1,60 @@
+﻿@model test3.Models.Class
+@{
+    ViewBag.ac = 12;
+}
+
+<h2>Thêm sinh viên</h2>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <form action="@Url.Action("ThemMoiLop", "QLL")" method="post" class="form-horizontal">
+                @Html.HiddenFor(model => model.ClassID)
+
+                <div class="form-group">
+                    <label for="ClassName" class="col-md-2 control-label">Tên lớp:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="ClassName" id="ClassName" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="StartDate" class="col-md-2 control-label">Ngày bắt đầu:</label>
+                    <div class="col-md-3">
+                        <input type="date" name="StartDate" id="StartDate" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="EndDate" class="col-md-2 control-label">Ngày kết thúc:</label>
+                    <div class="col-md-3">
+                        <input type="date" name="EndDate" id="EndDate" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="HeadTeacher" class="col-md-2 control-label">Giảng viên:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="HeadTeacher" id="HeadTeacher" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="MaxStudents" class="col-md-2 control-label">Số lượng sinh viên:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="MaxStudents" id="MaxStudents" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-3">
+                        <input type="submit" value="Thêm" class="btn btn-primary">
+                    </div>
+                </div>
+
+                <div>
+                    @Html.ActionLink("Back to List", "DanhSachLop")
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
