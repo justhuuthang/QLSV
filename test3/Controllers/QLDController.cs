@@ -4,9 +4,11 @@ using System.Linq;
 using System.Web.Mvc;
 using test3.Models;
 using PagedList;
+using System.Data.Entity;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Bibliography;
 using System.Drawing.Printing;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace test3.Controllers
 {
@@ -24,7 +26,8 @@ namespace test3.Controllers
             {
                 pageSize = 10;
             }
-            var diem = db.Grades.ToList();
+
+            var diem = db.Grades.Include(c => c.Cours).Include(c => c.Semester).ToList();
             return View(diem.ToPagedList((int)page, (int)pageSize));
         }
         [HttpGet]
@@ -93,7 +96,7 @@ namespace test3.Controllers
             }
 
             QuanliSVEntities db = new QuanliSVEntities();
-            var diem = db.Grades.Find(id);
+            var diem = db.Grades.Include(c => c.Cours).Include(c => c.Semester).FirstOrDefault(c => c.GradeID == id);
 
             if (diem == null)
             {
