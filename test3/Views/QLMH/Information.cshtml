@@ -1,0 +1,115 @@
+﻿@model test3.Models.Cours
+
+@{
+    ViewBag.Title = "Information";
+}
+
+<h2>Thông tin môn học</h2>
+<form action="~/QLMH/Information" method="post" class="form-horizontal">
+    @Html.HiddenFor(model => model.CourseID)
+
+    <div class="form-group">
+        <label for="CourseName" class="col-md-2 control-label">Tên môn:</label>
+        <div class="col-md-3">
+            <input type="text" name="CourseName" id="FullName" class="form-control" value="@Model.CourseName" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Description" class="col-md-2 control-label">Mô tả:</label>
+        <div class="col-md-3">
+            <input type="text" name="Description" id="Description" class="form-control" value="@Model.Description" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Credits" class="col-md-2 control-label">Tín chỉ:</label>
+        <div class="col-md-3">
+            <input type="number" name="Credits" id="Credits" class="form-control" value="@Model.Credits" required>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
+        <div class="col-md-3">
+            @{
+                test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+                List<test3.Models.Department> dsKhoa = db.Departments.ToList();
+            }
+
+            @Html.DropDownListFor(model => model.DepartmentID, new SelectList(dsKhoa, "DepartmentID", "DepartmentName"), "Chọn khoa...", new { @class = "form-control", id = "DepartmentID" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="SemesterID" class="col-md-2 control-label">Kì học:</label>
+        <div class="col-md-3">
+            <input type="text" name="SemesterID" id="SemesterID" class="form-control" value="@Model.SemesterID" required>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="ClassID">Tên lớp:</label>
+        <div class="col-md-3">
+            @{
+                List<test3.Models.Class> dslop = db.Classes.ToList();
+            }
+
+            @Html.DropDownListFor(model => model.ClassID, new SelectList(dslop, "ClassID", "ClassName"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-3">
+            <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
+            <input type="button" id="btn-xoa" name="action" value="Xóa" class="btn btn-primary">
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "ListSubjects")
+    </div>
+</form>
+@*`rset=utf-8",
+            url: window.location.origin + '/QLSV/' + action,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                if (action === 'AddNewStudent') {
+                    window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
+                } else {
+                    // Xử lý thành công cho các hành động khác
+                }
+            },
+            error: function (response) {
+                alert("Thực hiện hành động thất bại");
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        // Gán hàm xử lý cho cả nút Sửa và nút Xóa
+        $(".btn-primary-margin").click(function () {
+            // Lấy giá trị action từ giá trị của nút
+            var action = $(this).val();
+
+            // Gọi hàm xử lý chung
+            handleButtonClick('Suathongtin', action);
+        });
+    });*@
+
+
+
+
+<style>
+    .btn-primary-margin {
+        margin-right: 70px;
+    }
+</style>
+
