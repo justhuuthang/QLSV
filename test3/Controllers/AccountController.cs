@@ -17,7 +17,7 @@ namespace test3.Controllers
         [AllowAnonymous]
         public ActionResult Login(Account user)
         {
-            QuanliSVEntities QLSVEntities = new QuanliSVEntities();
+            QuaniSVEntities QLSVEntities = new QuaniSVEntities();
             var status = QLSVEntities.Accounts.FirstOrDefault(m => m.Username == user.Username && m.Password == user.Password);
 
             if (status == null)
@@ -48,7 +48,7 @@ namespace test3.Controllers
         [HttpPost]
         public ActionResult Register(Account user)
         {
-            QuanliSVEntities db = new QuanliSVEntities();
+            QuaniSVEntities db = new QuaniSVEntities();
             db.Accounts.Add(user);
             db.SaveChanges();
             return RedirectToAction("Login");

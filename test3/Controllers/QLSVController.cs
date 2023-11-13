@@ -17,7 +17,7 @@ namespace test3.Controllers
     public class QLSVController : Controller
     {
         // GET: QLSV
-        QuanliSVEntities db = new QuanliSVEntities();
+        QuaniSVEntities db = new QuaniSVEntities();
         [Role_User(FunctionID = "Admin_XemDanhSach")]
         public ActionResult DanhSachSinhVien(int? page, int? pageSize)
         {
@@ -51,7 +51,6 @@ namespace test3.Controllers
                     searchResults = db.Students.Where(s => s.FullName.ToLower().Contains(searchValue.ToLower())).ToList();
                     break;
                 case "DateOfBirth":
-                    // Kiểm tra nếu searchValue là ngày tháng hợp lệ
                     if (DateTime.TryParse(searchValue, out DateTime dob))
                     {
                         searchResults = db.Students.Where(s => s.DateOfBirth == dob).ToList();
@@ -99,11 +98,10 @@ namespace test3.Controllers
         {
             if (id == 0)
             {
-                // Giá trị id không hợp lệ, xử lý theo ý của bạn, có thể chuyển hướng hoặc hiển thị thông báo lỗi
                 return RedirectToAction("DanhSachSinhVien");
             }
 
-            QuanliSVEntities db = new QuanliSVEntities();
+            QuaniSVEntities db = new QuaniSVEntities();
             var sinhVien = db.Students.Find(id);
 
             if (sinhVien == null)
@@ -120,7 +118,7 @@ namespace test3.Controllers
         [HttpPost]
         public ActionResult Suathongtin(Student sinhVien, string action)
         {
-            QuanliSVEntities db = new QuanliSVEntities();
+            QuaniSVEntities db = new QuaniSVEntities();
             var existingStudent = db.Students.Find(sinhVien.StudentID);
 
             if (existingStudent == null)

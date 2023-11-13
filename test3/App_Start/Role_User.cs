@@ -12,7 +12,7 @@ namespace test3.App_Start
 {
     public class Role_User : AuthorizeAttribute
     {
-        QuanliSVEntities db =  new QuanliSVEntities();
+        QuaniSVEntities db =  new QuaniSVEntities();
         public string FunctionID { get; set; }
         /*public bool kiemtra(int accountID, string functionID)
         {
