@@ -46,9 +46,9 @@
                         {
                             <tr>
                                 <td>@diem.StudentID</td>
-                                <td>@diem.CourseID</td>
+                                <td>@diem.Cours.CourseName</td>
                                 <td>@(diem.ExamDate != null ? diem.ExamDate.Value.ToString("dd-MM-yyyy") : "")</td>
-                                <td>@diem.SemesterID</td>
+                                <td>@diem.Semester.SemesterName</td>
                                 <td>@diem.ScoreScale10</td>
                                 <td>@diem.ScoreScale4</td>
                                 <td>@diem.LetterGrade</td>
