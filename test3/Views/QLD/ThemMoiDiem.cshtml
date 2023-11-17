@@ -18,9 +18,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="CourseID" class="col-md-2 control-label">Mã môn:</label>
+                    <label class="control-label col-md-2" for="CourseID">Tên môn:</label>
                     <div class="col-md-3">
-                        <input type="text" name="CourseID" id="CourseID" class="form-control" required>
+                        @{
+                            test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+                            List<test3.Models.Cours> dsMon = db.Courses.ToList();
+                        }
+
+                        @Html.DropDownListFor(model => model.CourseID, new SelectList(dsMon, "CourseID", "CourseName"), "Chọn môn...", new { @class = "form-control", id = "CourseID" })
                     </div>
                 </div>
 
@@ -32,9 +37,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="SemesterID" class="col-md-2 control-label">Kì:</label>
+                    <label class="control-label col-md-2" for="SemesterID">Kì:</label>
                     <div class="col-md-3">
-                        <input type="text" name="SemesterID" id="SemesterID" class="form-control" required>
+                        @{
+                            List<test3.Models.Semester> dsKi = db.Semesters.ToList();
+                        }
+
+                        @Html.DropDownListFor(model => model.SemesterID, new SelectList(dsKi, "SemesterID", "SemesterName"), "Chọn kì...", new { @class = "form-control", id = "SemesterID" })
                     </div>
                 </div>
 

@@ -218,6 +218,7 @@
     <Compile Include="Controllers\QLHBController.cs" />
     <Compile Include="Controllers\QLHKController.cs" />
     <Compile Include="Controllers\QLLController.cs" />
+    <Compile Include="Controllers\QLMHController.cs" />
     <Compile Include="Controllers\QLSVController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Global.asax.cs">
@@ -489,6 +490,9 @@
     <Content Include="Views\QLHK\DanhSachHocKi.cshtml" />
     <Content Include="Views\QLHK\Suathongtin.cshtml" />
     <Content Include="Views\QLHK\ThemMoiHocKi.cshtml" />
+    <Content Include="Views\QLMH\AddNewSubject.cshtml" />
+    <Content Include="Views\QLMH\Information.cshtml" />
+    <Content Include="Views\QLMH\ListSubjects.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
