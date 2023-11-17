@@ -499,6 +499,8 @@
     <Content Include="Views\QLMH\AddNewSubject.cshtml" />
     <Content Include="Views\QLMH\Information.cshtml" />
     <Content Include="Views\QLMH\ListSubjects.cshtml" />
+    <Content Include="Views\Home\ThemMoiThongBao.cshtml" />
+    <Content Include="Views\Home\Suathongtin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
