@@ -1,0 +1,119 @@
+﻿@model test3.Models.Cours
+@{
+    ViewBag.ac = 10;
+}
+
+<h2>Thêm môn học</h2>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <form action="@Url.Action("ThemMoiMonHoc", "QLMH")" method="post" class="form-horizontal">
+                @Html.HiddenFor(model => model.CourseID)
+
+                <div class="form-group">
+                    <label for="CourseName" class="col-md-2 control-label">Tên môn:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="CourseName" id="CourseName" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Description" class="col-md-2 control-label">Mô tả:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="Description" id="Description" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Credits" class="col-md-2 control-label">Tín chỉ:</label>
+                    <div class="col-md-3">
+                        <input type="number" name="Credits" id="Credits" class="form-control" required>
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
+                    <div class="col-md-3">
+                        @{
+                            test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+                            List<test3.Models.Department> dsKhoa = db.Departments.ToList();
+                        }
+
+                        @Html.DropDownListFor(model => model.DepartmentID, new SelectList(dsKhoa, "DepartmentID", "DepartmentName"), "Chọn khoa...", new { @class = "form-control", id = "DepartmentID", required = "required" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="SemesterID">Kì:</label>
+                    <div class="col-md-3">
+                        @{
+                            List<test3.Models.Semester> dsKi = db.Semesters.ToList();
+                        }
+
+                        @Html.DropDownListFor(model => model.SemesterID, new SelectList(dsKi, "SemesterID", "SemesterName"), "Chọn kì...", new { @class = "form-control", id = "SemesterID", required = "required" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="ClassID">Tên lớp:</label>
+                    <div class="col-md-3">
+                        @{
+                            List<test3.Models.Class> dslop = db.Classes.ToList();
+                        }
+
+                        @Html.DropDownListFor(model => model.ClassID, new SelectList(dslop, "ClassID", "ClassName"), "Chọn lớp...", new { @class = "form-control", id = "ClassID", required = "required" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-3">
+                        <input type="button" value="Thêm" id="btn-them" class="btn btn-primary">
+                    </div>
+                </div>
+
+                <div>
+                    @Html.ActionLink("Back to List", "DanhSachMonHoc")
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#btn-them").click(function () {
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                // Nếu biểu mẫu không hợp lệ, không gửi đi
+                form.reportValidity();
+                return;
+            }
+
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                url: window.location.origin + '/QLMH/ThemMoiMonHoc',
+                success: function (response) {
+                    if (response.success) {
+                        // Nếu thành công, chuyển hướng hoặc thực hiện các hành động khác
+                        window.location.href = window.location.origin + '/QLMH/DanhSachMonHoc';
+                    } else {
+                        // Nếu có lỗi, hiển thị thông báo lỗi
+                        alert(response.message);
+                    }
+                },
+                error: function (response) {
+                    // Xử lý lỗi khi gửi yêu cầu AJAX
+                    alert("Thêm mới thất bại");
+                }
+            });
+        })
+    })
+</script>
