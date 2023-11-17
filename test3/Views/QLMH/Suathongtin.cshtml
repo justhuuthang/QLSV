@@ -1,17 +1,31 @@
 ﻿@model test3.Models.Cours
 
 @{
-    ViewBag.Title = "Information";
+    ViewBag.Title = "Suathongtin";
 }
 
 <h2>Thông tin môn học</h2>
-<form action="~/QLMH/Information" method="post" class="form-horizontal">
+
+<script>
+    @if (ViewBag.Error != null)
+    {
+        <text>
+            $(document).ready(function () {
+                alert("@Html.Raw(ViewBag.Error)");
+            });
+        </text>
+    }
+</script>
+
+
+
+<form action="~/QLMH/Suathongtin" method="post" class="form-horizontal">
     @Html.HiddenFor(model => model.CourseID)
 
     <div class="form-group">
         <label for="CourseName" class="col-md-2 control-label">Tên môn:</label>
         <div class="col-md-3">
-            <input type="text" name="CourseName" id="FullName" class="form-control" value="@Model.CourseName" required>
+            <input type="text" name="CourseName" id="CourseName" class="form-control" value="@Model.CourseName" required>
         </div>
     </div>
     <div class="form-group">
@@ -66,50 +80,62 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
-            <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
-            <input type="button" id="btn-xoa" name="action" value="Xóa" class="btn btn-primary">
+
+            <input type="submit" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
+            <input type="submit" name="action" value="Xóa" class="btn btn-primary">
         </div>
     </div>
 
     <div>
-        @Html.ActionLink("Back to List", "ListSubjects")
+        @Html.ActionLink("Back to List", "DanhSachMonHoc")
     </div>
 </form>
-@*`rset=utf-8",
-            url: window.location.origin + '/QLSV/' + action,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                if (action === 'AddNewStudent') {
-                    window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
-                } else {
-                    // Xử lý thành công cho các hành động khác
-                }
-            },
-            error: function (response) {
-                alert("Thực hiện hành động thất bại");
-            }
-        });
-    }
-
-    $(document).ready(function () {
-        // Gán hàm xử lý cho cả nút Sửa và nút Xóa
-        $(".btn-primary-margin").click(function () {
-            // Lấy giá trị action từ giá trị của nút
-            var action = $(this).val();
-
-            // Gọi hàm xử lý chung
-            handleButtonClick('Suathongtin', action);
-        });
-    });*@
-
-
-
 
 <style>
     .btn-primary-margin {
         margin-right: 70px;
     }
 </style>
+<script>
+   $(document).ready(function () {
+    $("#btn-them").click(function () {
+        var form = $('form')[0];
+        if (form.checkValidity() === false) {
+            // Nếu biểu mẫu không hợp lệ, không gửi đi
+            form.reportValidity();
+            return;
+        }
 
+        // Thêm kiểm tra CourseName trùng lặp
+        var existingCourseName = "@Model.CourseName"; // Lấy giá trị CourseName hiện tại từ Razor
+
+        if ($("#CourseName").val() === existingCourseName) {
+            alert("Tên môn học không thay đổi.");
+            return;
+        }
+
+        var formData = new FormData(form);
+        $.ajax({
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            url: window.location.origin + '/QLMH/Suathongtin',
+            success: function (response) {
+                if (response.success) {
+                    // Nếu thành công, chuyển hướng hoặc thực hiện các hành động khác
+                    window.location.href = window.location.origin + '/QLMH/DanhSachMonHoc';
+                } else {
+                    // Nếu có lỗi, hiển thị thông báo lỗi
+                    alert(response.message);
+                }
+            },
+            error: function (response) {
+                // Xử lý lỗi khi gửi yêu cầu AJAX
+                alert("Sửa thông tin thất bại");
+            }
+        });
+    });
+});
+
+</script>

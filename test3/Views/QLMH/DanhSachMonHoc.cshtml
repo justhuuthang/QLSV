@@ -1,4 +1,6 @@
-﻿@*@model List<test3.Models.SinhVien>*@
+﻿
+
+@*@model List<test3.Models.SinhVien>*@
 @using PagedList.Mvc;
 @using PagedList;
 @model IPagedList<test3.Models.Cours>
@@ -15,8 +17,8 @@
                 <option value="CourseID">MMH</option>*@
 
             @*</select>
-            <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>*@
+                <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>*@
             @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 920px;" })
         </div>
     </div>
@@ -30,13 +32,13 @@
                     <tr>
                         <th>Mã môn </th>
                         <th>Tên môn</th>
-                    <th>Mô tả</th>             
-                    <th>Tín chỉ</th>
-                    <th>Khoa</th>
-                    <th>Học kì</th>
-                    
+                        <th>Mô tả</th>
+                        <th>Tín chỉ</th>
+                        <th>Khoa</th>
+                        <th>Học kì</th>
+
                         @*<th>Lớp</th>*@
-                     
+
                         <th> </th>
 
                     </tr>
@@ -58,7 +60,7 @@
                                 <td>@monHoc.Semester.SemesterName</td>
 
                                 @*<td>@monHoc.ClassID</td>*@
-                                <td><a href="~/QLMH/Information?id=@monHoc.CourseID">Xem</a></td>
+                                <td><a href="~/QLMH/Suathongtin?id=@monHoc.CourseID">Xem</a></td>
 
 
 
@@ -73,7 +75,6 @@
 
             </table>
         </div>
-        @Html.PagedListPager(Model, page => Url.Action("ListSubjects", new { page, pageSize = ViewBag.PageSize }))
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachMonHoc", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
-
