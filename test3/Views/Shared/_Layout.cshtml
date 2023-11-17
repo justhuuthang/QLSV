@@ -58,14 +58,7 @@
                     <li>
                         <a href="#" class="@Html.Raw(ViewBag.ac == 4 || ViewBag.ac == 5|| ViewBag.ac == 6? "active-menu" : "")"><i class="fa fa-desktop fa-3x"></i> Giảng viên<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li class="nav nav-second-level">
-                                <a class="@Html.Raw(ViewBag.ac == 4 ? "active-menu" : "")" href="@Url.Action("DanhSachGiangVien", "QLGV")">Danh sách giảng viên</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 5 ? "active-menu" : "")" href="@Url.Action("ThemMoiGiangVien", "QLGV")">Thêm mới giảng viên</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 6 ? "active-menu" : "")" href="@Url.Action("ThemMoiTinTuc", "QLGV")">Thêm mới tin tức</a>
+                                <a class="@Html.Raw(ViewBag.ac == 6 ? "active-menu" : "")" href="@Url.Action("ThemMoiThongBao", "Home")">Thêm mới thông báo</a>
                             </li>
                         </ul>
                     </li>

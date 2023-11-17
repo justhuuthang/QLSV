@@ -32,9 +32,11 @@ namespace test3.Models
         public virtual DbSet<Function_Role> Function_Role { get; set; }
         public virtual DbSet<GradeBySemester> GradeBySemesters { get; set; }
         public virtual DbSet<Grade> Grades { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Scholarship> Scholarships { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }
