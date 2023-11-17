@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Học Bổng</title>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <?php
+    // Kết nối đến cơ sở dữ liệu
+    $servername = "tên_máy_chủ";
+    $username = "tên_người_dùng";
+    $password = "mật_khẩu";
+    $dbname = "tên_cơ_sở_dữ_liệu";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Kiểm tra kết nối
+    if ($conn->connect_error) {
+    die("Kết nối không thành công: " . $conn->connect_error);
+    }
+
+    // Lấy danh sách sinh viên đạt học bổng (giả sử điểm trung bình cần đạt là 8.0)
+    $sql = "SELECT Students.StudentID, Students.StudentName, AVG(Grades.Grade) AS AverageGrade
+    FROM Students
+    JOIN Grades ON Students.StudentID = Grades.StudentID
+    GROUP BY Students.StudentID, Students.StudentName
+    HAVING AVG(Grades.Grade) >= 8.0";
+
+    $result = $conn->query($sql);
+    ?>
+
+    <h2>Danh sách sinh viên đạt học bổng</h2>
+    <table>
+        <tr>
+            <th>Mã Sinh Viên</th>
+            <th>Tên Sinh Viên</th>
+            <th>Điểm Trung Bình</th>
+        </tr>
+
+        <?php
+        if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+        echo "
+        <tr>
+            ";
+            echo "
+            <td>{$row['StudentID']}</td>";
+            echo "
+            <td>{$row['StudentName']}</td>";
+            echo "
+            <td>{$row['AverageGrade']}</td>";
+            echo "
+        </tr>";
+        }
+        } else {
+        echo "
+        <tr><td colspan='3'>Không có sinh viên đạt học bổng</td></tr>";
+        }
+        ?>
+    </table>
+
+    <?php
+    // Đóng kết nối
+    $conn->close();
+    ?>
+
+</body>
+</html>

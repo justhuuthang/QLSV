@@ -1,0 +1,56 @@
+﻿@model test3.Models.Semester
+
+
+@{
+    ViewBag.Title = "Suathongtin";
+}
+
+<h2>Thông tin học kì</h2>
+
+<form action="~/QLHK/Suathongtin" method="post" class="form-horizontal">
+    @Html.HiddenFor(model => model.SemesterID)
+
+    <div class="form-group">
+        <label for="SemesterName" class="col-md-2 control-label">Tên học kì:</label>
+        <div class="col-md-3">
+            <input type="text" name="SemesterName" id="SemesterName" class="form-control" value="@Model.SemesterName" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="StartDate" class="col-md-2 control-label">Ngày bắt đầu:</label>
+        <div class="col-md-3">
+            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@Model.StartDate" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="EndDate" class="col-md-2 control-label">Ngày kết thúc:</label>
+        <div class="col-md-3">
+            <input type="date" name="EndDate" id="EndDate" class="form-control" value="@Model.EndDate" required>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-3">
+            <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
+            <input type="button" id="btn-xoa" name="action" value="Xóa" class="btn btn-primary">
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "DanhSachHocKi")
+    </div>
+</form>
+
+
+
+
+
+<style>
+    .btn-primary-margin {
+        margin-right: 70px;
+    }
+</style>
+
