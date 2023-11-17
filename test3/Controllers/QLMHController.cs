@@ -18,9 +18,9 @@ namespace test3.Controllers
     {
         // GET: QLSV
         QuanliSVEntities db = new QuanliSVEntities();
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
-        public ActionResult ListSubjects(int? page, int? pageSize)
-        { 
+
+        public ActionResult DanhSachMonHoc(int? page, int? pageSize)
+        {
             if (page == null)
             {
                 page = 1;
@@ -37,30 +37,28 @@ namespace test3.Controllers
 
 
 
-        [Role_User]
+
         [HttpGet]
-        public ActionResult AddNewSubject()
+        public ActionResult ThemMoiMonHoc()
         {
             return View();
         }
 
 
         [HttpPost]
-        public ActionResult AddNewSubject(Cours monHoc)
+        public ActionResult ThemMoiMonHoc(Cours monHoc)
         {
-            string courseName = Request["CourseName"];
-
-            var existingStudent = db.Courses.FirstOrDefault(c => c.CourseName == courseName);
-
-            if (existingStudent != null)
+            // Kiểm tra xem CourseName đã tồn tại chưa
+            if (db.Courses.Any(c => c.CourseName == monHoc.CourseName))
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Môn học đã tồn tại với tên này.");
+                return Json(new { success = false, message = "Tên môn học đã tồn tại. Vui lòng chọn tên khác." });
             }
 
+            // Nếu không có lỗi, thêm môn học vào cơ sở dữ liệu
             db.Courses.Add(monHoc);
             db.SaveChanges();
-            return RedirectToAction("ListSubjects");
+
+            return Json(new { success = true, message = "Thêm môn học thành công." });
         }
 
 
@@ -70,72 +68,72 @@ namespace test3.Controllers
 
 
 
-        [Role_User]
+
+
         [HttpGet]
-        public ActionResult Information(int id)
+        public ActionResult Suathongtin(int id)
         {
             if (id == 0)
             {
-                // Giá trị id không hợp lệ, xử lý theo ý của bạn, có thể chuyển hướng hoặc hiển thị thông báo lỗi
-                return RedirectToAction("ListSubjects");
+                return RedirectToAction("DanhSachMonHoc");
             }
-
             QuanliSVEntities db = new QuanliSVEntities();
             var monHoc = db.Courses.Include(c => c.Department).Include(c => c.Semester).FirstOrDefault(c => c.CourseID == id);
 
             if (monHoc == null)
             {
-                // Sinh viên không tồn tại, xử lý theo ý của bạn, có thể chuyển hướng hoặc hiển thị thông báo lỗi
-                return RedirectToAction("ListSubjects");
+                return RedirectToAction("DanhSachMonHoc");
             }
 
-            ViewBag.KhoaCu = monHoc.DepartmentID;
-            ViewBag.LopCu = monHoc.ClassID;
+
             return View(monHoc);
         }
-
         [HttpPost]
-        public ActionResult Information(Cours monHoc, string action)
+        public ActionResult Suathongtin(Cours monHoc, string action)
         {
             QuanliSVEntities db = new QuanliSVEntities();
-            var existingStudent = db.Courses.Find(monHoc.CourseID);
+            var existingCours = db.Courses.Find(monHoc.CourseID);
 
-            if (existingStudent == null)
+            if (existingCours == null)
             {
-                // Sinh viên không tồn tại, xử lý theo ý của bạn
-                return RedirectToAction("ListSubjects");
+                return RedirectToAction("DanhSachMonHoc");
             }
 
             if (action == "Xóa")
             {
-                // Xóa sinh viên
-                db.Courses.Remove(existingStudent);
+                db.Courses.Remove(existingCours);
                 db.SaveChanges();
-
-                return RedirectToAction("ListSubjects");
+                return RedirectToAction("DanhSachMonHoc");
             }
             else if (action == "Sửa")
             {
-                // Cập nhật thông tin sinh viên
-                existingStudent.CourseName = monHoc.CourseName;
-                existingStudent.Description = monHoc.Description;
-                existingStudent.Credits = monHoc.Credits;
-                existingStudent.DepartmentID = monHoc.DepartmentID;
-                existingStudent.SemesterID = monHoc.SemesterID;
-                existingStudent.ClassID = monHoc.ClassID;
+                // Kiểm tra xem CourseName đã tồn tại chưa (trừ môn học hiện tại)
+                if (db.Courses.Any(c => c.CourseName == monHoc.CourseName && c.CourseID != monHoc.CourseID))
+                {
+                    ViewBag.Error = "Tên môn học đã tồn tại. Vui lòng chọn tên khác.";
+                    return View(monHoc);
+                }
 
+                // Cập nhật thông tin môn học
+                existingCours.CourseName = monHoc.CourseName;
+                existingCours.Description = monHoc.Description;
+                existingCours.Credits = monHoc.Credits;
+                existingCours.DepartmentID = monHoc.DepartmentID;
+                existingCours.SemesterID = monHoc.SemesterID;
+                existingCours.ClassID = monHoc.ClassID;
 
-                // Lưu thay đổi vào cơ sở dữ liệu
                 db.SaveChanges();
 
-                return RedirectToAction("ListSubjects");
+                return RedirectToAction("DanhSachMonHoc");
             }
 
-            // Nếu không phải là "Sửa" hoặc "Xóa", quay lại View với dữ liệu nhập
             return View(monHoc);
         }
 
-        
+
+
+
+
 
 
 
