@@ -215,6 +215,8 @@
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QLDController.cs" />
+    <Compile Include="Controllers\QLHBController.cs" />
+    <Compile Include="Controllers\QLHKController.cs" />
     <Compile Include="Controllers\QLLController.cs" />
     <Compile Include="Controllers\QLMHController.cs" />
     <Compile Include="Controllers\QLSVController.cs" />
@@ -482,6 +484,12 @@
     <Content Include="Views\QLL\DanhSachLop.cshtml" />
     <Content Include="Views\QLL\Suathongtin.cshtml" />
     <Content Include="Views\QLL\ThemMoiLop.cshtml" />
+    <Content Include="Views\QLHB\DanhSachHocBong.cshtml" />
+    <Content Include="Views\QLHB\Suathongtin.cshtml" />
+    <Content Include="Views\QLHB\ThemHocBong.cshtml" />
+    <Content Include="Views\QLHK\DanhSachHocKi.cshtml" />
+    <Content Include="Views\QLHK\Suathongtin.cshtml" />
+    <Content Include="Views\QLHK\ThemMoiHocKi.cshtml" />
     <Content Include="Views\QLMH\AddNewSubject.cshtml" />
     <Content Include="Views\QLMH\Information.cshtml" />
     <Content Include="Views\QLMH\ListSubjects.cshtml" />
