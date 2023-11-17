@@ -72,10 +72,10 @@
                         <a href="#" class="@Html.Raw(ViewBag.ac == 9 || ViewBag.ac == 10? "active-menu" : "")"><i class="fa fa-desktop fa-3x"></i>Môn Học<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li class="nav nav-second-level">
-                                <a class="@Html.Raw(ViewBag.ac == 9 ? "active-menu" : "")" href="@Url.Action("ListSubjects", "QLMH")">Danh sách môn học</a>
+                                <a class="@Html.Raw(ViewBag.ac == 9 ? "active-menu" : "")" href="@Url.Action("DanhSachMonHoc", "QLMH")">Danh sách môn học</a>
                             </li>
                             <li>
-                                <a class="@Html.Raw(ViewBag.ac == 10 ? "active-menu" : "")" href="@Url.Action("AddNewSubject", "QLMH")">Thêm mới môn học</a>
+                                <a class="@Html.Raw(ViewBag.ac == 10 ? "active-menu" : "")" href="@Url.Action("ThemMoiMonHoc", "QLMH")">Thêm mới môn học</a>
                             </li>
                         </ul>
                     </li>
