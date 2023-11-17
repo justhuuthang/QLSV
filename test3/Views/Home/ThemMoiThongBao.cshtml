@@ -1,0 +1,78 @@
+﻿@model test3.Models.Notification
+@{
+    ViewBag.ac = 6;
+}
+
+<h2>Thêm thông báo</h2>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <form action="@Url.Action("ThemMoiThongBao", "Home")" method="post" class="form-horizontal">
+                @Html.HiddenFor(model => model.NotificationID)
+
+                <div class="form-group">
+                    <label for="NotificationName" class="col-md-2 control-label">Tiêu đề:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="NotificationName" id="NotificationName" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Date" class="col-md-2 control-label">Ngày:</label>
+                    <div class="col-md-3">
+                        <input type="date" name="Date" id="Date" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="NotificationContent" class="col-md-2 control-label">Nội dung:</label>
+                    <div class="col-md-3">
+                        <textarea name="NotificationContent" id="NotificationContent" class="form-control" rows="4" cols="20" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-3">
+                        <input type="submit" value="Thêm" class="btn btn-primary" id="btn-them">
+                    </div>
+                </div>
+
+                <div>
+                    @Html.ActionLink("Back to List", "DashBoard")
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#btn-them").click(function () {
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
+            }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: window.location.origin + '/Home/ThemMoiThongBao',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    window.location.href = window.location.origin + '/Home/DashBoard';
+                },
+                error: function (response) {
+                    if (response.responseText === "Sinh viên đã tồn tại với số điện thoại này.") {
+                        $("#error-message").text(response.responseText);
+                    } else {
+                        alert("Thêm mới thất bại");
+                    }
+                }
+            });
+        });
+    });
+
+</script>

@@ -57,7 +57,7 @@
         <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
         <div class="col-md-3">
             @{
-                test3.Models.QuaniSVEntities db = new test3.Models.QuaniSVEntities();
+                test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
                 List<test3.Models.Department> dsKhoa = db.Departments.ToList();
             }
 
@@ -87,7 +87,7 @@
         @Html.ActionLink("Back to List", "DanhSachSinhVien")
     </div>
 </form>
-`rset=utf-8",
+@*`rset=utf-8",
             url: window.location.origin + '/QLSV/' + action,
             processData: false,
             contentType: false,
@@ -114,7 +114,7 @@
             // Gọi hàm xử lý chung
             handleButtonClick('Suathongtin', action);
         });
-    });
+    });*@
 
 
 </script>
