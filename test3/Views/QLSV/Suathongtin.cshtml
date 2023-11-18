@@ -79,7 +79,6 @@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
             <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
-            <input type="button" id="btn-xoa" name="action" value="Xóa" class="btn btn-primary">
         </div>
     </div>
 
@@ -87,37 +86,6 @@
         @Html.ActionLink("Back to List", "DanhSachSinhVien")
     </div>
 </form>
-@*`rset=utf-8",
-            url: window.location.origin + '/QLSV/' + action,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                if (action === 'AddNewStudent') {
-                    window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
-                } else {
-                    // Xử lý thành công cho các hành động khác
-                }
-            },
-            error: function (response) {
-                alert("Thực hiện hành động thất bại");
-            }
-        });
-    }
-
-    $(document).ready(function () {
-        // Gán hàm xử lý cho cả nút Sửa và nút Xóa
-        $(".btn-primary-margin").click(function () {
-            // Lấy giá trị action từ giá trị của nút
-            var action = $(this).val();
-
-            // Gọi hàm xử lý chung
-            handleButtonClick('Suathongtin', action);
-        });
-    });*@
-
-
-</script>
 
 <style>
     .btn-primary-margin {
@@ -125,3 +93,35 @@
     }
 </style>
 
+<script>
+    $(document).ready(function () {
+        $("#btn-sua").click(function () {
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
+            }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: window.location.origin + '/QLSV/Suathongtin',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
+                },
+                error: function (response) {
+                    /*if (response.responseText === "Sinh viên đã tồn tại với số điện thoại này.") {
+                        $("#error-message").text(response.responseText);
+                    } else {
+                        alert("Thêm mới thất bại");
+                    }*/
+                }
+            });
+        });
+    });
+
+</script>

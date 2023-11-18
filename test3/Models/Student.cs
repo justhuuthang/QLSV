@@ -18,24 +18,21 @@ namespace test3.Models
         public Student()
         {
             this.GradeBySemesters = new HashSet<GradeBySemester>();
-            this.Grades = new HashSet<Grade>();
         }
     
         public int StudentID { get; set; }
         public string FullName { get; set; }
-        public Nullable<System.DateTime> DateOfBirth { get; set; }
+        public System.DateTime DateOfBirth { get; set; }
         public bool Gender { get; set; }
         public string Address { get; set; }
         public string ContactNumber { get; set; }
         public string Email { get; set; }
-        public Nullable<int> ClassID { get; set; }
-        public Nullable<int> DepartmentID { get; set; }
+        public int ClassID { get; set; }
+        public int DepartmentID { get; set; }
     
         public virtual Class Class { get; set; }
         public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GradeBySemester> GradeBySemesters { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Grade> Grades { get; set; }
     }
 }

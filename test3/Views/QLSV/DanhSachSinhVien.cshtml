@@ -21,6 +21,7 @@
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+            @Html.ActionLink("Import", "ImportStudents", "QLSV", null, new { @class = "btn btn-primary"})
         </div>
     </div>
 </form>
@@ -33,15 +34,15 @@
                     <tr>
                         <th>Mã sinh viên</th>
                         <th>Họ và tên</th>
-                    @*    <th>Ngày sinh</th>*@
+                        <th>Ngày sinh</th>
                         <th>Giới tính</th>
                         @*<th>Địa chỉ</th>*@
                         <th>Số điện thoại</th>
                         <th>Email</th>
                         @*<th>Mã lớp</th>
-                        <th>Mã khoa</th>*@
-                        <th> </th>
-
+        <th>Mã khoa</th>*@
+                        <th>Edit </th>
+                        <th>Edit </th>
                     </tr>
                 </thead>
                 @if (Model != null && Model.Any())
@@ -52,17 +53,28 @@
                             <tr>
                                 <td>@sinhVien.StudentID</td>
                                 <td>@sinhVien.FullName</td>
-                                @*<td>@sinhVien.DateOfBirth</td>*@
+                                <td>@sinhVien.DateOfBirth.ToString("dd/MM/yyyy")</td>
                                 <td>@(sinhVien.Gender ? "Nam" : "Nữ")</td>
                                 @*<td>@sinhVien.Address</td>*@
                                 <td>@sinhVien.ContactNumber</td>
                                 <td>@sinhVien.Email</td>
                                 @*<td>@sinhVien.ClassID</td>
-                                <td>@sinhVien.DepartmentID</td>*@
-                                <td><a href="~/QLSV/Suathongtin?id=@sinhVien.StudentID">Xem</a></td>
+        <td>@sinhVien.DepartmentID</td>*@
+                                @*<td><a href="~/QLSV/Suathongtin?id=@sinhVien.StudentID">Xem</a></td>*@
 
-                                @*<td><a href="~/QLSV/Xoa?id=@sinhVien.StudentID">Xóa</a></td>
-                                <td><a href="~/QLSV/Suathongtin?id=@sinhVien.StudentID">Sửa</a></td>*@
+                                <td>
+                                    <form action="~/QLSV/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@sinhVien.StudentID" />
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="~/QLSV/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@sinhVien.StudentID" />
+                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                    </form>
+                                </td>
+
                             </tr>
                         }
 
@@ -74,4 +86,3 @@
         @Html.PagedListPager(Model, page => Url.Action("DanhSachSinhVien", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
-

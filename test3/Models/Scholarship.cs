@@ -17,8 +17,8 @@ namespace test3.Models
         public int ScholarshipID { get; set; }
         public string ScholarshipName { get; set; }
         public string Description { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
         public string Conditions { get; set; }
     }
 }

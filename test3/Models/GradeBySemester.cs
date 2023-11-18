@@ -20,7 +20,6 @@ namespace test3.Models
         public decimal AverageScore { get; set; }
     
         public virtual Grade Grade { get; set; }
-        public virtual Semester Semester { get; set; }
         public virtual Student Student { get; set; }
     }
 }

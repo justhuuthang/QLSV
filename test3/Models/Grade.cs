@@ -21,18 +21,16 @@ namespace test3.Models
         }
     
         public int GradeID { get; set; }
-        public Nullable<int> StudentID { get; set; }
-        public Nullable<int> CourseID { get; set; }
-        public Nullable<System.DateTime> ExamDate { get; set; }
-        public Nullable<int> SemesterID { get; set; }
-        public Nullable<decimal> ScoreScale10 { get; set; }
-        public Nullable<decimal> ScoreScale4 { get; set; }
+        public int StudentID { get; set; }
+        public int CourseID { get; set; }
+        public System.DateTime ExamDate { get; set; }
+        public int SemesterID { get; set; }
+        public decimal ScoreScale10 { get; set; }
+        public decimal ScoreScale4 { get; set; }
         public string LetterGrade { get; set; }
     
         public virtual Cours Cours { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GradeBySemester> GradeBySemesters { get; set; }
-        public virtual Student Student { get; set; }
-        public virtual Semester Semester { get; set; }
     }
 }

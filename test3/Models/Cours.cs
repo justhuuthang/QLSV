@@ -23,14 +23,11 @@ namespace test3.Models
         public int CourseID { get; set; }
         public string CourseName { get; set; }
         public string Description { get; set; }
-        public Nullable<int> Credits { get; set; }
-        public Nullable<int> DepartmentID { get; set; }
-        public Nullable<int> SemesterID { get; set; }
-        public Nullable<int> ClassID { get; set; }
+        public int Credits { get; set; }
+        public int DepartmentID { get; set; }
+        public int SemesterID { get; set; }
+        public int ClassID { get; set; }
     
-        public virtual Class Class { get; set; }
-        public virtual Department Department { get; set; }
-        public virtual Semester Semester { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Grade> Grades { get; set; }
     }
