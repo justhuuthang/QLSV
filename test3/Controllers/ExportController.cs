@@ -54,6 +54,63 @@ namespace test3.Controllers
                 return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachSinhVien.xlsx");
             }
         }
+        private QuanliSVEntities db = new QuanliSVEntities();
+        public ActionResult ExportMonHoc()
+        {
+            // Lấy danh sách sinh viên từ cơ sở dữ liệu hoặc từ nơi bạn lưu trữ dữ liệu
+            List<Cours> subjects = GetSubjectListFromDatabase();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DanhSachMonHoc");
+
+                // Định dạng tiêu đề
+                worksheet.Cell(1, 1).Value = "CourseID";
+                worksheet.Cell(1, 2).Value = "CourseName";
+                worksheet.Cell(1, 3).Value = "Description";
+                worksheet.Cell(1, 4).Value = "Credits";
+                worksheet.Cell(1, 5).Value = "DepartmentName";
+                worksheet.Cell(1, 6).Value = "SemesterName";
+
+                // Ghi danh sách sinh viên vào file Excel
+                for (int i = 0; i < subjects.Count; i++)
+                {
+                    var row = i + 2;
+                    worksheet.Cell(row, 1).Value = subjects[i].CourseID;
+                    worksheet.Cell(row, 2).Value = subjects[i].CourseName;
+                    worksheet.Cell(row, 3).Value = subjects[i].Description;
+                    worksheet.Cell(row, 4).Value = subjects[i].Credits;
+                    var departmentName = GetDepartmentName(subjects[i].DepartmentID);
+                    var semesterName = GetSemesterName(subjects[i].SemesterID);
+
+                    worksheet.Cell(row, 5).Value = departmentName;
+                    worksheet.Cell(row, 6).Value = semesterName;
+
+                }
+
+                // Tạo tệp Excel và trả về nó cho người dùng
+                var memoryStream = new MemoryStream();
+                workbook.SaveAs(memoryStream);
+
+                return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachMonHoc.xlsx");
+            }
+        }
+        private string GetDepartmentName(int departmentID)
+        {
+            var department = db.Departments.Find(departmentID);
+            return department != null ? department.DepartmentName : string.Empty;
+        }
+
+        // Hàm để lấy tên học kỳ từ SemesterID
+        private string GetSemesterName(int semesterID)
+        {
+            var semester = db.Semesters.Find(semesterID);
+            return semester != null ? semester.SemesterName : string.Empty;
+        }
+
+
+
+
 
 
         /*public ActionResult ExportGiangVien()
@@ -234,6 +291,12 @@ namespace test3.Controllers
             var db = new QuanliSVEntities();
             // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
             return db.Students.ToList();
+        }
+        private List<Cours> GetSubjectListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
+            return db.Courses.ToList();
         }
     }
 }
