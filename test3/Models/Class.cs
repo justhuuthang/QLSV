@@ -18,6 +18,7 @@ namespace test3.Models
         public Class()
         {
             this.Students = new HashSet<Student>();
+            this.Courses = new HashSet<Cours>();
         }
     
         public int ClassID { get; set; }
@@ -29,5 +30,7 @@ namespace test3.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cours> Courses { get; set; }
     }
 }

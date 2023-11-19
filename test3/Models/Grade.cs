@@ -26,11 +26,13 @@ namespace test3.Models
         public System.DateTime ExamDate { get; set; }
         public int SemesterID { get; set; }
         public decimal ScoreScale10 { get; set; }
-        public decimal ScoreScale4 { get; set; }
+        public Nullable<decimal> ScoreScale4 { get; set; }
         public string LetterGrade { get; set; }
     
         public virtual Cours Cours { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GradeBySemester> GradeBySemesters { get; set; }
+        public virtual Student Student { get; set; }
+        public virtual Semester Semester { get; set; }
     }
 }

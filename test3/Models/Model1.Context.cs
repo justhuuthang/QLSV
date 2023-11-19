@@ -37,6 +37,5 @@ namespace test3.Models
         public virtual DbSet<Scholarship> Scholarships { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<Student> Students { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }
