@@ -1,14 +1,14 @@
-﻿@*@model List<test3.Models.SinhVien>*@
+﻿
 @using PagedList.Mvc;
 @using PagedList;
-@model IPagedList<test3.Models.Grade>
+@model IPagedList<test3.Models.Semester>
 @{
     ViewBag.ac = 15;
 }
 
 <h2>Danh sách học kì </h2>
 <!-- Advanced Tables -->
-<form action="/QLSV/Search" method="get">
+<form action="/QLHK/Search" method="get">
     <div class="form-group">
         <div style="display: flex">
             <select name="searchField" class="form-control" style="width: 30%;">
@@ -22,7 +22,7 @@
     </div>
 </form>
 
-<form action="/QLMH/Search" method="get">
+<form action="/QLHK/Search" method="get">
     <div class="form-group">
         <div style="display: flex">
 
@@ -64,7 +64,7 @@
 
 
 
-                        @*<td><a href="~/QLSV/Xoa?id=@sinhVien.StudentID">Xóa</a></td>*@
+                        
 
                     </tr>
                         }

@@ -1,87 +1,93 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Học Bổng</title>
-    <style>
-        table {
-            width: 80%;
-            border-collapse: collapse;
-            margin: 20px;
-        }
+﻿@model test3.Models.Scholarship
+@{
+    ViewBag.ac = 17;
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+<h2>Thêm học bổng mới</h2>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <form action="@Url.Action("ThemMoiHocBong", "QLHB")" method="post" class="form-horizontal">
+                @Html.HiddenFor(model => model.ScholarshipID)
 
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
+                <div class="form-group">
+                    <label for="ScholarshipName" class="col-md-2 control-label">Tên Học Bổng:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="ScholarshipName" id="ScholarshipName" class="form-control" required>
+                    </div>
+                </div>
 
-    <?php
-    // Kết nối đến cơ sở dữ liệu
-    $servername = "tên_máy_chủ";
-    $username = "tên_người_dùng";
-    $password = "mật_khẩu";
-    $dbname = "tên_cơ_sở_dữ_liệu";
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
+                <div class="form-group">
+                    <label for="StartDate" class="col-md-2 control-label">Ngày bắt đầu:</label>
+                    <div class="col-md-3">
+                        <input type="date" name="StartDate" id="StartDate" class="form-control" required>
+                    </div>
+                </div>
 
-    // Kiểm tra kết nối
-    if ($conn->connect_error) {
-    die("Kết nối không thành công: " . $conn->connect_error);
-    }
+                <div class="form-group">
+                    <label for="EndDate" class="col-md-2 control-label">Ngày kết thúc:</label>
+                    <div class="col-md-3">
+                        <input type="date" name="EndDate" id="EndDate" class="form-control" required>
+                    </div>
+                </div>
 
-    // Lấy danh sách sinh viên đạt học bổng (giả sử điểm trung bình cần đạt là 8.0)
-    $sql = "SELECT Students.StudentID, Students.StudentName, AVG(Grades.Grade) AS AverageGrade
-    FROM Students
-    JOIN Grades ON Students.StudentID = Grades.StudentID
-    GROUP BY Students.StudentID, Students.StudentName
-    HAVING AVG(Grades.Grade) >= 8.0";
+                <div class="form-group">
+                    <label for="Description" class="col-md-2 control-label">Mô tả:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="Descriprion" id="Descriptoin" class="form-control" required>
+                    </div>
+                </div>
 
-    $result = $conn->query($sql);
-    ?>
+                <div class="form-group">
+                    <label for="Conditions" class="col-md-2 control-label">Điều kiện:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="Conditions" id="Conditions" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-3">
+                        <input type="button" value="Thêm" id="btn-them" class="btn btn-primary">
+                    </div>
+                </div>
 
-    <h2>Danh sách sinh viên đạt học bổng</h2>
-    <table>
-        <tr>
-            <th>Mã Sinh Viên</th>
-            <th>Tên Sinh Viên</th>
-            <th>Điểm Trung Bình</th>
-        </tr>
 
-        <?php
-        if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-        echo "
-        <tr>
-            ";
-            echo "
-            <td>{$row['StudentID']}</td>";
-            echo "
-            <td>{$row['StudentName']}</td>";
-            echo "
-            <td>{$row['AverageGrade']}</td>";
-            echo "
-        </tr>";
-        }
-        } else {
-        echo "
-        <tr><td colspan='3'>Không có sinh viên đạt học bổng</td></tr>";
-        }
-        ?>
-    </table>
 
-    <?php
-    // Đóng kết nối
-    $conn->close();
-    ?>
 
-</body>
-</html>
+
+
+                <div>
+                    @Html.ActionLink("Back to List", "DanhSachHocBong")
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+            $("#btn-them").click(function () {
+                var form = $('form')[0];
+                if (form.checkValidity() === false) {
+                    // Nếu biểu mẫu không hợp lệ, không gửi đi
+                    form.reportValidity();
+                    return;
+                }
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "POST",
+                    data: formData,
+                    contentType: "application/json; charset = utf-8",
+                    url: window.location.origin + '/QLHB/ThemMoiHocBong',
+                    processData: false,
+                    contentType: false,
+                    Cache: false,
+                    success: function (reponse) {
+                        window.location.href = window.location.origin + '/QLHK/DanhSachHocBong';
+                    },
+                    error: function (response) {
+                        alert("Thêm mới thất bại");
+                    }
+                })
+            })
+        })
+</script>
