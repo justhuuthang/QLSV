@@ -95,6 +95,44 @@ namespace test3.Controllers
                 return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachMonHoc.xlsx");
             }
         }
+
+        public ActionResult ExportLop()
+        {
+            // Lấy danh sách sinh viên từ cơ sở dữ liệu hoặc từ nơi bạn lưu trữ dữ liệu
+            List<Class> classes = GetClassListFromDatabase();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DanhSachMonHoc");
+
+                // Định dạng tiêu đề
+                worksheet.Cell(1, 1).Value = "ClassID";
+                worksheet.Cell(1, 2).Value = "ClassName";
+                worksheet.Cell(1, 3).Value = "StartDate";
+                worksheet.Cell(1, 4).Value = "EndDate";
+                worksheet.Cell(1, 5).Value = "HeadTeacher";
+                worksheet.Cell(1, 6).Value = "MaxStudents";
+
+                // Ghi danh sách sinh viên vào file Excel
+                for (int i = 0; i < classes.Count; i++)
+                {
+                    var row = i + 2;
+                    worksheet.Cell(row, 1).Value = classes[i].ClassID;
+                    worksheet.Cell(row, 2).Value = classes[i].ClassName;
+                    worksheet.Cell(row, 3).Value = classes[i].StartDate;
+                    worksheet.Cell(row, 4).Value = classes[i].EndDate;
+                    worksheet.Cell(row, 5).Value = classes[i].HeadTeacher;
+                    worksheet.Cell(row, 6).Value = classes[i].MaxStudents;
+
+                }
+                // Tạo tệp Excel và trả về nó cho người dùng
+                var memoryStream = new MemoryStream();
+                workbook.SaveAs(memoryStream);
+
+                return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachLop.xlsx");
+            }
+        }
+
         private string GetDepartmentName(int departmentID)
         {
             var department = db.Departments.Find(departmentID);
@@ -297,6 +335,12 @@ namespace test3.Controllers
             var db = new QuanliSVEntities();
             // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
             return db.Courses.ToList();
+        }
+        private List<Class> GetClassListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
+            return db.Classes.ToList();
         }
     }
 }

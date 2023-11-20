@@ -7,6 +7,13 @@
 }
 
 <h2>Danh sách lớp </h2>
+<form action="/QLL/Search" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            @Html.ActionLink("Export", "ExportLop", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 920px;" })
+        </div>
+    </div>
+</form>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
@@ -31,8 +38,8 @@
                             <tr>
                                 <td>@lop.ClassID</td>
                                 <td>@lop.ClassName</td>
-                                <td>@(lop.StartDate != null ? lop.StartDate.Value.ToString("dd-MM-yyyy") : "")</td>
-                                <td>@(lop.EndDate != null ? lop.EndDate.Value.ToString("dd-MM-yyyy") : "")</td>
+                                <td>@lop.StartDate.ToString("dd-MM-yyyy")</td>
+                                <td>@lop.EndDate.ToString("dd-MM-yyyy")</td>
                                 <td>@lop.HeadTeacher</td>
                                 <td>@lop.MaxStudents</td>
                                 <td><a href="~/QLL/Suathongtin?id=@lop.ClassID">Xem</a></td>
