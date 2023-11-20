@@ -66,13 +66,18 @@
     </div>
 
     <div class="form-group">
-        <label class="control-label col-md-2" for="ClassID">Tên lớp:</label>
+        <label for="ClassID" class="control-label col-md-2">Lớp:</label>
         <div class="col-md-3">
             @{
-                List<test3.Models.Class> dslop = db.Classes.ToList();
+                var selectedClassId = Model.ClassID;
+                List<SelectListItem> classList = new List<SelectListItem>();
+                if (selectedClassId != null)
+                {
+                    var selectedClass = db.Classes.Find(selectedClassId);
+                    classList.Add(new SelectListItem { Text = selectedClass.ClassName, Value = selectedClass.ClassID.ToString(), Selected = true });
+                }
             }
-
-            @Html.DropDownListFor(model => model.ClassID, new SelectList(dslop, "ClassID", "ClassName"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
+            @Html.DropDownListFor(model => model.ClassID, classList, "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
         </div>
     </div>
 
@@ -123,5 +128,26 @@
             });
         });
     });
+    $(document).ready(function () {
+        $("#DepartmentID").change(function () {
+            var selectedDepartmentId = $(this).val();
 
+            $.ajax({
+                url: '/QLSV/GetClassesByDepartment', // Thay đổi đường dẫn tới action của bạn
+                type: 'GET',
+                dataType: 'json',
+                data: { departmentId: selectedDepartmentId },
+                success: function (classes) {
+                    var classDropdown = $("#ClassID");
+                    classDropdown.find('option').not(':first').remove();
+                    $.each(classes, function (index, cls) {
+                        classDropdown.append($('<option></option>').attr('value', cls.Value).text(cls.Text));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
 </script>
