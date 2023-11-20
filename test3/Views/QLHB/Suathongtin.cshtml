@@ -1,61 +1,56 @@
-﻿@model test3.Models.Grade
+﻿@model test3.Models.Scholarship
 
 @{
     ViewBag.Title = "Suathongtin";
 }
 
 <h2>Thông tin điểm</h2>
-<form action="/QLD/Suathongtin" method="post" class="form-horizontal">
-    @Html.HiddenFor(model => model.GradeID)
+<form action="/QLHB/Suathongtin" method="post" class="form-horizontal">
+    @Html.HiddenFor(model => model.ScholarshipID)
 
     <div class="form-group">
-        <label for="StudentID" class="col-md-2 control-label">Mã sinh viên:</label>
+        <label for="ScholarshipID" class="col-md-2 control-label">Mã hoc bong:</label>
         <div class="col-md-3">
-            <input type="text" name="StudentID" id="StudentID" class="form-control" value="@Model.StudentID" required>
+            <input type="text" name="ScholarshipID" id="ScholarshipID" class="form-control" value="@Model.ScholarshipID" required>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="CourseID" class="col-md-2 control-label">Mã môn:</label>
+        <label for="ScholarshipName" class="col-md-2 control-label">Ten hoc bong:</label>
         <div class="col-md-3">
-            <input type="text" name="CourseID" id="CourseID" class="form-control" value="@Model.CourseID" required>
+            <input type="text" name="ScholarshipName" id="ScholarshipName" class="form-control" value="@Model.ScholarshipName" required>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="ExamDate" class="col-md-2 control-label">Ngày thi:</label>
+        <label for="Description" class="col-md-2 control-label">Mo ta:</label>
         <div class="col-md-3">
-            <input type="text" name="ExamDate" id="ExamDate" class="form-control" value="@Model.ExamDate" required />
+            <input type="text" name="Descriprion" id="Description" class="form-control" value="@Model.Description" required />
         </div>
     </div>
 
     <div class="form-group">
-        <label for="SemesterID" class="col-md-2 control-label">Kì:</label>
+        <label for="StartDate" class="col-md-2 control-label">Ngay bat dau:</label>
         <div class="col-md-3">
-            <input type="text" name="SemesterID" id="SemesterID" class="form-control" value="@Model.SemesterID" required />
+            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@Model.StartDate" required />
         </div>
     </div>
 
     <div class="form-group">
-        <label for="ScoreScale10" class="col-md-2 control-label">Điểm hệ 10:</label>
+        <label for="EndDate" class="col-md-2 control-label">Ngay ket thuc:</label>
         <div class="col-md-3">
-            <input type="text" name="ScoreScale10" id="ScoreScale10" class="form-control" value ="@Model.ScoreScale10" oninput="convertGrade()" required>
+            <input type="date" name="EndDate" id="EndDate" class="form-control" value ="@Model.EndDate" oninput="convertGrade()" required>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="ScoreScale4" class="col-md-2 control-label">Điểm hệ 4:</label>
+        <label for="Conditions" class="col-md-2 control-label">Đieu kien:</label>
         <div class="col-md-3">
-            <input type="text" name="ScoreScale4" class="form-control" id="ScoreScale4" value="@Model.ScoreScale4" readonly>
+            <input type="text" name="Conditions" class="form-control" id="Conditions" value="@Model.Conditions" readonly>
         </div>
     </div>
 
-    <div class="form-group">
-        <label for="LetterGrade" class="col-md-2 control-label">Điểm chữ:</label>
-        <div class="col-md-3">
-            <input type="text" name="LetterGrade" class="form-control" id="LetterGrade" value="@Model.LetterGrade" readonly>
-        </div>
-    </div>
+   
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
@@ -69,31 +64,4 @@
         @Html.ActionLink("Back to List", "DanhSachHocBong")
     </div>
 </form>
-<script>
-    function convertGrade() {
-        var grade10 = parseFloat(document.getElementById('ScoreScale10').value);
 
-        var grade4;
-        var letterScore;
-
-        if (grade10 >= 8.5 && grade10 <= 10.0) {
-            grade4 = 4.0;
-            letterScore = "A";
-        } else if (grade10 >= 7.0 && grade10 <= 8.4) {
-            grade4 = 3.0;
-            letterScore = "B";
-        } else if (grade10 >= 5.5 && grade10 <= 6.9) {
-            grade4 = 2.0;
-            letterScore = "C";
-        } else if (grade10 >= 4.0 && grade10 <= 5.4) {
-            grade4 = 1.0;
-            letterScore = "D";
-        } else {
-            grade4 = 0.0;
-            letterScore = "F";
-        }
-
-        document.getElementById('ScoreScale4').value = grade4;
-        document.getElementById('LetterGrade').value = letterScore;
-    }
-</script>
