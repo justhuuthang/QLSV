@@ -10,19 +10,14 @@
 namespace test3.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class GradeBySemester
+    public partial class sp_DanhSachSinhVienDatHocBong_Result
     {
         public int StudentID { get; set; }
+        public string FullName { get; set; }
         public int SemesterID { get; set; }
-        public int GradeID { get; set; }
-        public decimal AverageScore { get; set; }
-        public int ScholarshipID { get; set; }
-    
-        public virtual Grade Grade { get; set; }
-        public virtual Scholarship Scholarship { get; set; }
-        public virtual Semester Semester { get; set; }
-        public virtual Student Student { get; set; }
+        public string SemesterName { get; set; }
+        public Nullable<decimal> AverageScore { get; set; }
+        public string HocBong { get; set; }
     }
 }

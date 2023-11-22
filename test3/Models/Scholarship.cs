@@ -14,11 +14,20 @@ namespace test3.Models
     
     public partial class Scholarship
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Scholarship()
+        {
+            this.GradeBySemesters = new HashSet<GradeBySemester>();
+        }
+    
         public int ScholarshipID { get; set; }
         public string ScholarshipName { get; set; }
         public string Description { get; set; }
         public System.DateTime StartDate { get; set; }
         public System.DateTime EndDate { get; set; }
         public string Conditions { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GradeBySemester> GradeBySemesters { get; set; }
     }
 }

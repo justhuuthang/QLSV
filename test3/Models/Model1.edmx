@@ -65,6 +65,7 @@
           <Property Name="SemesterID" Type="int" Nullable="false" />
           <Property Name="GradeID" Type="int" Nullable="false" />
           <Property Name="AverageScore" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="ScholarshipID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Grades">
           <Key>
@@ -253,6 +254,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GradeBySemester_Scholarships">
+          <End Role="Scholarships" Type="Self.Scholarships" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scholarships">
+              <PropertyRef Name="ScholarshipID" />
+            </Principal>
+            <Dependent Role="GradeBySemester">
+              <PropertyRef Name="ScholarshipID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GradeBySemester_Semesters">
           <End Role="Semesters" Type="Self.Semesters" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -321,6 +336,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="sp_DanhSachSinhVienDatHocBong" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MaKi" Type="nvarchar" Mode="In" />
+        </Function>
         <EntityContainer Name="QuanliSVModelStoreContainer">
           <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Classes" EntityType="Self.Classes" Schema="dbo" store:Type="Tables" />
@@ -369,6 +387,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_GradeBySemester_Grades" Association="Self.FK_GradeBySemester_Grades">
             <End Role="Grades" EntitySet="Grades" />
+            <End Role="GradeBySemester" EntitySet="GradeBySemester" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GradeBySemester_Scholarships" Association="Self.FK_GradeBySemester_Scholarships">
+            <End Role="Scholarships" EntitySet="Scholarships" />
             <End Role="GradeBySemester" EntitySet="GradeBySemester" />
           </AssociationSet>
           <AssociationSet Name="FK_GradeBySemester_Semesters" Association="Self.FK_GradeBySemester_Semesters">
@@ -468,7 +490,9 @@
           <Property Name="SemesterID" Type="Int32" Nullable="false" />
           <Property Name="GradeID" Type="Int32" Nullable="false" />
           <Property Name="AverageScore" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="ScholarshipID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Grade" Relationship="Self.FK_GradeBySemester_Grades" FromRole="GradeBySemester" ToRole="Grades" />
+          <NavigationProperty Name="Scholarship" Relationship="Self.FK_GradeBySemester_Scholarships" FromRole="GradeBySemester" ToRole="Scholarships" />
           <NavigationProperty Name="Semester" Relationship="Self.FK_GradeBySemester_Semesters" FromRole="GradeBySemester" ToRole="Semesters" />
           <NavigationProperty Name="Student" Relationship="Self.FK_GradeBySemester_Students" FromRole="GradeBySemester" ToRole="Students" />
         </EntityType>
@@ -519,6 +543,7 @@
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Conditions" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="GradeBySemesters" Relationship="Self.FK_GradeBySemester_Scholarships" FromRole="Scholarships" ToRole="GradeBySemester" />
         </EntityType>
         <EntityType Name="Semester">
           <Key>
@@ -664,6 +689,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GradeBySemester_Scholarships">
+          <End Role="Scholarships" Type="Self.Scholarship" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GradeBySemester" Type="Self.GradeBySemester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scholarships">
+              <PropertyRef Name="ScholarshipID" />
+            </Principal>
+            <Dependent Role="GradeBySemester">
+              <PropertyRef Name="ScholarshipID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GradeBySemester_Semesters">
           <End Role="Semesters" Type="Self.Semester" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -765,6 +804,10 @@
             <End Role="Grades" EntitySet="Grades" />
             <End Role="GradeBySemester" EntitySet="GradeBySemesters" />
           </AssociationSet>
+          <AssociationSet Name="FK_GradeBySemester_Scholarships" Association="Self.FK_GradeBySemester_Scholarships">
+            <End Role="Scholarships" EntitySet="Scholarships" />
+            <End Role="GradeBySemester" EntitySet="GradeBySemesters" />
+          </AssociationSet>
           <AssociationSet Name="FK_GradeBySemester_Semesters" Association="Self.FK_GradeBySemester_Semesters">
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="GradeBySemester" EntitySet="GradeBySemesters" />
@@ -781,12 +824,23 @@
             <End Role="Semesters" EntitySet="Semesters" />
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
+          <FunctionImport Name="sp_DanhSachSinhVienDatHocBong" ReturnType="Collection(QuanliSVModel.sp_DanhSachSinhVienDatHocBong_Result)">
+          <Parameter Name="MaKi" Mode="In" Type="String" />
+          </FunctionImport>
           <EntitySet Name="sysdiagrams" EntityType="QuanliSVModel.sysdiagram" />
           <AssociationSet Name="FK_Classes_Departments" Association="QuanliSVModel.FK_Classes_Departments">
             <End Role="Department" EntitySet="Departments" />
             <End Role="Class" EntitySet="Classes" />
           </AssociationSet>
         </EntityContainer>
+        <ComplexType Name="sp_DanhSachSinhVienDatHocBong_Result">
+          <Property Type="Int32" Name="StudentID" Nullable="false" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="SemesterID" Nullable="false" />
+          <Property Type="String" Name="SemesterName" Nullable="false" MaxLength="255" />
+          <Property Type="Decimal" Name="AverageScore" Nullable="true" Precision="38" Scale="6" />
+          <Property Type="String" Name="HocBong" Nullable="false" MaxLength="9" />
+        </ComplexType>
         <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -879,6 +933,7 @@
                 <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
                 <ScalarProperty Name="GradeID" ColumnName="GradeID" />
                 <ScalarProperty Name="AverageScore" ColumnName="AverageScore" />
+                <ScalarProperty Name="ScholarshipID" ColumnName="ScholarshipID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -952,6 +1007,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_DanhSachSinhVienDatHocBong" FunctionName="QuanliSVModel.Store.sp_DanhSachSinhVienDatHocBong">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanliSVModel.sp_DanhSachSinhVienDatHocBong_Result">
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
+                <ScalarProperty Name="SemesterName" ColumnName="SemesterName" />
+                <ScalarProperty Name="AverageScore" ColumnName="AverageScore" />
+                <ScalarProperty Name="HocBong" ColumnName="HocBong" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="QuanliSVModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">

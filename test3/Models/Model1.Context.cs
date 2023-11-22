@@ -12,6 +12,8 @@ namespace test3.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class QuanliSVEntities : DbContext
     {
@@ -38,5 +40,14 @@ namespace test3.Models
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+    
+        public virtual ObjectResult<sp_DanhSachSinhVienDatHocBong_Result> sp_DanhSachSinhVienDatHocBong(string maKi)
+        {
+            var maKiParameter = maKi != null ?
+                new ObjectParameter("MaKi", maKi) :
+                new ObjectParameter("MaKi", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_DanhSachSinhVienDatHocBong_Result>("sp_DanhSachSinhVienDatHocBong", maKiParameter);
+        }
     }
 }

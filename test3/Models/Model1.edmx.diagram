@@ -4,19 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6ccbdec446064990b9d33de685be1549" Name="Diagram1">
-        <EntityTypeShape EntityType="QuanliSVModel.Account" Width="1.5" PointX="5.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Class" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Cours" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Department" Width="1.5" PointX="3.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Function_Role" Width="1.5" PointX="5.75" PointY="9.125" IsExpanded="true" />
+      <Diagram DiagramId="37f031819a24414c9e4aa4f0da60caed" Name="Diagram1">
+        <EntityTypeShape EntityType="QuanliSVModel.Account" Width="1.5" PointX="8.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Class" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Cours" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Department" Width="1.5" PointX="3.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Function_Role" Width="1.5" PointX="8.75" PointY="9.125" IsExpanded="true" />
         <EntityTypeShape EntityType="QuanliSVModel.GradeBySemester" Width="1.5" PointX="8.25" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Grade" Width="1.5" PointX="11.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Grade" Width="1.5" PointX="11.25" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="QuanliSVModel.Notification" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Role" Width="1.5" PointX="8" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Scholarship" Width="1.5" PointX="2.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Semester" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="QuanliSVModel.Student" Width="1.5" PointX="6" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Role" Width="1.5" PointX="11" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Scholarship" Width="1.5" PointX="6" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Semester" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.Student" Width="1.5" PointX="6" PointY="5" IsExpanded="true" />
         <AssociationConnector Association="QuanliSVModel.FK_Role_Accounts" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK__Students__ClassI__4CA06362" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_Courses_Classes" ManuallyRouted="false" />
@@ -26,11 +26,12 @@
         <AssociationConnector Association="QuanliSVModel.FK__Students__Depart__4D94879B" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_Role_Function" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_GradeBySemester_Grades" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanliSVModel.FK_GradeBySemester_Scholarships" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_GradeBySemester_Semesters" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_GradeBySemester_Students" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK__Grades__StudentI__4316F928" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_Grades_Semesters" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="QuanliSVModel.sysdiagram" Width="1.5" PointX="8.375" PointY="8.75" />
+        <EntityTypeShape EntityType="QuanliSVModel.sysdiagram" Width="1.5" PointX="3.375" PointY="9.75" />
         <AssociationConnector Association="QuanliSVModel.FK_Classes_Departments" />
       </Diagram>
     </edmx:Diagrams>
