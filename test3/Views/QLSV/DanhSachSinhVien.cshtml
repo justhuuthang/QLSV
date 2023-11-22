@@ -18,17 +18,12 @@
             </select>
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-        </div>
-    </div>
-</form>
-<form action="/QLSV/Search" method="get">
-    <div class="form-group">
-        <div style="display: flex">
             @Html.ActionLink("Export", "ExportSinhVien", "QLSV", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
             @Html.ActionLink("Import", "ImportStudents", "QLSV", null, new { @class = "btn btn-primary" })
         </div>
     </div>
 </form>
+
 
 
 <div class="panel panel-default">
