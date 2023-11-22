@@ -1,111 +1,67 @@
-﻿@model test3.Models.Grade
+﻿@*@model List<test3.Models.SinhVien>*@
+@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.Grade>
 @{
-    ViewBag.ac = 14;
+    ViewBag.ac = 13;
 }
 
-<h2>Thêm điểm</h2>
+<h2>Danh sách điểm </h2>
+<form action="/QLD/Search" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            <select name="searchField" class="form-control" style="width: 30%;">
+                <option value="StudentID">MSSV</option>
+                <option value="CourseID">Mã môn</option>
+                <option value="ExamDate">Ngày thi</option>
+                <option value="SemesterID">Kì</option>
+            </select>
+            <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+        </div>
+    </div>
+</form>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
-            <form action="@Url.Action("ThemMoiDiem", "QLD")" method="post" class="form-horizontal">
-                @Html.HiddenFor(model => model.GradeID)
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Mã sinh viên</th>
+                        <th>Mã môn</th>
+                        <th>Ngày thi</th>
+                        <th>Kì</th>
+                        <th>Điểm hệ 10</th>
+                        <th>Điểm hệ 4</th>
+                        <th>Điểm chữ</th>
+                        <th> </th>
 
-                <div class="form-group">
-                    <label for="StudentID" class="col-md-2 control-label">Mã sinh viên:</label>
-                    <div class="col-md-3">
-                        <input type="text" name="StudentID" id="StudentID" class="form-control" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="CourseID">Tên môn:</label>
-                    <div class="col-md-3">
-                        @{
-                            test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
-                            List<test3.Models.Cours> dsMon = db.Courses.ToList();
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var diem in Model)
+                        {
+                            <tr>
+                                <td>@diem.StudentID</td>
+                                <td>@diem.Cours.CourseName</td>
+                                <td>@(diem.ExamDate != null ? diem.ExamDate.Value.ToString("dd-MM-yyyy") : "")</td>
+                                <td>@diem.Semester.SemesterName</td>
+                                <td>@diem.ScoreScale10</td>
+                                <td>@diem.ScoreScale4</td>
+                                <td>@diem.LetterGrade</td>
+                                <td><a href="~/QLD/Suathongtin?id=@diem.GradeID">Xem</a></td>
+                            </tr>
                         }
 
-                        @Html.DropDownListFor(model => model.CourseID, new SelectList(dsMon, "CourseID", "CourseName"), "Chọn môn...", new { @class = "form-control", id = "CourseID" })
-                    </div>
-                </div>
+                    </tbody>
+                }
 
-                <div class="form-group">
-                    <label for="ExamDate" class="col-md-2 control-label">Ngày thi:</label>
-                    <div class="col-md-3">
-                        <input type="date" name="ExamDate" id="ExamDate" class="form-control" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="SemesterID">Kì:</label>
-                    <div class="col-md-3">
-                        @{
-                            List<test3.Models.Semester> dsKi = db.Semesters.ToList();
-                        }
-
-                        @Html.DropDownListFor(model => model.SemesterID, new SelectList(dsKi, "SemesterID", "SemesterName"), "Chọn kì...", new { @class = "form-control", id = "SemesterID" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="ScoreScale10" class="col-md-2 control-label">Điểm hệ 10:</label>
-                    <div class="col-md-3">
-                        <input type="text" name="ScoreScale10" id="ScoreScale10" class="form-control" oninput="convertGrade()" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="ScoreScale4" class="col-md-2 control-label">Điểm hệ 4:</label>
-                    <div class="col-md-3">
-                        <input type="text" name="ScoreScale4" class="form-control" id="ScoreScale4" readonly>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="LetterGrade" class="col-md-2 control-label">Điểm chữ:</label>
-                    <div class="col-md-3">
-                        <input type="text" name="LetterGrade" class="form-control" id="LetterGrade" readonly>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-3">
-                        <input type="submit" value="Thêm" class="btn btn-primary">
-                    </div>
-                </div>
-
-                <div>
-                    @Html.ActionLink("Back to List", "DanhSachDiem")
-                </div>
-            </form>
+            </table>
         </div>
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachDiem", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
-<script>
-    function convertGrade() {
-        var grade10 = parseFloat(document.getElementById('ScoreScale10').value);
 
-        var grade4;
-        var letterScore;
-
-        if (grade10 >= 8.5 && grade10 <= 10.0) {
-            grade4 = 4.0;
-            letterScore = "A";
-        } else if (grade10 >= 7.0 && grade10 <= 8.4) {
-            grade4 = 3.0;
-            letterScore = "B";
-        } else if (grade10 >= 5.5 && grade10 <= 6.9) {
-            grade4 = 2.0;
-            letterScore = "C";
-        } else if (grade10 >= 4.0 && grade10 <= 5.4) {
-            grade4 = 1.0;
-            letterScore = "D";
-        } else {
-            grade4 = 0.0;
-            letterScore = "F";
-        }
-
-        document.getElementById('ScoreScale4').value = grade4;
-        document.getElementById('LetterGrade').value = letterScore;
-    }
-</script>
