@@ -197,6 +197,15 @@ namespace test3.Controllers
         public ActionResult Suathongtin(Student sinhVien)
         {
             QuanliSVEntities db = new QuanliSVEntities();
+            string contactNumber = Request["ContactNumber"];
+
+            var existingStudent = db.Students.FirstOrDefault(s => s.ContactNumber == contactNumber);
+
+            if (existingStudent != null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Sinh viên đã tồn tại với số điện thoại này.");
+            }
             db.Entry(sinhVien).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("DanhSachSinhVien");

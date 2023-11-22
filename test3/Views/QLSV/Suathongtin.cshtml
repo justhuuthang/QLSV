@@ -80,7 +80,7 @@
             @Html.DropDownListFor(model => model.ClassID, classList, "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
         </div>
     </div>
-
+    <div id="error-message" style="color: red;"></div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
             <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
@@ -119,11 +119,11 @@
                     window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
                 },
                 error: function (response) {
-                    /*if (response.responseText === "Sinh viên đã tồn tại với số điện thoại này.") {
+                    if (response.responseText === "Sinh viên đã tồn tại với số điện thoại này.") {
                         $("#error-message").text(response.responseText);
                     } else {
-                        alert("Thêm mới thất bại");
-                    }*/
+                        alert("Sửa thất bại");
+                    }
                 }
             });
         });
@@ -133,7 +133,7 @@
             var selectedDepartmentId = $(this).val();
 
             $.ajax({
-                url: '/QLSV/GetClassesByDepartment', // Thay đổi đường dẫn tới action của bạn
+                url: '/QLSV/GetClassesByDepartment', 
                 type: 'GET',
                 dataType: 'json',
                 data: { departmentId: selectedDepartmentId },

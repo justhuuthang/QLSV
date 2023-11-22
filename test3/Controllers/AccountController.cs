@@ -27,10 +27,7 @@ namespace test3.Controllers
             }
             else
             {
-                // Gán user vào Session sau khi xác thực thành công
                 SessionConfig.setUser(status);
-
-                // Redirect đến Dashboard
                 return RedirectToAction("DashBoard", "Home");
             }
 
