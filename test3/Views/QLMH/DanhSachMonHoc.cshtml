@@ -13,13 +13,10 @@
 <form action="/QLMH/Search" method="get">
     <div class="form-group">
         <div style="display: flex">
-            @*<select name="searchField" class="form-control" style="width: 30%;">
-                <option value="CourseID">MMH</option>*@
-
-            @*</select>
-                <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
-                <button type="submit" class="btn btn-primary">Tìm kiếm</button>*@
-            @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 920px;" })
+          <label for="TenMon" class="col-md-2 control-label" style="margin:7px">TênMôn:</label>
+            <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
         </div>
     </div>
 </form>
@@ -36,10 +33,11 @@
                         <th>Tín chỉ</th>
                         <th>Khoa</th>
                         <th>Học kì</th>
+                        <th>Edit </th>
+                        <th>Edit </th>
 
-                        @*<th>Lớp</th>*@
 
-                        <th> </th>
+
 
                     </tr>
                 </thead>
@@ -59,13 +57,22 @@
 
                                 <td>@monHoc.Semester.SemesterName</td>
 
-                                @*<td>@monHoc.ClassID</td>*@
-                                <td><a href="~/QLMH/Suathongtin?id=@monHoc.CourseID">Xem</a></td>
+
+                                <td>
+                                    <form action="~/QLMH/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@monHoc.CourseID" />
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="~/QLMH/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@monHoc.CourseID" />
+                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                    </form>
+                                </td>
 
 
 
-
-                                @*<td><a href="~/QLSV/Xoa?id=@sinhVien.StudentID">Xóa</a></td>*@
 
                             </tr>
                         }

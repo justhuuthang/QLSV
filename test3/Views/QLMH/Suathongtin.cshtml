@@ -77,12 +77,10 @@
             @Html.DropDownListFor(model => model.ClassID, new SelectList(dslop, "ClassID", "ClassName"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
         </div>
     </div>
-
+    <div id="error-message" style="color: red;"></div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
-
-            <input type="submit" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
-            <input type="submit" name="action" value="Xóa" class="btn btn-primary">
+            <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
         </div>
     </div>
 
@@ -97,45 +95,33 @@
     }
 </style>
 <script>
-   $(document).ready(function () {
-    $("#btn-them").click(function () {
-        var form = $('form')[0];
-        if (form.checkValidity() === false) {
-            // Nếu biểu mẫu không hợp lệ, không gửi đi
-            form.reportValidity();
-            return;
-        }
-
-        // Thêm kiểm tra CourseName trùng lặp
-        var existingCourseName = "@Model.CourseName"; // Lấy giá trị CourseName hiện tại từ Razor
-
-        if ($("#CourseName").val() === existingCourseName) {
-            alert("Tên môn học không thay đổi.");
-            return;
-        }
-
-        var formData = new FormData(form);
-        $.ajax({
-            type: "POST",
-            data: formData,
-            contentType: false,
-            processData: false,
-            url: window.location.origin + '/QLMH/Suathongtin',
-            success: function (response) {
-                if (response.success) {
-                    // Nếu thành công, chuyển hướng hoặc thực hiện các hành động khác
-                    window.location.href = window.location.origin + '/QLMH/DanhSachMonHoc';
-                } else {
-                    // Nếu có lỗi, hiển thị thông báo lỗi
-                    alert(response.message);
-                }
-            },
-            error: function (response) {
-                // Xử lý lỗi khi gửi yêu cầu AJAX
-                alert("Sửa thông tin thất bại");
+    $(document).ready(function () {
+        $("#btn-sua").click(function () {
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
             }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: window.location.origin + '/QLMH/Suathongtin',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    window.location.href = window.location.origin + '/QLMH/DanhSachMonHoc';
+                },
+                error: function (response) {
+                    if (response.responseText === "Môn học đã tồn tại .") {
+                        $("#error-message").text(response.responseText);
+                    } else {
+                        alert("Sửa thất bại");
+                    }
+                }
+            });
         });
     });
-});
-
 </script>
