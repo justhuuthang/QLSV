@@ -237,6 +237,7 @@
     <Compile Include="Controllers\QLLController.cs" />
     <Compile Include="Controllers\QLMHController.cs" />
     <Compile Include="Controllers\QLSVController.cs" />
+    <Compile Include="Controllers\QLSVDHBController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -520,6 +521,7 @@
     <Content Include="Views\QLMH\ThemMoiMonHoc.cshtml" />
     <Content Include="Views\QLMH\Suathongtin.cshtml" />
     <Content Include="Views\QLSV\ImportStudents.cshtml" />
+    <Content Include="Views\QLSVDHB\DanhSachSinhVienDatHocBong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
