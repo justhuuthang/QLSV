@@ -19,14 +19,14 @@
     <div class="form-group">
         <label for="StartDate" class="col-md-2 control-label">Ngày bắt đầu:</label>
         <div class="col-md-3">
-            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@Model.StartDate" required>
+            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.StartDate)" required>
         </div>
     </div>
 
     <div class="form-group">
         <label for="EndDate" class="col-md-2 control-label">Ngày kết thúc:</label>
         <div class="col-md-3">
-            <input type="date" name="EndDate" id="EndDate" class="form-control" value="@Model.EndDate" required>
+            <input type="date" name="EndDate" id="EndDate" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.EndDate)" required>
         </div>
     </div>
 
