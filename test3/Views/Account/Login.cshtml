@@ -31,6 +31,14 @@
         <link rel="stylesheet" type="text/css" href="~/Content/login/css/util.css">
         <link rel="stylesheet" type="text/css" href="~/Content/login/css/main.css">
         <!--===============================================================================================-->
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/animsition/js/animsition.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/login/vendor/bootstrap/js/popper.js"></script>
+        <script src="~/Content/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+
     </head>
 
     <body>
@@ -54,11 +62,11 @@
                             <input class="input100" type="password" name="password">
                             <span class="focus-input100" data-placeholder="Password"></span>
                         </div>
-                        <p style="color: red; font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif">@ViewBag.LoginFail</p>
+                        <div id="error-message" style="color: red;"></div>
                         <div class="container-login100-form-btn">
                             <div class="wrap-login100-form-btn">
                                 <div class="login100-form-bgbtn"></div>
-                                <button type="submit" class="login100-form-btn">
+                                <button type="button" id="btn-login" class="login100-form-btn">
                                     Login
                                 </button>
                             </div>
@@ -71,24 +79,43 @@
                 </div>
             </div>
         </div>
-
-
-        <!--===============================================================================================-->
-        <script src="~/Content/login/vendor/jquery/jquery-3.2.1.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="~/Content/login/vendor/animsition/js/animsition.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="~/Content/login/vendor/bootstrap/js/popper.js"></script>
-        <script src="~/Content/login/vendor/bootstrap/js/bootstrap.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="~/Content/login/vendor/select2/select2.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="~/Content/login/vendor/daterangepicker/moment.min.js"></script>
-        <script src="~/Content/login/vendor/daterangepicker/daterangepicker.js"></script>
-        <!--===============================================================================================-->
-        <script src="~/Content/login/vendor/countdowntime/countdowntime.js"></script>
-        <!--===============================================================================================-->
-        <script src="~/Scripts/login/js/main.js"></script>
-
     </body>
+    <!--===============================================================================================-->
+    <script src="~/Content/login/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/login/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/Content/login/vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/login/vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Scripts/login/js/main.js"></script>
 </main>
+<script>
+    $(document).ready(function () {
+        $("#btn-login").click(function () {
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
+            }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: window.location.origin + '/Account/Login',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    window.location.href = window.location.origin + '/Home/DashBoard';
+                },
+                error: function (response) {
+                    if (response.responseText === "Sai tài khoản hoặc mật khẩu") {
+                        $("#error-message").text(response.responseText);
+                    }
+                }
+            });
+        });
+    });
+</script>
