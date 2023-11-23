@@ -122,6 +122,16 @@
                             </li>
                         </ul>
                     </li>
+                    
+                    <li>
+                        <a href="#" class="@Html.Raw(ViewBag.ac == 19 || ViewBag.ac == 20? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a class="@Html.Raw(ViewBag.ac == 19 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVienDatHocBong", "QLSVDHB" )">Sinh viên đạt học bổng</a>
+                            </li>
+
+                        </ul>
+                    </li>
                 </ul>
 
             </div>
