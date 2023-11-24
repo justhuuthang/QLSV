@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web.Mvc;
 using test3.Models;
 using PagedList;
+using System.Net;
+using System.Data.Entity;
 
 namespace test3.Controllers
 {
@@ -30,10 +32,32 @@ namespace test3.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Search(string searchValue, int? page)
+        {
+            List<Class> searchResults = new List<Class>();
+            searchResults = db.Classes.Where(s => s.ClassName.ToUpper().StartsWith(searchValue)).ToList();
+
+            int pageNumber = page ?? 1;
+            int pageSize = 10;
+            IPagedList<Class> pagedResults = searchResults.ToPagedList(pageNumber, pageSize);
+
+            return View("DanhSachLop", pagedResults);
+        }
+
         [HttpPost]
         public ActionResult ThemMoiLop(Class lop)
         {
-            QuanliSVEntities db = new QuanliSVEntities();
+            string className = Request["ClassName"];
+
+            var existingClassName = db.Classes.FirstOrDefault(s => s.ClassName == className);
+
+            if (existingClassName != null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Lớp này đã tồn tại.");
+            }
+
             db.Classes.Add(lop);
             db.SaveChanges();
             return RedirectToAction("DanhSachLop");
@@ -59,38 +83,27 @@ namespace test3.Controllers
         }
 
         [HttpPost]
-        public ActionResult Suathongtin(Class lop, string action)
+        public ActionResult Suathongtin(Class lop)
         {
-            QuanliSVEntities db = new QuanliSVEntities();
-            var existingClass = db.Classes.Find(lop.ClassID);
+            string className = Request["ClassName"];
 
-            if (existingClass == null)
+            var existingClassName = db.Classes.FirstOrDefault(s => s.ClassName == className);
+
+            if (existingClassName != null)
             {
-                return RedirectToAction("DanhSachLop");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Lớp này đã tồn tại.");
             }
-
-            if (action == "Xóa")
-            {
-                db.Classes.Remove(existingClass);
-                db.SaveChanges();
-
-                return RedirectToAction("DanhSachLop");
-            }
-            else if (action == "Sửa")
-            {
-                existingClass.ClassID = lop.ClassID;
-                existingClass.ClassName = lop.ClassName;
-                existingClass.StartDate = lop.StartDate;
-                existingClass.EndDate = lop.EndDate;
-                existingClass.HeadTeacher = lop.HeadTeacher;
-                existingClass.MaxStudents = lop.MaxStudents;
-
-                db.SaveChanges();
-
-                return RedirectToAction("DanhSachLop");
-            }
-
-            return View(lop);
+            db.Entry(lop).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("DanhSachLop");
+        }
+        public ActionResult Xoa(int id)
+        {
+            var lop = db.Classes.Find(id);
+            db.Classes.Remove(lop);
+            db.SaveChanges();
+            return RedirectToAction("DanhSachLop");
         }
     }
 }
