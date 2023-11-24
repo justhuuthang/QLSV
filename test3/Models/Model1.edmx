@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="QuanliSVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="QuanliSVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Accounts">
           <Key>
             <PropertyRef Name="UserID" />
@@ -131,16 +131,6 @@
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="ClassID" Type="int" Nullable="false" />
           <Property Name="DepartmentID" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK__Courses__Departm__4D94879B">
           <End Role="Departments" Type="Self.Departments" Multiplicity="1" />
@@ -352,7 +342,6 @@
           <EntitySet Name="Scholarships" EntityType="Self.Scholarships" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semesters" EntityType="Self.Semesters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Courses__Departm__4D94879B" Association="Self.FK__Courses__Departm__4D94879B">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Courses" EntitySet="Courses" />
@@ -414,7 +403,8 @@
             <End Role="Role" EntitySet="Role" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QuanliSVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -439,10 +429,10 @@
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="HeadTeacher" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="MaxStudents" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Students" Relationship="Self.FK__Students__ClassI__4CA06362" FromRole="Classes" ToRole="Students" />
-          <NavigationProperty Name="Courses" Relationship="Self.FK_Courses_Classes" FromRole="Classes" ToRole="Courses" />
           <Property Name="DepartmentID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Department" Relationship="QuanliSVModel.FK_Classes_Departments" FromRole="Class" ToRole="Department" />
+          <NavigationProperty Name="Students" Relationship="Self.FK__Students__ClassI__4CA06362" FromRole="Classes" ToRole="Students" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Classes_Departments" FromRole="Classes" ToRole="Departments" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_Courses_Classes" FromRole="Classes" ToRole="Courses" />
         </EntityType>
         <EntityType Name="Cours">
           <Key>
@@ -467,9 +457,9 @@
           <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DepartmentName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Classes" Relationship="Self.FK_Classes_Departments" FromRole="Departments" ToRole="Classes" />
           <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__Departm__4D94879B" FromRole="Departments" ToRole="Courses" />
           <NavigationProperty Name="Students" Relationship="Self.FK__Students__Depart__4D94879B" FromRole="Departments" ToRole="Students" />
-          <NavigationProperty Name="Classes" Relationship="QuanliSVModel.FK_Classes_Departments" FromRole="Department" ToRole="Class" />
         </EntityType>
         <EntityType Name="Function_Role">
           <Key>
@@ -598,6 +588,20 @@
             </Principal>
             <Dependent Role="Students">
               <PropertyRef Name="ClassID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Classes_Departments">
+          <End Role="Departments" Type="Self.Department" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Classes" Type="Self.Class" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="Classes">
+              <PropertyRef Name="DepartmentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -776,6 +780,10 @@
             <End Role="Classes" EntitySet="Classes" />
             <End Role="Students" EntitySet="Students" />
           </AssociationSet>
+          <AssociationSet Name="FK_Classes_Departments" Association="Self.FK_Classes_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Classes" EntitySet="Classes" />
+          </AssociationSet>
           <AssociationSet Name="FK_Courses_Classes" Association="Self.FK_Courses_Classes">
             <End Role="Classes" EntitySet="Classes" />
             <End Role="Courses" EntitySet="Courses" />
@@ -825,13 +833,8 @@
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
           <FunctionImport Name="sp_DanhSachSinhVienDatHocBong" ReturnType="Collection(QuanliSVModel.sp_DanhSachSinhVienDatHocBong_Result)">
-          <Parameter Name="MaKi" Mode="In" Type="String" />
+            <Parameter Name="MaKi" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="sysdiagrams" EntityType="QuanliSVModel.sysdiagram" />
-          <AssociationSet Name="FK_Classes_Departments" Association="QuanliSVModel.FK_Classes_Departments">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="Class" EntitySet="Classes" />
-          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_DanhSachSinhVienDatHocBong_Result">
           <Property Type="Int32" Name="StudentID" Nullable="false" />
@@ -841,30 +844,6 @@
           <Property Type="Decimal" Name="AverageScore" Nullable="true" Precision="38" Scale="6" />
           <Property Type="String" Name="HocBong" Nullable="false" MaxLength="9" />
         </ComplexType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <Association Name="FK_Classes_Departments">
-          <End Type="QuanliSVModel.Department" Role="Department" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="QuanliSVModel.Class" Role="Class" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="DepartmentID" />
-            </Principal>
-            <Dependent Role="Class">
-              <PropertyRef Name="DepartmentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -885,13 +864,13 @@
           <EntitySetMapping Name="Classes">
             <EntityTypeMapping TypeName="QuanliSVModel.Class">
               <MappingFragment StoreEntitySet="Classes">
-                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="ClassName" ColumnName="ClassName" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="HeadTeacher" ColumnName="HeadTeacher" />
                 <ScalarProperty Name="MaxStudents" ColumnName="MaxStudents" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1019,17 +998,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="QuanliSVModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
