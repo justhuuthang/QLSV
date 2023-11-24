@@ -119,7 +119,7 @@
                     window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
                 },
                 error: function (response) {
-                    if (response.responseText === "Sinh viên đã tồn tại với số điện thoại này.") {
+                    if (response.responseText === "Sinh viên khác đã sử dụng số điện thoại này.") {
                         $("#error-message").text(response.responseText);
                     } else {
                         alert("Sửa thất bại");

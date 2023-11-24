@@ -4,7 +4,6 @@
     Layout = null;
 }
 
-<main>
     <head>
         <title>@ViewBag.Title</title>
         <meta charset="UTF-8">
@@ -102,36 +101,35 @@
         <script src="~/Content/login/vendor/countdowntime/countdowntime.js"></script>
         <!--===============================================================================================-->
         <script src="~/Scripts/login/js/main.js"></script>
-    </body>
-</main>
-<script>
-    $(document).ready(function () {
-        $("#btn-register").click(function () {
-            var form = $('form')[0];
-            if (form.checkValidity() === false) {
-                form.reportValidity();
-                return;
-            }
-            var formData = new FormData(form);
-            $.ajax({
-                type: "POST",
-                data: formData,
-                contentType: "application/json; charset=utf-8",
-                url: window.location.origin + '/Account/Register',
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (response) {
-                    window.location.href = window.location.origin + '/Account/Login';
-                },
-                error: function (response) {
-                    if (response.responseText === "Người dùng đã tồn tại") {
-                        $("#error-message").text(response.responseText);
-                    } else {
-                        alert("Đăng kí thất bại");
+        <script>
+            $(document).ready(function () {
+                $("#btn-register").click(function () {
+                    var form = $('form')[0];
+                    if (form.checkValidity() === false) {
+                        form.reportValidity();
+                        return;
                     }
-                }
+                    var formData = new FormData(form);
+                    $.ajax({
+                        type: "POST",
+                        data: formData,
+                        contentType: "application/json; charset=utf-8",
+                        url: window.location.origin + '/Account/Register',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (response) {
+                            window.location.href = window.location.origin + '/Account/Login';
+                        },
+                        error: function (response) {
+                            if (response.responseText === "Người dùng đã tồn tại") {
+                                $("#error-message").text(response.responseText);
+                            } else {
+                                alert("Đăng kí thất bại");
+                            }
+                        }
+                    });
+                });
             });
-        });
-    });
-</script>
+        </script>
+    </body>

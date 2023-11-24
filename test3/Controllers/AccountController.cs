@@ -14,26 +14,36 @@ namespace test3.Controllers
         {
             return View();
         }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Login(Account user)
         {
-            QuanliSVEntities QLSVEntities = new QuanliSVEntities();
-            var status = QLSVEntities.Accounts.FirstOrDefault(m => m.Username == user.Username && m.Password == user.Password);
+            using (QuanliSVEntities QLSVEntities = new QuanliSVEntities())
+            {
+                // Kiểm tra tên người dùng tồn tại trước khi kiểm tra mật khẩu
+                var existingUser = QLSVEntities.Accounts.SingleOrDefault(m => m.Username == user.Username);
 
-            if (status == null)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Sai tài khoản hoặc mật khẩu");
-            }
-            else
-            {
-                SessionConfig.setUser(status);
+                if (existingUser == null)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Content("Sai tài khoản hoặc mật khẩu");
+                }
+
+                // Kiểm tra mật khẩu chỉ khi tên người dùng tồn tại
+                if (existingUser.Password != user.Password)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Content("Sai tài khoản hoặc mật khẩu");
+                }
+
+                // Lưu thông tin người dùng vào Session
+                SessionConfig.setUser(existingUser);
                 return RedirectToAction("DashBoard", "Home");
             }
+        }
 
-    }
-    public ActionResult Logout()
+        public ActionResult Logout()
         {
             SessionConfig.setUser(null);
             return RedirectToAction("Login", "Account");
