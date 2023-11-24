@@ -54,7 +54,6 @@
         <div class="col-md-offset-2 col-md-3">
 
             <input type="submit" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
-            <input type="submit" name="action" value="Xóa" class="btn btn-primary">
         </div>
     </div>
 
@@ -62,3 +61,43 @@
         @Html.ActionLink("Back to List", "DanhSachLop")
     </div>
 </form>
+
+<script>
+    $(document).ready(function () {
+        $("#btn-sua").click(function () {
+            var startDate = new Date($("#StartDate").val());
+            var endDate = new Date($("#EndDate").val());
+
+            if (startDate > endDate) {
+                $("#error-message").text("Ngày kết thúc phải sau ngày bắt đầu.");
+                return;
+            }
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
+            }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: window.location.origin + '/QLHB/Suathongtin',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    window.location.href = window.location.origin + '/QLHB/DanhSachHocBong';
+                },
+                error: function (response) {
+                    if (response.responseText === "Học bổng này đã tồn tại.") {
+                        $("#error-message").text(response.responseText);
+                    } else {
+                        alert("Sửa thất bại");
+                    }
+                }
+            });
+        });
+    });
+
+</script>

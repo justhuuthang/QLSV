@@ -10,7 +10,10 @@
 <form action="/QLL/Search" method="get">
     <div class="form-group">
         <div style="display: flex">
-            @Html.ActionLink("Export", "ExportLop", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 920px;" })
+            <label class="form-control" style="width:30%">Tên lớp</label>
+            <input name="searchValue" type="text" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            @Html.ActionLink("Export", "ExportLop", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
         </div>
     </div>
 </form>
@@ -42,7 +45,18 @@
                                 <td>@lop.EndDate.ToString("dd-MM-yyyy")</td>
                                 <td>@lop.HeadTeacher</td>
                                 <td>@lop.MaxStudents</td>
-                                <td><a href="~/QLL/Suathongtin?id=@lop.ClassID">Xem</a></td>
+                                <td>
+                                    <form action="~/QLL/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@lop.ClassID" />
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="~/QLSV/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@lop.ClassID" />
+                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                    </form>
+                                </td>
                             </tr>
                         }
 
@@ -51,7 +65,7 @@
 
             </table>
         </div>
-        @Html.PagedListPager(Model, page => Url.Action("DanhSachSinhVien", new { page, pageSize = ViewBag.PageSize }))
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachLop", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
 
