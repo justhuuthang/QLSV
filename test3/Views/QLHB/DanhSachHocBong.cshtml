@@ -46,11 +46,23 @@
                                 <td>@hocBong.ScholarshipID</td>
                                 <td>@hocBong.ScholarshipName</td>
                                 <td>@hocBong.Description</td>
-                                <td>@hocBong.StartDate</td>
-                                <td>@hocBong.EndDate</td>
+                                <td>@hocBong.StartDate.ToString("dd/MM/yyyy")</td>
+                                <td>@hocBong.EndDate.ToString("dd/MM/yyyy")</td>
                                 <td>@hocBong.Conditions</td>
-                                
-                                <td><a href="~/QLHB/Suathongtin?id=@hocBong.ScholarshipID">Sửa</a></td>
+
+                                <td>
+                                    <form action="~/QLHB/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@hocBong.ScholarshipID" />
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="~/QLHB/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@hocBong.ScholarshipID " />
+                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                    </form>
+                                </td>
+
                             </tr>
                         }
 

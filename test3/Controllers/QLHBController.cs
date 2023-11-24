@@ -7,6 +7,9 @@ using PagedList;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Bibliography;
 using System.Drawing.Printing;
+using System.Net;
+using test3.App_Start;
+using System.Data.Entity;
 
 namespace test3.Controllers
 {
@@ -50,6 +53,7 @@ namespace test3.Controllers
 
             return View("DanhSachHocBong", pagedResults);
         }
+        [Role_User]
         [HttpGet]
         public ActionResult ThemHocBong()
         {
@@ -59,12 +63,28 @@ namespace test3.Controllers
         [HttpPost]
         public ActionResult ThemHocBong(Scholarship hocBong)
         {
-            QuanliSVEntities db = new QuanliSVEntities();
+            string scholarshipName = Request["ScholarshipName"];
+
+            var existingScholarship = db.Scholarships.FirstOrDefault(s => s.ScholarshipName == scholarshipName);
+
+            if (existingScholarship != null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Học bổng này đã tồn tại.");
+            }
+
             db.Scholarships.Add(hocBong);
             db.SaveChanges();
             return RedirectToAction("DanhSachHocBong");
         }
-
+        public ActionResult Xoa(int id)
+        {
+            QuanliSVEntities db = new QuanliSVEntities();
+            var hocBong = db.Scholarships.Find(id);
+            db.Scholarships.Remove(hocBong);
+            db.SaveChanges();
+            return RedirectToAction("DanhSachHocBong");
+        }
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {
@@ -80,43 +100,25 @@ namespace test3.Controllers
             {
                 return RedirectToAction("DanhSachHocBong");
             }
-
             return View(hocBong);
         }
 
         [HttpPost]
-        public ActionResult Suathongtin(Scholarship hocBong, string action)
+        public ActionResult Suathongtin(Scholarship hocBong)
         {
             QuanliSVEntities db = new QuanliSVEntities();
-            var existingScholarship = db.Scholarships.Find(hocBong.ScholarshipID);
+            string scholarshipName = Request["ScholarshipName"];
 
-            if (existingScholarship == null)
+            var existingScholarship = db.Scholarships.FirstOrDefault(s => s.ScholarshipName == scholarshipName);
+
+            if (existingScholarship != null)
             {
-                return RedirectToAction("DanhSachHocBong");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Học bổng này đã tồn tại.");
             }
-
-            if (action == "Xóa")
-            {
-                db.Scholarships.Remove(existingScholarship);
-                db.SaveChanges();
-
-                return RedirectToAction("DanhSachHocBong");
-            }
-            else if (action == "Sửa")
-            {
-                existingScholarship.ScholarshipID = hocBong.ScholarshipID;
-                existingScholarship.ScholarshipName = hocBong.ScholarshipName;
-                existingScholarship.Description = hocBong.Description;
-                existingScholarship.StartDate = hocBong.StartDate;
-                existingScholarship.EndDate = hocBong.EndDate;
-                existingScholarship.Conditions = hocBong.Conditions;
-
-                db.SaveChanges();
-
-                return RedirectToAction("DanhSachHocBong");
-            }
-
-            return View(hocBong);
+            db.Entry(hocBong).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("DanhSachHocBong");
         }
     }
 }

@@ -53,19 +53,21 @@
                         <td>@hocKi.SemesterID</td>
                         <td>@hocKi.SemesterName</td>
 
-                        <td>@hocKi.StartDate</td>
+                        <td>@hocKi.StartDate.ToString("dd/MM/yyyy")</td>
 
-                        <td>@hocKi.EndDate</td>
-
-
-                        @*<td>@hocKi.SemesterID</td>*@
-                        <td><a href="~/QLHK/Suathongtin?id=@hocKi.SemesterID">Sửa</a></td>
-
-
-
-
-                        
-
+                        <td>@hocKi.EndDate.ToString("dd/MM/yyyy") </td>
+                        <td>
+                            <form action="~/QLHK/Xoa" method="post">
+                                <input type="hidden" name="id" value="@hocKi.SemesterID" />
+                                <button type="submit" class="btn btn-danger">Xóa</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="~/QLHK/Suathongtin" method="get">
+                                <input type="hidden" name="id" value="@hocKi.SemesterID" />
+                                <button type="submit" class="btn btn-primary">Sửa</button>
+                            </form>
+                        </td>
                     </tr>
                         }
 

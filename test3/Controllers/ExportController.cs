@@ -190,5 +190,33 @@ namespace test3.Controllers
             // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
             return db.Classes.ToList();
         }
+        public ActionResult ExportHocBong(string MaKi)
+        {
+            List<sp_DanhSachSinhVienDatHocBong_Result> dssvdhb = db.sp_DanhSachSinhVienDatHocBong(MaKi).ToList();
+
+            var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("DanhSachSinhVienDatHocBong");
+
+
+            var headers = new List<string> { "Mã Sinh Viên", "Tên Sinh Viên", "..." };
+            for (int i = 0; i < headers.Count; i++)
+            {
+                worksheet.Cell(1, i + 1).Value = headers[i];
+            }
+
+
+            for (int i = 0; i < dssvdhb.Count; i++)
+            {
+                var sv = dssvdhb[i];
+                worksheet.Cell(i + 2, 1).Value = sv.SemesterID;
+                worksheet.Cell(i + 2, 2).Value = sv.FullName;
+
+            }
+
+            var memoryStream = new System.IO.MemoryStream();
+            workbook.SaveAs(memoryStream);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachSinhVienDatHocBong.xlsx");
+        }
     }
 }

@@ -9,59 +9,104 @@
     @Html.HiddenFor(model => model.ScholarshipID)
 
     <div class="form-group">
-        <label for="ScholarshipID" class="col-md-2 control-label">Mã hoc bong:</label>
-        <div class="col-md-3">
-            <input type="text" name="ScholarshipID" id="ScholarshipID" class="form-control" value="@Model.ScholarshipID" required>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="ScholarshipName" class="col-md-2 control-label">Ten hoc bong:</label>
+        <label for="ScholarshipName" class="col-md-2 control-label">Tên học bổng:</label>
         <div class="col-md-3">
             <input type="text" name="ScholarshipName" id="ScholarshipName" class="form-control" value="@Model.ScholarshipName" required>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="Description" class="col-md-2 control-label">Mo ta:</label>
+        <label for="Description" class="col-md-2 control-label">Mô tả:</label>
         <div class="col-md-3">
-            <input type="text" name="Descriprion" id="Description" class="form-control" value="@Model.Description" required />
+            <input type="text" name="Description" id="Description" class="form-control" value="@Model.Description" required />
         </div>
     </div>
 
     <div class="form-group">
-        <label for="StartDate" class="col-md-2 control-label">Ngay bat dau:</label>
+        <label for="StartDate" class="col-md-2 control-label">Ngày bắt đầu:</label>
         <div class="col-md-3">
-            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@Model.StartDate" required />
+            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.StartDate)" required />
         </div>
     </div>
 
     <div class="form-group">
-        <label for="EndDate" class="col-md-2 control-label">Ngay ket thuc:</label>
+        <label for="EndDate" class="col-md-2 control-label">Ngày kết thúc:</label>
         <div class="col-md-3">
-            <input type="date" name="EndDate" id="EndDate" class="form-control" value ="@Model.EndDate" oninput="convertGrade()" required>
+            <input type="date" name="EndDate" id="EndDate" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.EndDate)" required>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="Conditions" class="col-md-2 control-label">Đieu kien:</label>
+        <label for="Conditions" class="col-md-2 control-label">Điều kiện:</label>
         <div class="col-md-3">
             <input type="text" name="Conditions" class="form-control" id="Conditions" value="@Model.Conditions" readonly>
         </div>
     </div>
+    <div id="error-message" style="color: red;"></div>
 
-   
+
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
 
-            <input type="submit" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
-            <input type="submit" name="action" value="Xóa" class="btn btn-primary">
+            <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
         </div>
     </div>
+
+
+
 
     <div>
         @Html.ActionLink("Back to List", "DanhSachHocBong")
     </div>
 </form>
+
+
+
+<style>
+    .btn-primary-margin {
+        margin-right: 70px;
+    }
+</style>
+
+
+<script>
+    $(document).ready(function () {
+        $("#btn-sua").click(function () {
+            var startDate = new Date($("#StartDate").val());
+            var endDate = new Date($("#EndDate").val());
+
+            if (startDate > endDate) {
+                $("#error-message").text("Ngày kết thúc phải sau ngày bắt đầu.");
+                return;
+            }
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
+            }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: window.location.origin + '/QLHB/Suathongtin',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    window.location.href = window.location.origin + '/QLHB/DanhSachHocBong';
+                },
+                error: function (response) {
+                    if (response.responseText === "Học bổng này đã tồn tại.") {
+                        $("#error-message").text(response.responseText);
+                    } else {
+                        alert("Sửa thất bại");
+                    }
+                }
+            });
+        });
+    });
+    
+</script>
 

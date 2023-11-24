@@ -4,6 +4,8 @@
 }
 
 <h2>Thêm học kì mới</h2>
+
+
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
@@ -30,16 +32,13 @@
                         <input type="date" name="EndDate" id="EndDate" class="form-control" required>
                     </div>
                 </div>
+                <div id="error-message" style="color: red;"></div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-3">
                         <input type="button" value="Thêm" id="btn-them" class="btn btn-primary">
                     </div>
                 </div>
-
-
-
-
-
+                
 
                 <div>
                     @Html.ActionLink("Back to List", "DanhSachHocKi")
@@ -49,30 +48,42 @@
     </div>
 </div>
 <script>
-        $(document).ready(function () {
-            $("#btn-them").click(function () {
-                var form = $('form')[0];
-                if (form.checkValidity() === false) {
-                    // Nếu biểu mẫu không hợp lệ, không gửi đi
-                    form.reportValidity();
-                    return;
-                }
-                var formData = new FormData(form);
-                $.ajax({
-                    type: "POST",
-                    data: formData,
-                    contentType: "application/json; charset = utf-8",
-                    url: window.location.origin + '/QLHK/ThemMoiHocKi',
-                    processData: false,
-                    contentType: false,
-                    Cache: false,
-                    success: function (reponse) {
-                        window.location.href = window.location.origin + '/QLHK/DanhSachHocKi';
-                    },
-                    error: function (response) {
+    $(document).ready(function () {
+        $("#btn-them").click(function () {
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
+            }
+            var startDate = new Date($("#StartDate").val());
+            var endDate = new Date($("#EndDate").val());
+
+            if (startDate > endDate) {
+                $("#error-message").text("Ngày kết thúc phải sau ngày bắt đầu.");
+                return;
+            }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                
+                url: window.location.origin + '/QLHK/ThemMoiHocKi',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    window.location.href = window.location.origin + '/QLHK/DanhSachHocKi';
+                },
+                error: function (response) {
+                    if (response.responseText === "Đã có học kì này.") {
+                        $("#error-message").text(response.responseText);
+                    } else {
                         alert("Thêm mới thất bại");
                     }
-                })
-            })
-        })
+
+                }
+            });
+        });
+    });
+
 </script>
