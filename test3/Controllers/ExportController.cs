@@ -12,29 +12,28 @@ namespace test3.Controllers
     public class ExportController : Controller
     {
         // GET: Export
-        public ActionResult ExportSinhVien(string tenLop, string tenKhoa)
-        {
-            List<Student> students;
-            bool isSearchByClass = !string.IsNullOrEmpty(tenLop);
-            bool isSearchByDepartment = !string.IsNullOrEmpty(tenKhoa);
+       
+            public ActionResult ExportSinhVien()
+        {// Lấy thông tin về lớp và khoa từ TempData
+            List<Student> searchResults = TempData["SearchResults"] as List<Student>;
 
-            if (isSearchByClass)
+            List<Student> students;
+
+            // Nếu có thông tin tìm kiếm, sử dụng nó; nếu không, lấy toàn bộ danh sách sinh viên từ cơ sở dữ liệu
+            if (searchResults != null && searchResults.Any())
             {
-                students = GetStudentListByClassFromDatabase(tenLop);
-            }
-            else if (isSearchByDepartment)
-            {
-                students = GetStudentListByDepartmentFromDatabase(tenKhoa);
+                students = searchResults;
             }
             else
             {
                 students = GetStudentListFromDatabase();
             }
 
+
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("DanhSachSinhVien");
-
+                        // Định dạng tiêu đề
                 worksheet.Cell(1, 1).Value = "StudentID";
                 worksheet.Cell(1, 2).Value = "FullName";
                 worksheet.Cell(1, 3).Value = "DateOfBirth";
@@ -44,7 +43,7 @@ namespace test3.Controllers
                 worksheet.Cell(1, 7).Value = "Email";
                 worksheet.Cell(1, 8).Value = "ClassID";
                 worksheet.Cell(1, 9).Value = "DepartmentID";
-
+                // Ghi danh sách sinh viên vào file Excel
                 for (int i = 0; i < students.Count; i++)
                 {
                     var row = i + 2;
@@ -59,10 +58,12 @@ namespace test3.Controllers
                     worksheet.Cell(row, 9).Value = students[i].DepartmentID;
                 }
 
+                // Tạo tệp Excel và trả về nó cho người dùng
                 var memoryStream = new MemoryStream();
                 workbook.SaveAs(memoryStream);
 
                 return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachSinhVien.xlsx");
+
             }
         }
         private List<Student> GetStudentListFromDatabase()
@@ -70,33 +71,44 @@ namespace test3.Controllers
             var db = new QuanliSVEntities();
             return db.Students.ToList();
         }
-        private List<Student> GetStudentListByClassFromDatabase(string tenLop)
-        {
-            var db = new QuanliSVEntities();
-            var students = db.Students
-                     .Where(s => s.Class.ClassName.ToLower() == tenLop.ToLower())
-                     .ToList();
-            return db.Students.ToList();
-        }
-        private List<Student> GetStudentListByDepartmentFromDatabase(string tenKhoa)
-        {
-            var students = db.Students
-                             .Where(s => s.Class.Department.DepartmentName.ToLower() == tenKhoa.ToLower())
-                             .ToList();
 
-            return students;
+        private List<Student> GetStudentList(string searchClassName, string searchDepartmentName)
+        {
+            var query = db.Students.AsQueryable();
+
+            // Nếu có thông tin về lớp, thêm điều kiện tìm kiếm
+            if (!string.IsNullOrEmpty(searchClassName))
+            {
+                query = query.Where(s => s.Class.ClassName.Contains(searchClassName));
+            }
+
+            // Nếu có thông tin về khoa, thêm điều kiện tìm kiếm
+            if (!string.IsNullOrEmpty(searchDepartmentName))
+            {
+                query = query.Where(s => s.Class.Department.DepartmentName.Contains(searchDepartmentName));
+            }
+
+            return query.ToList();
         }
+
         private QuanliSVEntities db = new QuanliSVEntities();
         public ActionResult ExportMonHoc()
         {
-            // Lấy danh sách sinh viên từ cơ sở dữ liệu hoặc từ nơi bạn lưu trữ dữ liệu
-            List<Cours> subjects = GetSubjectListFromDatabase();
+            // Lấy thông tin về ClassName từ TempData
+            string searchClassName = TempData["SearchClassName"] as string;
+            List<Cours> subjects;
+            if (string.IsNullOrEmpty(searchClassName))
+            {
+                subjects = GetSubjectListFromDatabase();
+            }
+            else
+            {
+                subjects = db.Courses.Where(c => c.CourseName.Contains(searchClassName)).ToList();
+            }
 
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("DanhSachMonHoc");
-
-                // Định dạng tiêu đề
                 worksheet.Cell(1, 1).Value = "CourseID";
                 worksheet.Cell(1, 2).Value = "CourseName";
                 worksheet.Cell(1, 3).Value = "Description";
@@ -104,7 +116,6 @@ namespace test3.Controllers
                 worksheet.Cell(1, 5).Value = "DepartmentName";
                 worksheet.Cell(1, 6).Value = "SemesterName";
 
-                // Ghi danh sách sinh viên vào file Excel
                 for (int i = 0; i < subjects.Count; i++)
                 {
                     var row = i + 2;
@@ -112,15 +123,14 @@ namespace test3.Controllers
                     worksheet.Cell(row, 2).Value = subjects[i].CourseName;
                     worksheet.Cell(row, 3).Value = subjects[i].Description;
                     worksheet.Cell(row, 4).Value = subjects[i].Credits;
+
                     var departmentName = GetDepartmentName(subjects[i].DepartmentID);
                     var semesterName = GetSemesterName(subjects[i].SemesterID);
 
                     worksheet.Cell(row, 5).Value = departmentName;
                     worksheet.Cell(row, 6).Value = semesterName;
-
                 }
 
-                // Tạo tệp Excel và trả về nó cho người dùng
                 var memoryStream = new MemoryStream();
                 workbook.SaveAs(memoryStream);
 
@@ -128,6 +138,21 @@ namespace test3.Controllers
             }
         }
 
+        private string GetDepartmentName(int departmentID)
+        {
+            var department = db.Departments.Find(departmentID);
+            return department != null ? department.DepartmentName : string.Empty;
+        }
+        private string GetSemesterName(int semesterID)
+        {
+            var semester = db.Semesters.Find(semesterID);
+            return semester != null ? semester.SemesterName : string.Empty;
+        }
+        private List<Cours> GetSubjectListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            return db.Courses.ToList();
+        }
         public ActionResult ExportLop()
         {
             // Lấy danh sách sinh viên từ cơ sở dữ liệu hoặc từ nơi bạn lưu trữ dữ liệu
@@ -165,18 +190,7 @@ namespace test3.Controllers
             }
         }
 
-        private string GetDepartmentName(int departmentID)
-        {
-            var department = db.Departments.Find(departmentID);
-            return department != null ? department.DepartmentName : string.Empty;
-        }
 
-        // Hàm để lấy tên học kỳ từ SemesterID
-        private string GetSemesterName(int semesterID)
-        {
-            var semester = db.Semesters.Find(semesterID);
-            return semester != null ? semester.SemesterName : string.Empty;
-        }
 
 
         //danh sach sinh vien dat hoc bong
@@ -319,12 +333,7 @@ namespace test3.Controllers
             // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
             return db.Departments.ToList();
         }
-        private List<Cours> GetSubjectListFromDatabase()
-        {
-            var db = new QuanliSVEntities();
-            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
-            return db.Courses.ToList();
-        }
+
         private List<Class> GetClassListFromDatabase()
         {
             var db = new QuanliSVEntities();

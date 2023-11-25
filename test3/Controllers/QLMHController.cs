@@ -12,14 +12,13 @@ using System.Data.Entity.Validation;
 using test3.App_Start;
 using System.Net;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace test3.Controllers
 {
     public class QLMHController : Controller
     {
-
-
-
         QuanliSVEntities db = new QuanliSVEntities();
         [Role_User(FunctionID = "Admin_XemDanhSach")]
         public ActionResult DanhSachMonHoc(int? page, int? pageSize)
@@ -32,24 +31,24 @@ namespace test3.Controllers
             {
                 pageSize = 10;
             }
-
             var monHoc = db.Courses.Include(c => c.Department).Include(c => c.Semester).ToList();
             return View(monHoc.ToPagedList((int)page, (int)pageSize));
-
         }
+        [Role_User(FunctionID = "Admin_XemDanhSach")]
         [Role_User(FunctionID = "Admin_XemDanhSach")]
         [HttpGet]
         public ActionResult Search(string searchField, string searchValue, int? page)
-        {         
+        {
             List<Cours> searchResults = db.Courses.Where(c => c.CourseName.Contains(searchValue)).ToList();
-            int pageSize = 10; 
-            int pageNumber = (page ?? 1);    
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
             IPagedList<Cours> pagedSearchResults = searchResults.ToPagedList(pageNumber, pageSize);
+
+            // Thêm ClassName vào TempData để sử dụng trong hành động ExportMonHoc
+            TempData["SearchClassName"] = searchValue;
+
             return View("DanhSachMonHoc", pagedSearchResults);
         }
-
-
-
 
         [Role_User(FunctionID = "Admin_XemDanhSach")]
         [HttpGet]
@@ -57,8 +56,6 @@ namespace test3.Controllers
         {
             return View();
         }
-
-
         [HttpPost]
         public ActionResult ThemMoiMonHoc(Cours monHoc)
         {
@@ -76,20 +73,10 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachMonHoc");
         }
-
-
-
-
-
-
-
-
-
         [Role_User(FunctionID = "Admin_XemDanhSach")]
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {
-
             if (id == 0)
             {
                 return RedirectToAction("DanhSachMonHoc");
@@ -104,7 +91,6 @@ namespace test3.Controllers
             }
             return View(monHoc);
         }
-
         [HttpPost]
         public ActionResult Suathongtin(Cours monHoc)
         {
@@ -130,5 +116,8 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachMonHoc");
         }
+   
+
+
     }
 }
