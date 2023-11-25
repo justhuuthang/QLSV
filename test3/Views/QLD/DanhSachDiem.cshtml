@@ -26,52 +26,49 @@
         </div>
     </div>
 </form>
-<form>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" id="data-table">
-                    <thead>
-                        <tr>
-                            <th>Mã sinh viên</th>
-                            <th>Mã môn</th>
-                            <th>Tên môn</th>
-                            <th>Ngày thi</th>
-                            <th>Kì</th>
-                            <th>Điểm hệ 10</th>
-                            <th>Điểm hệ 4</th>
-                            <th>Điểm chữ</th>
-                            <th> </th>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="data-table">
+                <thead>
+                    <tr>
+                        <th>Mã sinh viên</th>
+                        <th>Mã môn</th>
+                        <th>Tên môn</th>
+                        <th>Ngày thi</th>
+                        <th>Kì</th>
+                        <th>Điểm hệ 10</th>
+                        <th>Điểm hệ 4</th>
+                        <th>Điểm chữ</th>
+                        <th> </th>
 
-                        </tr>
-                    </thead>
-                    @if (Model != null && Model.Any())
-                    {
-                        <tbody>
-                            @foreach (var diem in Model)
-                            {
-                                <tr data-studentid="@diem.StudentID" data-courseid="@diem.CourseID" data-coursename="@diem.Cours.CourseName" data-examdate="@diem.ExamDate" data-semestername="@diem.Semester.SemesterName" data-scalescore10="@diem.ScoreScale10" data-scalescore4="@diem.ScoreScale4" data-lettergrade="@diem.LetterGrade">
-                                    <td>@diem.StudentID</td>
-                                    <td>@diem.CourseID</td>
-                                    <td>@diem.Cours.CourseName</td>
-                                    <td>@diem.ExamDate.ToString("dd-MM-yyyy")
-                                    <td>@diem.Semester.SemesterName</td>
-                                    <td class="editable">@diem.ScoreScale10</td>
-                                    <td>@diem.ScoreScale4</td>
-                                    <td>@diem.LetterGrade</td>
-                                </tr>
-                            }
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var diem in Model)
+                        {
+                            <tr data-studentid="@diem.StudentID" data-courseid="@diem.CourseID" data-coursename="@diem.Cours.CourseName" data-examdate="@diem.ExamDate" data-semestername="@diem.Semester.SemesterName" data-scalescore10="@diem.ScoreScale10" data-scalescore4="@diem.ScoreScale4" data-lettergrade="@diem.LetterGrade">
+                                <td>@diem.StudentID</td>
+                                <td>@diem.CourseID</td>
+                                <td>@diem.Cours.CourseName</td>
+                                <td>@diem.ExamDate.ToString("dd-MM-yyyy")
+                                <td>@diem.Semester.SemesterName</td>
+                                <td class="editable">@diem.ScoreScale10</td>
+                                <td>@diem.ScoreScale4</td>
+                                <td>@diem.LetterGrade</td>
+                            </tr>
+                        }
 
-                        </tbody>
-                    }
+                    </tbody>
+                }
 
-                </table>
-            </div>
-            @Html.PagedListPager(Model, page => Url.Action("DanhSachDiem", new { page, pageSize = ViewBag.PageSize }))
+            </table>
         </div>
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachDiem", new { page, pageSize = ViewBag.PageSize }))
     </div>
-</form>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</div>
 <script>
     $(document).ready(function () {
         $('#edit-toggle-btn').on('click', function () {
