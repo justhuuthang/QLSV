@@ -6,6 +6,7 @@ using test3.Models;
 using PagedList;
 using System.Net;
 using System.Data.Entity;
+using test3.App_Start;
 
 namespace test3.Controllers
 {
@@ -13,6 +14,7 @@ namespace test3.Controllers
     {
         // GET: QLSV
         QuanliSVEntities db = new QuanliSVEntities();
+        [Role_User(FunctionID = "Admin_XemDanhSach")]
         public ActionResult DanhSachLop(int? page, int? pageSize)
         {
             if (page == null)
@@ -26,6 +28,7 @@ namespace test3.Controllers
             var lop = db.Classes.ToList();
             return View(lop.ToPagedList((int)page, (int)pageSize));
         }
+        [Role_User]
         [HttpGet]
         public ActionResult ThemMoiLop()
         {
@@ -62,7 +65,7 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachLop");
         }
-
+        [Role_User]
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {
@@ -87,7 +90,7 @@ namespace test3.Controllers
         {
             string className = Request["ClassName"];
 
-            var existingClassName = db.Classes.FirstOrDefault(s => s.ClassName == className);
+            var existingClassName = db.Classes.FirstOrDefault(s => s.ClassID != lop.ClassID && s.ClassName == lop.ClassName);
 
             if (existingClassName != null)
             {
