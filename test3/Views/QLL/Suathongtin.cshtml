@@ -53,7 +53,7 @@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
 
-            <input type="submit" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
+            <input type="submit" id="btn-sua" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
         </div>
     </div>
 
@@ -90,7 +90,7 @@
                     window.location.href = window.location.origin + '/QLHB/DanhSachHocBong';
                 },
                 error: function (response) {
-                    if (response.responseText === "Học bổng này đã tồn tại.") {
+                    if (response.responseText === "Lớp này đã tồn tại.") {
                         $("#error-message").text(response.responseText);
                     } else {
                         alert("Sửa thất bại");
