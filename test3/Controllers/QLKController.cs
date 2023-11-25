@@ -14,6 +14,7 @@ namespace test3.Controllers
     {
         // GET: QLSV
         QuanliSVEntities db = new QuanliSVEntities();
+        [Role_User(FunctionID = "Admin_XemDanhSach")]
         public ActionResult DanhSachKhoa(int? page, int? pageSize)
         {
             if (page == null)
@@ -70,6 +71,8 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachKhoa");
         }
+
+        [Role_User]
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {
