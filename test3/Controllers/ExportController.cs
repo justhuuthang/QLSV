@@ -178,19 +178,9 @@ namespace test3.Controllers
             return semester != null ? semester.SemesterName : string.Empty;
         }
 
-        private List<Cours> GetSubjectListFromDatabase()
-        {
-            var db = new QuanliSVEntities();
-            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
-            return db.Courses.ToList();
-        }
-        private List<Class> GetClassListFromDatabase()
-        {
-            var db = new QuanliSVEntities();
-            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
-            return db.Classes.ToList();
-        }
-        public ActionResult ExportHocBong(string MaKi)
+
+        //danh sach sinh vien dat hoc bong
+        public ActionResult ExportSVDHB(string MaKi)
         {
             List<sp_DanhSachSinhVienDatHocBong_Result> dssvdhb = db.sp_DanhSachSinhVienDatHocBong(MaKi).ToList();
 
@@ -218,5 +208,107 @@ namespace test3.Controllers
 
             return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachSinhVienDatHocBong.xlsx");
         }
+
+        //export hoc ki
+        public ActionResult ExportHocKi()
+        {
+            
+            List<Semester> semesters = GetSemesterListFromDatabase();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DanhSachHocKi");
+
+                // Định dạng tiêu đề
+                worksheet.Cell(1, 1).Value = "SemesterID";
+                worksheet.Cell(1, 2).Value = "SemesterName";
+                worksheet.Cell(1, 3).Value = "StartDate";
+                worksheet.Cell(1, 4).Value = "EndDate";
+                
+
+                // Ghi danh sách sinh viên vào file Excel
+                for (int i = 0; i < semesters.Count; i++)
+                {
+                    var row = i + 2;
+                    worksheet.Cell(row, 1).Value = semesters[i].SemesterID;
+                    worksheet.Cell(row, 2).Value = semesters[i].SemesterName;
+                    worksheet.Cell(row, 3).Value = semesters[i].StartDate;
+                    worksheet.Cell(row, 4).Value = semesters[i].EndDate;
+                    
+
+                }
+                // Tạo tệp Excel và trả về nó cho người dùng
+                var memoryStream = new MemoryStream();
+                workbook.SaveAs(memoryStream);
+
+                return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachHocKi.xlsx");
+            }
+        }
+
+        //hocbong
+        public ActionResult ExportHocBong()
+        {
+
+            List<Scholarship> scholarships = GetScholarshipListFromDatabase();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DanhSachHocBong");
+
+                // Định dạng tiêu đề
+                worksheet.Cell(1, 1).Value = "ScholarshipID";
+                worksheet.Cell(1, 2).Value = "ScholarshipName";
+                worksheet.Cell(1, 3).Value = "Description";
+                worksheet.Cell(1, 4).Value = "StartDate";
+                worksheet.Cell(1, 5).Value = "EndDate";
+                worksheet.Cell(1, 6).Value = "Conditions";
+
+
+                // Ghi danh sách sinh viên vào file Excel
+                for (int i = 0; i < scholarships.Count; i++)
+                {
+                    var row = i + 2;
+                    worksheet.Cell(row, 1).Value = scholarships[i].ScholarshipID;
+                    worksheet.Cell(row, 2).Value = scholarships[i].ScholarshipID;
+                    worksheet.Cell(row, 3).Value = scholarships[i].Description;
+                    worksheet.Cell(row, 4).Value = scholarships[i].StartDate;
+                    worksheet.Cell(row, 5).Value = scholarships[i].EndDate;
+                    worksheet.Cell(row, 6).Value = scholarships[i].Conditions;
+
+
+                }
+                // Tạo tệp Excel và trả về nó cho người dùng
+                var memoryStream = new MemoryStream();
+                workbook.SaveAs(memoryStream);
+
+                return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachHocBong.xlsx");
+            }
+        }
+
+
+
+        private List<Cours> GetSubjectListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
+            return db.Courses.ToList();
+        }
+        private List<Class> GetClassListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
+            return db.Classes.ToList();
+        }
+        private List<Semester> GetSemesterListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            return db.Semesters.ToList();
+        }
+        private List<Scholarship> GetScholarshipListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            return db.Scholarships.ToList();
+        }
+        
     }
 }

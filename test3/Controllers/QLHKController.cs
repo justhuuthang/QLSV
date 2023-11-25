@@ -34,6 +34,25 @@ namespace test3.Controllers
             var hocKi = db.Semesters.ToList();
             return View(hocKi.ToPagedList((int)page, (int)pageSize));
         }
+        [HttpGet]
+        public ActionResult Search(string searchField, string searchValue, int? page)
+        {
+            searchValue = searchValue.ToLower();
+
+            List<Semester> searchResults = new List<Semester>();
+
+            switch (searchField)
+            {
+                case "SemesterName":
+                    searchResults = db.Semesters.Where(s => s.SemesterName.ToLower().Contains(searchValue)).ToList();
+                    break;
+            }
+            int pageNumber = page ?? 1;
+            int pageSize = 10;
+            IPagedList<Semester> pagedResults = searchResults.ToPagedList(pageNumber, pageSize);
+
+            return View("DanhSachHocKi", pagedResults);
+        }
 
 
         [Role_User]
@@ -53,7 +72,7 @@ namespace test3.Controllers
             if (existingSemester != null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Học kì này đã tồn tại.");
+                return Content("Đã có học kì này.");
             }
 
             db.Semesters.Add(hocKi);
@@ -97,10 +116,11 @@ namespace test3.Controllers
             if (existingSemester != null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Học kì này đã tồn tại.");
+                return Content("Đã có học kì này.");
             }
             db.Entry(hocKi).State = EntityState.Modified;
             db.SaveChanges();
+            TempData["SuccessMessage"] = "Sửa thông tin học kì thành công.";
             return RedirectToAction("DanhSachHocKi");
         }
     }

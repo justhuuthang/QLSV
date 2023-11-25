@@ -30,10 +30,11 @@
     </div>
 
     <div id="error-message" style="color: red;"></div>
+    <div  id="success-mesage" style="color: green;"></div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
-            <input type="submit" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
+            <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
         </div>
     </div>
 
@@ -49,6 +50,8 @@
         margin-right: 70px;
     }
 </style>
+
+
 <script>
     $(document).ready(function () {
         $("#btn-sua").click(function () {
@@ -74,10 +77,11 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
+                    $("#success-message").text("Sửa thông tin học kì thành công.");
                     window.location.href = window.location.origin + '/QLHK/DanhSachHocKi';
                 },
                 error: function (response) {
-                    if (response.responseText === "Học kì đã tồn tại .") {
+                    if (response.responseText === "Đã có học kì này.") {
                         $("#error-message").text(response.responseText);
                     } else {
                         alert("Sửa thất bại");
