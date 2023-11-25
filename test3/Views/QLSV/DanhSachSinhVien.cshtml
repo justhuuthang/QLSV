@@ -36,11 +36,10 @@
                         <th>Họ và tên</th>
                         <th>Ngày sinh</th>
                         <th>Giới tính</th>
-                        @*<th>Địa chỉ</th>*@
                         <th>Số điện thoại</th>
                         <th>Email</th>
-                        @*<th>Mã lớp</th>
-                            <th>Mã khoa</th>*@
+                        <th>Lớp</th>
+                        <th>Khoa</th>
                         <th>Edit </th>
                         <th>Edit </th>
                     </tr>
@@ -55,12 +54,10 @@
                                 <td>@sinhVien.FullName</td>
                                 <td>@sinhVien.DateOfBirth.ToString("dd/MM/yyyy")</td>
                                 <td>@(sinhVien.Gender ? "Nam" : "Nữ")</td>
-                                @*<td>@sinhVien.Address</td>*@
                                 <td>@sinhVien.ContactNumber</td>
                                 <td>@sinhVien.Email</td>
-                                @*<td>@sinhVien.ClassID</td>
-                                    <td>@sinhVien.DepartmentID</td>*@
-                                @*<td><a href="~/QLSV/Suathongtin?id=@sinhVien.StudentID">Xem</a></td>*@
+                                <td>@sinhVien.Class.ClassName</td>
+                                <td>@sinhVien.Department.DepartmentName</td>
 
                                 <td>
                                     <form action="~/QLSV/Xoa" method="post">

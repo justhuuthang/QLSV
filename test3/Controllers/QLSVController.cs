@@ -33,7 +33,7 @@ namespace test3.Controllers
             {
                 pageSize = 10;
             }
-            var sinhVien = db.Students.ToList();
+            var sinhVien = db.Students.Include(c => c.Class).Include(c => c.Department).ToList();
             return View(sinhVien.ToPagedList((int)page, (int)pageSize));
         }
         [HttpGet]
