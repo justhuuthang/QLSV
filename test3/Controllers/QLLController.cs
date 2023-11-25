@@ -55,7 +55,7 @@ namespace test3.Controllers
             if (existingClassName != null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Lớp này đã tồn tại.");
+                return Content("Tên lớp đã tồn tại.");
             }
 
             db.Classes.Add(lop);
@@ -92,7 +92,7 @@ namespace test3.Controllers
             if (existingClassName != null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Lớp này đã tồn tại.");
+                return Content("Tên lớp đã tồn tại.");
             }
             db.Entry(lop).State = EntityState.Modified;
             db.SaveChanges();

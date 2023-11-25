@@ -1,9 +1,10 @@
 ﻿@model test3.Models.Class
 @{
-    ViewBag.ac = 12;
+    ViewBag.ac = 17;
 }
 
 <h2>Thêm lớp</h2>
+
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
@@ -17,17 +18,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
-                    <div class="col-md-3">
-                        @{
-                            test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
-                            List<test3.Models.Department> dsKhoa = db.Departments.ToList();
-                        }
-
-                        @Html.DropDownListFor(model => model.DepartmentID, new SelectList(dsKhoa, "DepartmentID", "DepartmentName"), "Chọn khoa...", new { @class = "form-control", id = "DepartmentID" })
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <label for="StartDate" class="col-md-2 control-label">Ngày bắt đầu:</label>
@@ -51,17 +41,31 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="MaxStudents" class="col-md-2 control-label">Số lượng sinh viên:</label>
+                    <label for="MaxStudents" class="col-md-2 control-label">Sinh viên tối đa:</label>
                     <div class="col-md-3">
                         <input type="text" name="MaxStudents" id="MaxStudents" class="form-control" required>
                     </div>
                 </div>
 
-                <div id="error-message" style="color: red;"></div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
+                    <div class="col-md-3">
+                        @{
+                            test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+                            List<test3.Models.Department> dsKhoa = db.Departments.ToList();
+                        }
+
+                        @Html.DropDownListFor(model => model.DepartmentID, new SelectList(dsKhoa, "DepartmentID", "DepartmentName"), "Chọn khoa...", new { @class = "form-control", id = "DepartmentID" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-3" id="error-message" style="color: red" ,font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif"></div>
+                </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-3">
-                        <input type="submit" id="btn-them" value="Thêm" class="btn btn-primary">
+                        <input type="button" value="Thêm" id="btn-them" class="btn btn-primary">
                     </div>
                 </div>
 
@@ -72,6 +76,7 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     $(document).ready(function () {
         $("#btn-them").click(function () {
@@ -97,10 +102,23 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    window.location.href = window.location.origin + '/QLL/DanhSachLop';
+                    Swal.fire({
+                        title: 'Thêm thành công',
+                        text: 'Bạn có muốn quay trở lại danh sách lớp không?',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có',
+                        cancelButtonText: 'Không'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.origin + '/QLL/DanhSachLop';
+                        } else {
+                        }
+                    });
                 },
+
                 error: function (response) {
-                    if (response.responseText === "Đã có lớp này.") {
+                    if (response.responseText === "Tên lớp đã tồn tại.") {
                         $("#error-message").text(response.responseText);
                     } else {
                         alert("Thêm mới thất bại");
