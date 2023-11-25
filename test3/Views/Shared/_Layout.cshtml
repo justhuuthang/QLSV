@@ -56,6 +56,7 @@
                             </li>
                         </ul>
                     </li>
+
                     <li>
                         <a href="#" class="@Html.Raw(ViewBag.ac == 9 || ViewBag.ac == 10? "active-menu" : "")"><i class="fa fa-desktop fa-3x"></i>Môn Học<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -78,6 +79,18 @@
                             </li>
                         </ul>
 
+                    </li>
+
+                    <li>
+                        <a href="#" class="@Html.Raw(ViewBag.ac == 4 || ViewBag.ac == 5? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i>Khoa<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a class="@Html.Raw(ViewBag.ac == 4 ? "active-menu" : "")" href="@Url.Action("DanhSachKhoa", "QLK" )">Danh sách khoa</a>
+                            </li>
+                            <li>
+                                <a class="@Html.Raw(ViewBag.ac == 5 ? "active-menu" : "")" href="@Url.Action("ThemMoiKhoa", "QLK")">Thêm khoa</a>
+                            </li>
+                        </ul>
                     </li>
 
                     <li>
@@ -122,7 +135,7 @@
                             </li>
                         </ul>
                     </li>
-                    
+
                     <li>
                         <a href="#" class="@Html.Raw(ViewBag.ac == 19 || ViewBag.ac == 20? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">

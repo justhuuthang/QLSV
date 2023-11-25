@@ -234,6 +234,7 @@
     <Compile Include="Controllers\QLDController.cs" />
     <Compile Include="Controllers\QLHBController.cs" />
     <Compile Include="Controllers\QLHKController.cs" />
+    <Compile Include="Controllers\QLKController.cs" />
     <Compile Include="Controllers\QLLController.cs" />
     <Compile Include="Controllers\QLMHController.cs" />
     <Compile Include="Controllers\QLSVController.cs" />
@@ -519,6 +520,9 @@
     <Content Include="Views\QLMH\Suathongtin.cshtml" />
     <Content Include="Views\QLSV\ImportStudents.cshtml" />
     <Content Include="Views\QLSVDHB\DanhSachSinhVienDatHocBong.cshtml" />
+    <Content Include="Views\QLK\ThemMoiKhoa.cshtml" />
+    <Content Include="Views\QLK\DanhSachKhoa.cshtml" />
+    <Content Include="Views\QLK\Suathongtin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -165,6 +165,34 @@ namespace test3.Controllers
             }
         }
 
+        public ActionResult ExportKhoa()
+        {
+            // Lấy danh sách sinh viên từ cơ sở dữ liệu hoặc từ nơi bạn lưu trữ dữ liệu
+            List<Department> classes = GetDepartmentListFromDatabase();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DanhSachLop");
+
+                // Định dạng tiêu đề
+                worksheet.Cell(1, 1).Value = "DepartmentID";
+                worksheet.Cell(1, 2).Value = "DepartmentName";
+                // Ghi danh sách sinh viên vào file Excel
+                for (int i = 0; i < classes.Count; i++)
+                {
+                    var row = i + 2;
+                    worksheet.Cell(row, 1).Value = classes[i].DepartmentID;
+                    worksheet.Cell(row, 2).Value = classes[i].DepartmentName;
+
+                }
+                // Tạo tệp Excel và trả về nó cho người dùng
+                var memoryStream = new MemoryStream();
+                workbook.SaveAs(memoryStream);
+
+                return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachKhoa.xlsx");
+            }
+        }
+
         private string GetDepartmentName(int departmentID)
         {
             var department = db.Departments.Find(departmentID);
@@ -189,6 +217,12 @@ namespace test3.Controllers
             var db = new QuanliSVEntities();
             // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
             return db.Classes.ToList();
+        }
+        private List<Department> GetDepartmentListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
+            return db.Departments.ToList();
         }
         public ActionResult ExportHocBong(string MaKi)
         {

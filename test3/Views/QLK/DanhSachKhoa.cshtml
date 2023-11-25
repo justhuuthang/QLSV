@@ -1,0 +1,66 @@
+﻿@*@model List<test3.Models.SinhVien>*@
+@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.Department>
+@{
+    ViewBag.ac = 4;
+}
+
+<h2>Danh sách khoa </h2>
+<form action="/QLK/Search" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            <label class="form-control" style="width:30%">Tên khoa</label>
+            <input name="searchValue" type="text" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            @Html.ActionLink("Export", "ExportKhoa", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+        </div>
+    </div>
+</form>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Mã khoa</th>
+                        <th>Tên khoa</th>
+                        @*<th>Mô tả</th>*@
+                        <th> </th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var khoa in Model)
+                        {
+                            <tr>
+                                <td>@khoa.DepartmentID</td>
+                                <td>@khoa.DepartmentName</td>
+                                @*<td>@khoa.Description</td>*@
+                                <td>
+                                    <form action="~/QLK/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@khoa.DepartmentID" />
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="~/QLK/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@khoa.DepartmentID " />
+                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                    </form>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+
+            </table>
+        </div>
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachKhoa", new { page, pageSize = ViewBag.PageSize }))
+    </div>
+</div>
+
