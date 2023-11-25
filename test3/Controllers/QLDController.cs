@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Bibliography;
 using System.Drawing.Printing;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using System.Net;
 
 namespace test3.Controllers
 {
@@ -31,7 +32,7 @@ namespace test3.Controllers
             return View(diem.ToPagedList((int)page, (int)pageSize));
         }
         [HttpGet]
-        public ActionResult Search(string searchField, string searchValue,int? page)
+        public ActionResult Search(string searchField, string searchValue, int? page)
         {
             searchValue = searchValue.ToLower();
 
@@ -107,39 +108,28 @@ namespace test3.Controllers
         }
 
         [HttpPost]
-        public ActionResult Suathongtin(Grade diem, string action)
+        public ActionResult Suathongtin(List<Grade> updatedData)
         {
-            QuanliSVEntities db = new QuanliSVEntities();
-            var existingGrade = db.Grades.Find(diem.GradeID);
-
-            if (existingGrade == null)
+            try
             {
-                return RedirectToAction("DanhSachDiem");
-            }
+                foreach (var data in updatedData)
+                {
+                    var existingData = db.Grades.FirstOrDefault(d => d.StudentID == data.StudentID && d.CourseID == data.CourseID);
 
-            if (action == "Xóa")
-            {
-                db.Grades.Remove(existingGrade);
+                    if (existingData != null)
+                    {
+                        existingData.ScoreScale10 = data.ScoreScale10;
+                    }
+                }
                 db.SaveChanges();
 
-                return RedirectToAction("DanhSachDiem");
+                return Json(new { success = true, message = "Cập nhật dữ liệu thành công!" });
             }
-            else if (action == "Sửa")
+            catch (Exception ex)
             {
-                existingGrade.StudentID = diem.StudentID;
-                existingGrade.CourseID = diem.CourseID;
-                existingGrade.ExamDate = diem.ExamDate;
-                existingGrade.SemesterID = diem.SemesterID;
-                existingGrade.ScoreScale10 = diem.ScoreScale10;
-                existingGrade.ScoreScale4 = diem.ScoreScale4;
-                existingGrade.LetterGrade = diem.LetterGrade;
-
-                db.SaveChanges();
-
-                return RedirectToAction("DanhSachDiem");
+                return Json(new { success = false, message = "Lỗi khi cập nhật dữ liệu: " + ex.Message });
             }
-
-            return View(diem);
         }
+
     }
 }

@@ -21,7 +21,6 @@ namespace test3.Controllers
         {
             using (QuanliSVEntities QLSVEntities = new QuanliSVEntities())
             {
-                // Kiểm tra tên người dùng tồn tại trước khi kiểm tra mật khẩu
                 var existingUser = QLSVEntities.Accounts.SingleOrDefault(m => m.Username == user.Username);
 
                 if (existingUser == null)
@@ -29,15 +28,12 @@ namespace test3.Controllers
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Content("Sai tài khoản hoặc mật khẩu");
                 }
-
-                // Kiểm tra mật khẩu chỉ khi tên người dùng tồn tại
                 if (existingUser.Password != user.Password)
                 {
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Content("Sai tài khoản hoặc mật khẩu");
                 }
 
-                // Lưu thông tin người dùng vào Session
                 SessionConfig.setUser(existingUser);
                 return RedirectToAction("DashBoard", "Home");
             }

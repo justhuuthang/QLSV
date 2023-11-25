@@ -71,11 +71,9 @@
             @{
                 var selectedClassId = Model.ClassID;
                 List<SelectListItem> classList = new List<SelectListItem>();
-                if (selectedClassId != null)
-                {
                     var selectedClass = db.Classes.Find(selectedClassId);
                     classList.Add(new SelectListItem { Text = selectedClass.ClassName, Value = selectedClass.ClassID.ToString(), Selected = true });
-                }
+                
             }
             @Html.DropDownListFor(model => model.ClassID, classList, "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
         </div>
