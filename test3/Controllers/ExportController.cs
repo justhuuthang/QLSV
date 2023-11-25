@@ -14,12 +14,10 @@ namespace test3.Controllers
         // GET: Export
        
             public ActionResult ExportSinhVien()
-        {// Lấy thông tin về lớp và khoa từ TempData
+        {
             List<Student> searchResults = TempData["SearchResults"] as List<Student>;
 
             List<Student> students;
-
-            // Nếu có thông tin tìm kiếm, sử dụng nó; nếu không, lấy toàn bộ danh sách sinh viên từ cơ sở dữ liệu
             if (searchResults != null && searchResults.Any())
             {
                 students = searchResults;
@@ -33,7 +31,6 @@ namespace test3.Controllers
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("DanhSachSinhVien");
-                        // Định dạng tiêu đề
                 worksheet.Cell(1, 1).Value = "StudentID";
                 worksheet.Cell(1, 2).Value = "FullName";
                 worksheet.Cell(1, 3).Value = "DateOfBirth";
@@ -41,9 +38,8 @@ namespace test3.Controllers
                 worksheet.Cell(1, 5).Value = "Address";
                 worksheet.Cell(1, 6).Value = "ContactNumber";
                 worksheet.Cell(1, 7).Value = "Email";
-                worksheet.Cell(1, 8).Value = "ClassID";
-                worksheet.Cell(1, 9).Value = "DepartmentID";
-                // Ghi danh sách sinh viên vào file Excel
+                worksheet.Cell(1, 8).Value = "Class";
+                worksheet.Cell(1, 9).Value = "Department";
                 for (int i = 0; i < students.Count; i++)
                 {
                     var row = i + 2;
@@ -54,11 +50,9 @@ namespace test3.Controllers
                     worksheet.Cell(row, 5).Value = students[i].Address;
                     worksheet.Cell(row, 6).Value = students[i].ContactNumber;
                     worksheet.Cell(row, 7).Value = students[i].Email;
-                    worksheet.Cell(row, 8).Value = students[i].ClassID;
-                    worksheet.Cell(row, 9).Value = students[i].DepartmentID;
+                    worksheet.Cell(row, 8).Value = students[i].Class.ClassName;
+                    worksheet.Cell(row, 9).Value = students[i].Department.DepartmentName;
                 }
-
-                // Tạo tệp Excel và trả về nó cho người dùng
                 var memoryStream = new MemoryStream();
                 workbook.SaveAs(memoryStream);
 

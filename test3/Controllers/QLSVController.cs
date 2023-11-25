@@ -66,7 +66,7 @@ namespace test3.Controllers
                     break;
             }
 
-            TempData["SearchResults"] = searchResults;  // Lưu kết quả tìm kiếm vào TempData
+            TempData["SearchResults"] = searchResults;  
 
             int pageSize = 10;
             int pageNumber = (page ?? 1);
@@ -108,6 +108,7 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachSinhVien");
         }
+        [Role_User]
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {
@@ -184,12 +185,10 @@ namespace test3.Controllers
         public ActionResult GetClassesByDepartment(int departmentId)
         {
             var classes = db.Classes.Where(c => c.DepartmentID == departmentId).ToList();
-
-            // Chuyển đổi danh sách lớp thành một danh sách SelectListItem
             var classList = classes.Select(c => new SelectListItem
             {
-                Value = c.ClassID.ToString(), // Field ID của bảng lớp
-                Text = c.ClassName // Field tên lớp của bảng lớp
+                Value = c.ClassID.ToString(), 
+                Text = c.ClassName 
             }).ToList();
             return Json(classList, JsonRequestBehavior.AllowGet);
         }

@@ -60,9 +60,9 @@
                                 <td>@sinhVien.Department.DepartmentName</td>
 
                                 <td>
-                                    <form action="~/QLSV/Xoa" method="post">
+                                    <form id="deleteForm_@sinhVien.StudentID" action="~/QLSV/Xoa" method="post">
                                         <input type="hidden" name="id" value="@sinhVien.StudentID" />
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@sinhVien.StudentID')">Xóa</button>
                                     </form>
                                 </td>
                                 <td>
@@ -83,3 +83,20 @@
         @Html.PagedListPager(Model, page => Url.Action("DanhSachSinhVien", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(studentID) {
+        Swal.fire({
+            title: 'Xác nhận xóa',
+            text: 'Bạn có chắc chắn muốn xóa sinh viên này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm_" + studentID).submit();
+            }
+        });
+    }
+</script>

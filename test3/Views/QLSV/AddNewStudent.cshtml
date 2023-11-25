@@ -73,7 +73,10 @@
                         @Html.DropDownListFor(model => model.ClassID, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
                     </div>
                 </div>
-                <div id="error-message" style="color: red;"></div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-3" id="error-message" style="color: red" ,font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif"></div>
+                </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-3">
                         <input type="button" value="Thêm" id="btn-them" class="btn btn-primary">
@@ -87,6 +90,7 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     $(document).ready(function () {
         $("#btn-them").click(function () {
@@ -105,7 +109,19 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
+                    Swal.fire({
+                        title: 'Thêm thành công',
+                        text: 'Bạn có muốn quay trở lại danh sách sinh viên không?',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có',
+                        cancelButtonText: 'Không'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
+                        } else {
+                        }
+                    });
                 },
                 error: function (response) {
                     if (response.responseText === "Sinh viên đã tồn tại với số điện thoại này.") {
@@ -122,7 +138,7 @@
             var selectedDepartmentId = $(this).val();
 
             $.ajax({
-                url: '/QLSV/GetClassesByDepartment', // Thay đổi đường dẫn tới action của bạn
+                url: '/QLSV/GetClassesByDepartment',
                 type: 'GET',
                 dataType: 'json',
                 data: { departmentId: selectedDepartmentId },
@@ -139,6 +155,4 @@
             });
         });
     });
-
-
     </script>
