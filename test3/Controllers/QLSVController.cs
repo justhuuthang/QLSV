@@ -40,8 +40,7 @@ namespace test3.Controllers
         public ActionResult Search(string searchField, string searchValue, int? page)
         {
             List<Student> searchResults = new List<Student>();
-            bool isSearchByClass = searchField == "ClassName";
-            bool isSearchByDepartment = searchField == "DepartmentName";
+
             switch (searchField)
             {
                 case "StudentID":
@@ -50,99 +49,33 @@ namespace test3.Controllers
                         searchResults = db.Students.Where(s => s.StudentID == studentID).ToList();
                     }
                     break;
+
                 case "ClassName":
-                    searchResults = db.Students.Where(s => s.Class.ClassName.Contains(searchValue)).ToList();
+                    searchResults = db.Students
+                        .Where(s => s.Class.ClassName.Contains(searchValue))
+                        .ToList();
                     break;
+
                 case "DepartmentName":
-                    searchResults = db.Students.Where(s => s.Class.Department.DepartmentName.Contains(searchValue)).ToList();
+                    searchResults = db.Students
+                        .Where(s => s.Class.Department.DepartmentName.Contains(searchValue))
+                        .ToList();
                     break;
 
                 default:
                     break;
             }
 
+            TempData["SearchResults"] = searchResults;  // Lưu kết quả tìm kiếm vào TempData
+
             int pageSize = 10;
             int pageNumber = (page ?? 1);
-
             IPagedList<Student> pagedSearchResults = searchResults.ToPagedList(pageNumber, pageSize);
 
             return View("DanhSachSinhVien", pagedSearchResults);
         }
-        public ActionResult ExportSinhVien(string searchField)
-        {
-            List<Student> students;
-            bool isSearchByClass = !string.IsNullOrEmpty(searchField);
-            bool isSearchByDepartment = !string.IsNullOrEmpty(searchField);
 
-            if (isSearchByClass)
-            {
-                students = GetStudentListByClassFromDatabase(searchField); 
-            }
-            else if (isSearchByDepartment)
-            {
-                students = GetStudentListByDepartmentFromDatabase(searchField);
-            }
-            else
-            {
-                students = GetStudentListFromDatabase();
-            }
 
-            using (var workbook = new XLWorkbook())
-            {
-                var worksheet = workbook.Worksheets.Add("DanhSachSinhVien");
-
-                worksheet.Cell(1, 1).Value = "StudentID";
-                worksheet.Cell(1, 2).Value = "FullName";
-                worksheet.Cell(1, 3).Value = "DateOfBirth";
-                worksheet.Cell(1, 4).Value = "Gender";
-                worksheet.Cell(1, 5).Value = "Address";
-                worksheet.Cell(1, 6).Value = "ContactNumber";
-                worksheet.Cell(1, 7).Value = "Email";
-                worksheet.Cell(1, 8).Value = "ClassID";
-                worksheet.Cell(1, 9).Value = "DepartmentID";
-
-                for (int i = 0; i < students.Count; i++)
-                {
-                    var row = i + 2;
-                    worksheet.Cell(row, 1).Value = students[i].StudentID;
-                    worksheet.Cell(row, 2).Value = students[i].FullName;
-                    worksheet.Cell(row, 3).Value = students[i].DateOfBirth;
-                    worksheet.Cell(row, 4).Value = students[i].Gender ? "Nam" : "Nữ";
-                    worksheet.Cell(row, 5).Value = students[i].Address;
-                    worksheet.Cell(row, 6).Value = students[i].ContactNumber;
-                    worksheet.Cell(row, 7).Value = students[i].Email;
-                    worksheet.Cell(row, 8).Value = students[i].ClassID;
-                    worksheet.Cell(row, 9).Value = students[i].DepartmentID;
-                }
-
-                var memoryStream = new MemoryStream();
-                workbook.SaveAs(memoryStream);
-
-                return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachSinhVien.xlsx");
-            }
-        }
-        private List<Student> GetStudentListFromDatabase()
-        {
-            var db = new QuanliSVEntities();
-            return db.Students.ToList();
-        }
-        private List<Student> GetStudentListByClassFromDatabase(string tenLop)
-        {
-            var db = new QuanliSVEntities();
-            var students = db.Students
-                     .Where(s => s.Class.ClassName.ToLower() == tenLop.ToLower())
-                     .ToList();
-            return db.Students.ToList();
-        }
-        private List<Student> GetStudentListByDepartmentFromDatabase(string tenKhoa)
-        {
-            var db = new QuanliSVEntities();
-            var students = db.Students
-                             .Where(s => s.Class.Department.DepartmentName.ToLower() == tenKhoa.ToLower())
-                             .ToList();
-
-            return students;
-        }
         [Role_User]
         [HttpGet]
         public ActionResult AddNewStudent()

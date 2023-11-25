@@ -1,19 +1,15 @@
 ﻿
-
-@*@model List<test3.Models.SinhVien>*@
 @using PagedList.Mvc;
 @using PagedList;
 @model IPagedList<test3.Models.Cours>
 @{
     ViewBag.ac = 9;
 }
-
 <h2>Danh sách môn học </h2>
-<!-- Advanced Tables -->
 <form action="/QLMH/Search" method="get">
     <div class="form-group">
         <div style="display: flex">
-          <label for="TenMon" class="col-md-2 control-label" style="margin:7px">TênMôn:</label>
+          <label for="TenMon" class="col-md-5 control-label" style="margin-top:7px">Tên Môn </label>
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
@@ -35,10 +31,6 @@
                         <th>Học kì</th>
                         <th>Edit </th>
                         <th>Edit </th>
-
-
-
-
                     </tr>
                 </thead>
                 @if (Model != null && Model.Any())
@@ -49,15 +41,11 @@
                             <tr>
                                 <td>@monHoc.CourseID</td>
                                 <td>@monHoc.CourseName</td>
-
                                 <td>@monHoc.Description</td>
-
                                 <td>@monHoc.Credits</td>
                                 <td>@monHoc.Department.DepartmentName</td>
 
                                 <td>@monHoc.Semester.SemesterName</td>
-
-
                                 <td>
                                     <form action="~/QLMH/Xoa" method="post">
                                         <input type="hidden" name="id" value="@monHoc.CourseID" />
@@ -70,16 +58,11 @@
                                         <button type="submit" class="btn btn-primary">Sửa</button>
                                     </form>
                                 </td>
-
-
-
-
                             </tr>
                         }
 
                     </tbody>
                 }
-
             </table>
         </div>
         @Html.PagedListPager(Model, page => Url.Action("DanhSachMonHoc", new { page, pageSize = ViewBag.PageSize }))
