@@ -43,18 +43,13 @@
         </div>
     </div>
     <div id="error-message" style="color: red;"></div>
-
-
+    <div id="success-message" style="color: green;"></div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
-
             <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
         </div>
     </div>
-
-
-
 
     <div>
         @Html.ActionLink("Back to List", "DanhSachHocBong")
@@ -95,6 +90,7 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
+                    $("#success-message").text("Sửa thông tin học bổng thành công.");
                     window.location.href = window.location.origin + '/QLHB/DanhSachHocBong';
                 },
                 error: function (response) {

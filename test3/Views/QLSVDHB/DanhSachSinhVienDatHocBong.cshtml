@@ -10,30 +10,26 @@
 
 <h2>Danh sách sinh viên đạt học bổng </h2>
 
-
-
-
-
 <form method="get" class="form-horizontal">
     <div class="form-group">
-        <label class="col-md-2 control-label">Kì</label>
-        <div class="col-md-3">
-            <select name="MaKi" class="form-control">
+        
+        <div style="display:flex">
+            
+            <select name="MaKi" class="form-control" style="width: 30%; margin-left:20px;">
+                <option value="SemesterName">Chọn học kì</option>
                 @foreach (var loai in dsKi)
                 {
                     <option value="@loai.SemesterID" @(loai.SemesterID.ToString() == ViewBag.MaKi ? "selected" : "")>@loai.SemesterName</option>
                 }
             </select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-3">
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            @Html.ActionLink("Export", "ExportSVDHB", "Export", null, new { @class = "btn btn-primary", @style="margin-left: 650px;" })
         </div>
     </div>
-    @Html.ActionLink("Export", "ExportHocBong", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 1000px; " })
 </form>
+
+
+
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -69,3 +65,29 @@
             @Html.PagedListPager(Model, page => Url.Action("DanhSachSinhVienDatHocBong", new { page, pageSize = ViewBag.PageSize }))
         </div>
     </div>
+</div>
+
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        text-align: center;
+    }
+
+    .btn-container {
+        margin-left: 15px;
+    }
+
+    #dataTables-example_wrapper .dataTables_paginate {
+        margin-top: 20px;
+    }
+</style>
+

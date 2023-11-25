@@ -38,14 +38,10 @@ namespace test3.Controllers
             List<Scholarship> searchResults = new List<Scholarship>();
 
             switch (searchField)
-            {
-                case "ScholarshipID":
-                    if (int.TryParse(searchValue, out int scholarshipID))
-                    {
-                        searchResults = db.Scholarships.Where(s => s.ScholarshipID == scholarshipID).ToList();
-                    }
-                    break;
-                
+            {   
+                case "ScholarshipName":
+                    searchResults = db.Scholarships.Where(s => s.ScholarshipName.ToLower().Contains(searchValue)).ToList();
+                    break;     
             }
             int pageNumber = page ?? 1;
             int pageSize = 10;
@@ -70,7 +66,7 @@ namespace test3.Controllers
             if (existingScholarship != null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Học bổng này đã tồn tại.");
+                return Content("Đã có học bổng này.");
             }
 
             db.Scholarships.Add(hocBong);
@@ -118,6 +114,7 @@ namespace test3.Controllers
             }
             db.Entry(hocBong).State = EntityState.Modified;
             db.SaveChanges();
+            TempData["SuccessMessage"] = "Sửa thông tin học bổng thành công.";
             return RedirectToAction("DanhSachHocBong");
         }
     }
