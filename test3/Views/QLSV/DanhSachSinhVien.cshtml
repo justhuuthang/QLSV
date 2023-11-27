@@ -12,11 +12,11 @@
     <div class="form-group">
         <div style="display: flex">
             <select name="searchField" class="form-control" style="width: 30%;">
-                <option value="StudentID">MSSV</option>
-                <option value="ClassName">Lớp</option>
-                <option value="DepartmentName">Khoa</option>
+                <option value="StudentID" @(TempData["SearchField"] as string == "StudentID" ? "selected" : "")>MSSV</option>
+                <option value="ClassName" @(TempData["SearchField"] as string == "ClassName" ? "selected" : "")>Lớp</option>
+                <option value="DepartmentName" @(TempData["SearchField"] as string == "DepartmentName" ? "selected" : "")>Khoa</option>
             </select>
-            <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <input type="text" name="searchValue" value="@TempData["SearchValue"]" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
             @Html.ActionLink("Import", "ImportStudents", "QLSV", null, new { @class = "btn btn-primary" })
