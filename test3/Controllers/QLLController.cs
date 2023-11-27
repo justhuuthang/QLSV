@@ -40,7 +40,7 @@ namespace test3.Controllers
         {
             List<Class> searchResults = new List<Class>();
             searchResults = db.Classes.Where(s => s.ClassName.ToUpper().StartsWith(searchValue)).ToList();
-
+            TempData["SearchResults"] = searchResults;
             int pageNumber = page ?? 1;
             int pageSize = 10;
             IPagedList<Class> pagedResults = searchResults.ToPagedList(pageNumber, pageSize);

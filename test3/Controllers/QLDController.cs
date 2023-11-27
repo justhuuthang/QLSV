@@ -119,6 +119,9 @@ namespace test3.Controllers
                     if (existingData != null)
                     {
                         existingData.ScoreScale10 = data.ScoreScale10;
+                        existingData.ScoreScale4 = data.ScoreScale4;
+                        existingData.LetterGrade = data.LetterGrade;
+
                     }
                 }
                 db.SaveChanges();

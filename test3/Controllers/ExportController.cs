@@ -147,24 +147,32 @@ namespace test3.Controllers
             var db = new QuanliSVEntities();
             return db.Courses.ToList();
         }
+        //Export DS lớp
         public ActionResult ExportLop()
         {
-            // Lấy danh sách sinh viên từ cơ sở dữ liệu hoặc từ nơi bạn lưu trữ dữ liệu
-            List<Class> classes = GetClassListFromDatabase();
+            List<Class> searchResults = TempData["SearchResults"] as List<Class>;
+
+            List<Class> classes;
+            if (searchResults != null && searchResults.Any())
+            {
+                classes = searchResults;
+            }
+            else
+            {
+                classes = GetClassListFromDatabase();
+            }
+
 
             using (var workbook = new XLWorkbook())
             {
-                var worksheet = workbook.Worksheets.Add("DanhSachMonHoc");
-
-                // Định dạng tiêu đề
+                var worksheet = workbook.Worksheets.Add("DanhSachLop");
                 worksheet.Cell(1, 1).Value = "ClassID";
                 worksheet.Cell(1, 2).Value = "ClassName";
                 worksheet.Cell(1, 3).Value = "StartDate";
                 worksheet.Cell(1, 4).Value = "EndDate";
                 worksheet.Cell(1, 5).Value = "HeadTeacher";
                 worksheet.Cell(1, 6).Value = "MaxStudents";
-
-                // Ghi danh sách sinh viên vào file Excel
+                worksheet.Cell(1, 7).Value = "Department";
                 for (int i = 0; i < classes.Count; i++)
                 {
                     var row = i + 2;
@@ -174,17 +182,94 @@ namespace test3.Controllers
                     worksheet.Cell(row, 4).Value = classes[i].EndDate;
                     worksheet.Cell(row, 5).Value = classes[i].HeadTeacher;
                     worksheet.Cell(row, 6).Value = classes[i].MaxStudents;
-
+                    worksheet.Cell(row, 6).Value = classes[i].Department.DepartmentName;
                 }
-                // Tạo tệp Excel và trả về nó cho người dùng
                 var memoryStream = new MemoryStream();
                 workbook.SaveAs(memoryStream);
 
                 return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachLop.xlsx");
+
             }
         }
+        private List<Class> GetClassListFromDatabase()
+        {
+            var db = new QuanliSVEntities();
+            return db.Classes.ToList();
+        }
+
+        private List<Student> GetClassList(string searchClassName, string searchDepartmentName)
+        {
+            var query = db.Students.AsQueryable();
+
+            // Nếu có thông tin về lớp, thêm điều kiện tìm kiếm
+            if (!string.IsNullOrEmpty(searchClassName))
+            {
+                query = query.Where(s => s.Class.ClassName.Contains(searchClassName));
+            }
+
+            // Nếu có thông tin về khoa, thêm điều kiện tìm kiếm
+            if (!string.IsNullOrEmpty(searchDepartmentName))
+            {
+                query = query.Where(s => s.Class.Department.DepartmentName.Contains(searchDepartmentName));
+            }
+
+            return query.ToList();
+        }
+
+        //Export DS khoa
+        public ActionResult ExportKhoa()
+        {
+            List<Department> searchResults = TempData["SearchResults"] as List<Department>;
+
+            List<Department> departments;
+            if (searchResults != null && searchResults.Any())
+            {
+                departments = searchResults;
+            }
+            else
+            {
+                departments = GetDepartmentListFromDatabase();
+            }
 
 
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DanhSachLop");
+                worksheet.Cell(1, 1).Value = "DepartmentID";
+                worksheet.Cell(1, 2).Value = "DepartmentName";
+                worksheet.Cell(1, 3).Value = "Description";
+                for (int i = 0; i < departments.Count; i++)
+                {
+                    var row = i + 2;
+                    worksheet.Cell(row, 1).Value = departments[i].DepartmentID;
+                    worksheet.Cell(row, 2).Value = departments[i].DepartmentName;
+                    worksheet.Cell(row, 3).Value = departments[i].Description;
+
+                }
+                var memoryStream = new MemoryStream();
+                workbook.SaveAs(memoryStream);
+
+                return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachKhoa.xlsx");
+
+            }
+        }
+        private List<Department> GetDepartments()
+        {
+            var db = new QuanliSVEntities();
+            return db.Departments.ToList();
+        }
+
+        private List<Department> GetDepartments(string searchDepartmentName)
+        {
+            var query = db.Departments.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchDepartmentName))
+            {
+                query = query.Where(s => s.DepartmentName.Contains(searchDepartmentName));
+            }
+
+            return query.ToList();
+        }
 
 
         //danh sach sinh vien dat hoc bong
@@ -292,47 +377,12 @@ namespace test3.Controllers
                 return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachHocBong.xlsx");
             }
         }
-        //Export Khoa
-        public ActionResult ExportKhoa()
-        {
-            // Lấy danh sách sinh viên từ cơ sở dữ liệu hoặc từ nơi bạn lưu trữ dữ liệu
-            List<Department> classes = GetDepartmentListFromDatabase();
-
-            using (var workbook = new XLWorkbook())
-            {
-                var worksheet = workbook.Worksheets.Add("DanhSachLop");
-
-                // Định dạng tiêu đề
-                worksheet.Cell(1, 1).Value = "DepartmentID";
-                worksheet.Cell(1, 2).Value = "DepartmentName";
-                // Ghi danh sách sinh viên vào file Excel
-                for (int i = 0; i < classes.Count; i++)
-                {
-                    var row = i + 2;
-                    worksheet.Cell(row, 1).Value = classes[i].DepartmentID;
-                    worksheet.Cell(row, 2).Value = classes[i].DepartmentName;
-
-                }
-                // Tạo tệp Excel và trả về nó cho người dùng
-                var memoryStream = new MemoryStream();
-                workbook.SaveAs(memoryStream);
-
-                return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachKhoa.xlsx");
-            }
-        }
 
         private List<Department> GetDepartmentListFromDatabase()
         {
             var db = new QuanliSVEntities();
             // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
             return db.Departments.ToList();
-        }
-
-        private List<Class> GetClassListFromDatabase()
-        {
-            var db = new QuanliSVEntities();
-            // Viết mã lấy danh sách sinh viên từ cơ sở dữ liệu của bạn ở đây
-            return db.Classes.ToList();
         }
         private List<Semester> GetSemesterListFromDatabase()
         {
