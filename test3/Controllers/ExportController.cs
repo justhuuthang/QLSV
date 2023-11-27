@@ -172,6 +172,7 @@ namespace test3.Controllers
                 worksheet.Cell(1, 4).Value = "EndDate";
                 worksheet.Cell(1, 5).Value = "HeadTeacher";
                 worksheet.Cell(1, 6).Value = "MaxStudents";
+                worksheet.Cell(1, 7).Value = "Department";
                 for (int i = 0; i < classes.Count; i++)
                 {
                     var row = i + 2;
@@ -181,6 +182,7 @@ namespace test3.Controllers
                     worksheet.Cell(row, 4).Value = classes[i].EndDate;
                     worksheet.Cell(row, 5).Value = classes[i].HeadTeacher;
                     worksheet.Cell(row, 6).Value = classes[i].MaxStudents;
+                    worksheet.Cell(row, 6).Value = classes[i].Department.DepartmentName;
                 }
                 var memoryStream = new MemoryStream();
                 workbook.SaveAs(memoryStream);
