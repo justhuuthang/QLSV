@@ -66,8 +66,9 @@ namespace test3.Controllers
                     break;
             }
 
-            TempData["SearchResults"] = searchResults;  
-
+            TempData["SearchResults"] = searchResults;
+            TempData["SearchField"] = searchField;
+            TempData["SearchValue"] = searchValue;
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             IPagedList<Student> pagedSearchResults = searchResults.ToPagedList(pageNumber, pageSize);
