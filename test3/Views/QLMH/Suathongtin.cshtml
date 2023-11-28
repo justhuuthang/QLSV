@@ -77,7 +77,9 @@
             @Html.DropDownListFor(model => model.ClassID, new SelectList(dslop, "ClassID", "ClassName"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
         </div>
     </div>
-    <div id="error-message" style="color: red;"></div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-3" id="error-message" style="color: red" ,font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif"></div>
+    </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
             <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
@@ -94,6 +96,7 @@
         margin-right: 70px;
     }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     $(document).ready(function () {
         $("#btn-sua").click(function () {
@@ -112,10 +115,22 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    window.location.href = window.location.origin + '/QLMH/DanhSachMonHoc';
+                    Swal.fire({
+                        title: 'Sửa thành công',
+                        text: 'Bạn có muốn quay trở lại danh sách môn học không?',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có',
+                        cancelButtonText: 'Không'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.origin + '/QLMH/DanhSachMonHoc';
+                        } else {
+                        }
+                    });
                 },
                 error: function (response) {
-                    if (response.responseText === "Môn học đã tồn tại .") {
+                    if (response.responseText === "Môn học đã tồn tại.") {
                         $("#error-message").text(response.responseText);
                     } else {
                         alert("Sửa thất bại");
@@ -124,4 +139,5 @@
             });
         });
     });
+   
 </script>
