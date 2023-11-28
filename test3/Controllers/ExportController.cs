@@ -66,38 +66,21 @@ namespace test3.Controllers
             return db.Students.ToList();
         }
 
-        private List<Student> GetStudentList(string searchClassName, string searchDepartmentName)
-        {
-            var query = db.Students.AsQueryable();
-
-            // Nếu có thông tin về lớp, thêm điều kiện tìm kiếm
-            if (!string.IsNullOrEmpty(searchClassName))
-            {
-                query = query.Where(s => s.Class.ClassName.Contains(searchClassName));
-            }
-
-            // Nếu có thông tin về khoa, thêm điều kiện tìm kiếm
-            if (!string.IsNullOrEmpty(searchDepartmentName))
-            {
-                query = query.Where(s => s.Class.Department.DepartmentName.Contains(searchDepartmentName));
-            }
-
-            return query.ToList();
-        }
+      
 
         private QuanliSVEntities db = new QuanliSVEntities();
         public ActionResult ExportMonHoc()
         {
-            // Lấy thông tin về ClassName từ TempData
-            string searchClassName = TempData["SearchClassName"] as string;
+            List<Cours> searchResults = TempData["SearchResults"] as List<Cours>;
+
             List<Cours> subjects;
-            if (string.IsNullOrEmpty(searchClassName))
+            if (searchResults != null && searchResults.Any())
             {
-                subjects = GetSubjectListFromDatabase();
+                subjects = searchResults;
             }
             else
             {
-                subjects = db.Courses.Where(c => c.CourseName.Contains(searchClassName)).ToList();
+                subjects = GetSubjectListFromDatabase();
             }
 
             using (var workbook = new XLWorkbook())
@@ -132,6 +115,8 @@ namespace test3.Controllers
             }
         }
 
+
+
         private string GetDepartmentName(int departmentID)
         {
             var department = db.Departments.Find(departmentID);
@@ -147,6 +132,11 @@ namespace test3.Controllers
             var db = new QuanliSVEntities();
             return db.Courses.ToList();
         }
+
+
+
+
+
         //Export DS lớp
         public ActionResult ExportLop()
         {

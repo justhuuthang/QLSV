@@ -9,7 +9,11 @@
 <form action="/QLMH/Search" method="get">
     <div class="form-group">
         <div style="display: flex">
-          <label for="TenMon" class="col-md-5 control-label" style="margin-top:7px">Tên Môn </label>
+            <select name="searchField" class="form-control" style="width: 50%;">
+                <option value="CourseName">Tên môn</option>
+                <option value="SemesterName">Kì</option>
+                <option value="DepartmentName">Khoa</option>
+            </select>
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
@@ -46,10 +50,11 @@
                                 <td>@monHoc.Department.DepartmentName</td>
 
                                 <td>@monHoc.Semester.SemesterName</td>
+                               
                                 <td>
-                                    <form action="~/QLMH/Xoa" method="post">
+                                    <form id="deleteForm_@monHoc.CourseID" action="~/QLMH/Xoa" method="post">
                                         <input type="hidden" name="id" value="@monHoc.CourseID" />
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@monHoc.CourseID')">Xóa</button>
                                     </form>
                                 </td>
                                 <td>
@@ -68,3 +73,20 @@
         @Html.PagedListPager(Model, page => Url.Action("DanhSachMonHoc", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(courseID) {
+        Swal.fire({
+            title: 'Xác nhận xóa',
+            text: 'Bạn có chắc chắn muốn xóa môn học này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm_" + courseID).submit();
+            }
+        });
+    }
+</script>

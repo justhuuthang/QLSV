@@ -35,20 +35,44 @@ namespace test3.Controllers
             return View(monHoc.ToPagedList((int)page, (int)pageSize));
         }
         [Role_User(FunctionID = "Admin_XemDanhSach")]
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
-        [HttpGet]
         public ActionResult Search(string searchField, string searchValue, int? page)
         {
-            List<Cours> searchResults = db.Courses.Where(c => c.CourseName.Contains(searchValue)).ToList();
+            List<Cours> searchResults = new List<Cours>();
+
+            switch (searchField)
+            {
+
+                case "CourseName":
+                    searchResults = db.Courses
+                        .Where(s => s.CourseName.Contains(searchValue))
+                        .ToList();
+                    break;
+
+                case "SemesterName":
+                    searchResults = db.Courses
+                        .Where(s => s.Semester.SemesterName.Contains(searchValue))
+                        .ToList();
+                    break;
+
+                case "DepartmentName":
+                    searchResults = db.Courses
+                        .Where(s => s.Department.DepartmentName.Contains(searchValue))
+                        .ToList();
+                    break;
+
+                default:
+                    break;
+            }
+
+            TempData["SearchResults"] = searchResults;
+
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             IPagedList<Cours> pagedSearchResults = searchResults.ToPagedList(pageNumber, pageSize);
 
-            // Thêm ClassName vào TempData để sử dụng trong hành động ExportMonHoc
-            TempData["SearchClassName"] = searchValue;
-
             return View("DanhSachMonHoc", pagedSearchResults);
         }
+
 
         [Role_User(FunctionID = "Admin_XemDanhSach")]
         [HttpGet]
@@ -95,15 +119,14 @@ namespace test3.Controllers
         public ActionResult Suathongtin(Cours monHoc)
         {
             QuanliSVEntities db = new QuanliSVEntities();
-            string courseName = Request["CourseName"];
+            var existingCourse = db.Courses.FirstOrDefault(s => s.CourseID != monHoc.CourseID && s.CourseName == monHoc.CourseName);
 
-            var existingCours = db.Courses.FirstOrDefault(s => s.CourseName == courseName);
-
-            if (existingCours != null)
+            if (existingCourse != null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Môn học đã tồn tại .");
+                return Content("Môn học đã tồn tại.");
             }
+
             db.Entry(monHoc).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("DanhSachMonHoc");
