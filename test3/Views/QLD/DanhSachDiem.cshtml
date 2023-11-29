@@ -32,8 +32,9 @@
             <table class="table table-striped table-bordered table-hover" id="data-table">
                 <thead>
                     <tr>
-                        <th>Mã sinh viên</th>
-                        <th>Mã môn</th>
+                        <th>Mã điểm</th>
+                        <th>Mã sv</th>
+                        <th>Tên sinh viên</th>
                         <th>Tên môn</th>
                         <th>Ngày thi</th>
                         <th>Kì</th>
@@ -50,19 +51,20 @@
                         @foreach (var diem in Model)
                         {
                             <tr data-studentid="@diem.StudentID" data-courseid="@diem.CourseID" data-coursename="@diem.Cours.CourseName" data-examdate="@diem.ExamDate" data-semestername="@diem.Semester.SemesterName" data-scalescore10="@diem.ScoreScale10" data-scalescore4="@diem.ScoreScale4" data-lettergrade="@diem.LetterGrade">
+                                <td>@diem.GradeID</td>
                                 <td>@diem.StudentID</td>
                                 <td>@diem.CourseID</td>
                                 <td>@diem.Cours.CourseName</td>
                                 <td>@diem.ExamDate.ToString("dd-MM-yyyy")
                                 <td>@diem.Semester.SemesterName</td>
                                 <td class="editable">
-                                    <input id="ScoreScale10" class="form-control" name="ScoreScale10" value="@diem.ScoreScale10" oninput="convertGrade(this)" readonly/>
+                                    <input id="ScoreScale10_@diem.GradeID" class="form-control" name="ScoreScale10_@diem.GradeID" value="@diem.ScoreScale10" oninput="convertGrade(this)" readonly/>
                                 </td>
                                 <td class="editable">
-                                    <input id="ScoreScale4" class="form-control" name="ScoreScale4" value="@diem.ScoreScale4" readonly />
+                                    <input id="ScoreScale4_@diem.GradeID" class="form-control" name="ScoreScale4_@diem.GradeID" value="@diem.ScoreScale4" readonly />
                                 </td>
                                 <td class="editable">
-                                    <input id="LetterGrade" class="form-control" name="LetterGrade" value="@diem.LetterGrade" readonly />
+                                    <input id="LetterGrade_@diem.GradeID" class="form-control" name="LetterGrade_@diem.GradeID" value="@diem.LetterGrade" readonly />
                                 </td>
                             </tr>
                         }
@@ -82,7 +84,7 @@
 
             if (buttonText === 'Sửa') {
                 $(this).text('Lưu');
-                $('.editable input[name="ScoreScale10"]').prop('readonly', false);
+                $('.editable input[name^="ScoreScale10_"]').prop('readonly', false);
                 $('.editable').each(function () {
                     $(this).addClass('edit-field');
                 });
@@ -98,9 +100,9 @@
                     rowData.CourseName = $(this).data('coursename');
                     rowData.ExamDate = $(this).data('examdate');
                     rowData.SemesterName = $(this).data('semestername');
-                    rowData.ScoreScale10 = $(this).find('.editable input[name="ScoreScale10"]').val();
-                    rowData.ScoreScale4 = $(this).find('.editable input[name="ScoreScale4"]').val();
-                    rowData.LetterGrade = $(this).find('.editable input[name="LetterGrade"]').val();
+                    rowData.ScoreScale10 = $(this).find('.editable input[name^="ScoreScale10_"]').val();
+                    rowData.ScoreScale4 = $(this).find('.editable input[name^="ScoreScale4_"]').val();
+                    rowData.LetterGrade = $(this).find('.editable input[name^="LetterGrade_"]').val();
                     tableData.push(rowData);
                 });
 
@@ -124,8 +126,8 @@
             return false;
         });
     });
-    function convertGrade() {
-        var grade10 = parseFloat(document.getElementById('ScoreScale10').value);
+    function convertGrade(input) {
+        var grade10 = parseFloat(input.value);
         var grade4;
         var letterScore;
         if (grade10 >= 8.5 && grade10 <= 10.0) {
@@ -144,11 +146,18 @@
             grade4 = 0.0;
             letterScore = "F";
         }
-        document.getElementById('ScoreScale4').value = grade4;
-        document.getElementById('LetterGrade').value = letterScore;
+        var row = $(input).closest('tr');
+        var gradeID = row.find('td:first').text();
+        //console.log(gradeID);
+        document.getElementById('ScoreScale4_'+gradeID).value = grade4;
+        document.getElementById('LetterGrade_'+gradeID).value = letterScore;
     }
 </script>
-
+<style>
+    .editable {
+        width: 150px; /* Đặt chiều ngang mong muốn, có thể điều chỉnh giảm hoặc tăng theo nhu cầu */
+    }
+</style>
 
 
 
