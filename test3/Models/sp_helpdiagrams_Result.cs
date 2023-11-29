@@ -10,15 +10,13 @@
 namespace test3.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Role
+    public partial class sp_helpdiagrams_Result
     {
-        public int AccountID { get; set; }
-        public string Group { get; set; }
-        public string Description { get; set; }
-    
-        public virtual Account Account { get; set; }
-        public virtual Function_Role Function_Role { get; set; }
+        public string Database { get; set; }
+        public string Name { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

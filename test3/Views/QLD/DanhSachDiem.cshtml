@@ -133,13 +133,22 @@
         if (grade10 >= 8.5 && grade10 <= 10.0) {
             grade4 = 4.0;
             letterScore = "A";
-        } else if (grade10 >= 7.0 && grade10 <= 8.4) {
+        } else if (grade10 >= 8.0 && grade10 < 8.5) {
+            grade4 = 3.5;
+            letterScore = "B+";
+        }else if (grade10 >= 7.0 && grade10 < 8.0) {
             grade4 = 3.0;
             letterScore = "B";
-        } else if (grade10 >= 5.5 && grade10 <= 6.9) {
+        } else if (grade10 >= 6.5 && grade10 <= 6.9) {
+            grade4 = 2.5;
+            letterScore = "C+";
+        } else if (grade10 >= 5.5 && grade10 <= 6.4) {
             grade4 = 2.0;
             letterScore = "C";
-        } else if (grade10 >= 4.0 && grade10 <= 5.4) {
+        } else if (grade10 >= 5.0 && grade10 <= 5.4) {
+            grade4 = 1.5;
+            letterScore = "D+";
+        } else if (grade10 >= 4.0 && grade10 < 5.0) {
             grade4 = 1.0;
             letterScore = "D";
         } else {

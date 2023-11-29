@@ -18,11 +18,12 @@ using System.IO;
 
 namespace test3.Controllers
 {
+    [Role_User/*(Group = "ADMIN,CTSV")*/]
     public class QLSVController : Controller
     {
         // GET: QLSV
         QuanliSVEntities db = new QuanliSVEntities();
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
+        
         public ActionResult DanhSachSinhVien(int? page, int? pageSize)
         {
             if (page == null)
@@ -75,9 +76,6 @@ namespace test3.Controllers
 
             return View("DanhSachSinhVien", pagedSearchResults);
         }
-
-
-        [Role_User]
         [HttpGet]
         public ActionResult AddNewStudent()
         {
@@ -109,7 +107,6 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachSinhVien");
         }
-        [Role_User]
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {

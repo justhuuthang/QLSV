@@ -24,152 +24,331 @@
     <div id="wrapper">
         @{
             var user = test3.App_Start.SessionConfig.getUser();
+            if (user != null)
+            {
+                int userID = user.UserID;
+                using (var db = new test3.Models.QuanliSVEntities())
+                {
+                    var userRoles = db.Roles.Where(r => r.AccountID == userID).Select(r => r.Group).ToList();
+                    Session["USER_GROUPS"] = userRoles;
+                    if (userRoles.Contains("ADMIN"))
+                    {
+                        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+                            <div class="navbar-header">
+                                <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
+                            </div>
+                            <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
+                                <span>Welcome @user.FullName</span>&nbsp;
+                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+                            </div>
+                        </nav>
+                        <nav class="navbar-default navbar-side" role="navigation">
+                            <div class="sidebar-collapse">
+                                <ul class="nav" id="main-menu">
+                                    <li>
+                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV")">Danh sách sinh viên</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 3 ? "active-menu" : "")" href="@Url.Action("AddNewStudent", "QLSV")">Thêm mới sinh viên</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 9 || ViewBag.ac == 10 ? "active-menu" : "")"><i class="fa fa-desktop fa-3x"></i>Môn Học<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li class="nav nav-second-level">
+                                                <a class="@Html.Raw(ViewBag.ac == 9 ? "active-menu" : "")" href="@Url.Action("DanhSachMonHoc", "QLMH")">Danh sách môn học</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 10 ? "active-menu" : "")" href="@Url.Action("ThemMoiMonHoc", "QLMH")">Thêm mới môn học</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 11 || ViewBag.ac == 12 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Lớp<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 11 ? "active-menu" : "")" href="@Url.Action("DanhSachLop", "QLL")">Danh sách lớp</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 12 ? "active-menu" : "")" href="@Url.Action("ThemMoiLop", "QLL")">Thêm mới lớp</a>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 4 || ViewBag.ac == 5 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i>Khoa<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 4 ? "active-menu" : "")" href="@Url.Action("DanhSachKhoa", "QLK")">Danh sách khoa</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 5 ? "active-menu" : "")" href="@Url.Action("ThemMoiKhoa", "QLK")">Thêm khoa</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Điểm<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 13 ? "active-menu" : "")" href="@Url.Action("DanhSachDiem", "QLD")">Danh sách điểm</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 14 ? "active-menu" : "")" href="@Url.Action("ThemMoiDiem", "QLD")">Nhập điểm</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Tài khoản & phân quyền<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 13 ? "active-menu" : "")" href="@Url.Action("DanhSachTaiKhoan", "Role")">Danh sách tài khoản</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 15 || ViewBag.ac == 16 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Kì<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 15 ? "active-menu" : "")" href="@Url.Action("DanhSachHocKi", "QLHK")">Danh sách học kì</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 15 ? "active-menu" : "")" href="@Url.Action("ThemMoiHocKi", "QLHK")">Thêm học kì mới</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 17 || ViewBag.ac == 18 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Bổng<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")" href="@Url.Action("DanhSachHocBong", "QLHB")">Danh sách học bổng</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")" href="@Url.Action("ThemHocBong", "QLHB")">Thêm học bổng</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 19 || ViewBag.ac == 20 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 19 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVienDatHocBong", "QLSVDHB")">Sinh viên đạt học bổng</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                        </nav>
+                        <!-- /. NAV SIDE  -->
+                        <div id="page-wrapper">
+                            @RenderBody()
+
+
+                            <!-- /. PAGE INNER  -->
+                        </div>
+                    }
+                    if (userRoles.Contains("CTSV"))
+                    {
+                        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+                            <div class="navbar-header">
+                                <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
+                            </div>
+                            <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
+                                <span>Welcome @user.FullName</span>&nbsp;
+                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+                            </div>
+                        </nav>
+                        <nav class="navbar-default navbar-side" role="navigation">
+                            <div class="sidebar-collapse">
+                                <ul class="nav" id="main-menu">
+                                    <li>
+                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV")">Danh sách sinh viên</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 3 ? "active-menu" : "")" href="@Url.Action("AddNewStudent", "QLSV")">Thêm mới sinh viên</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 15 || ViewBag.ac == 16 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Kì<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 15 ? "active-menu" : "")" href="@Url.Action("DanhSachHocKi", "QLHK")">Danh sách học kì</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 15 ? "active-menu" : "")" href="@Url.Action("ThemMoiHocKi", "QLHK")">Thêm học kì mới</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 17 || ViewBag.ac == 18 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Bổng<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")" href="@Url.Action("DanhSachHocBong", "QLHB")">Danh sách học bổng</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")" href="@Url.Action("ThemHocBong", "QLHB")">Thêm học bổng</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 19 || ViewBag.ac == 20 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 19 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVienDatHocBong", "QLSVDHB")">Sinh viên đạt học bổng</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                        </nav>
+                        <!-- /. NAV SIDE  -->
+                        <div id="page-wrapper">
+                            @RenderBody()
+
+
+                            <!-- /. PAGE INNER  -->
+                        </div>
+                    }
+                    if (userRoles.Contains("GV"))
+                    {
+                        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+                            <div class="navbar-header">
+                                <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
+                            </div>
+                            <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
+                                <span>Welcome @user.FullName</span>&nbsp;
+                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+                            </div>
+                        </nav>
+                        <nav class="navbar-default navbar-side" role="navigation">
+                            <div class="sidebar-collapse">
+                                <ul class="nav" id="main-menu">
+                                    <li>
+                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV")">Danh sách sinh viên</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 3 ? "active-menu" : "")" href="@Url.Action("AddNewStudent", "QLSV")">Thêm mới sinh viên</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Điểm<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 13 ? "active-menu" : "")" href="@Url.Action("DanhSachDiem", "QLD")">Danh sách điểm</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 14 ? "active-menu" : "")" href="@Url.Action("ThemMoiDiem", "QLD")">Nhập điểm</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                        </nav>
+                        <!-- /. NAV SIDE  -->
+                        <div id="page-wrapper">
+                            @RenderBody()
+
+
+                            <!-- /. PAGE INNER  -->
+                        </div>
+                    }
+                    if (userRoles.Contains("SV"))
+                    {
+                        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+                            <div class="navbar-header">
+                                <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
+                            </div>
+                            <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
+                                <span>Welcome @user.FullName</span>&nbsp;
+                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+                            </div>
+                        </nav>
+                        <nav class="navbar-default navbar-side" role="navigation">
+                            <div class="sidebar-collapse">
+                                <ul class="nav" id="main-menu">
+                                    <li>
+                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV")">Danh sách sinh viên</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 3 ? "active-menu" : "")" href="@Url.Action("AddNewStudent", "QLSV")">Thêm mới sinh viên</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                        </nav>
+                        <!-- /. NAV SIDE  -->
+                        <div id="page-wrapper">
+                            @RenderBody()
+
+
+                            <!-- /. PAGE INNER  -->
+                        </div>
+                    }
+                }
+            }
         }
-        @if (user != null)
-        {
-            <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
-                </div>
-                <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
-                    <span>Welcome @user.Username</span>&nbsp;
-                    <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
-                </div>
-            </nav>
-        }
 
 
-        <nav class="navbar-default navbar-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="main-menu">
-                    <li>
-                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home" )"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV" )">Danh sách sinh viên</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 3 ? "active-menu" : "")" href="@Url.Action("AddNewStudent", "QLSV")">Thêm mới sinh viên</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 9 || ViewBag.ac == 10? "active-menu" : "")"><i class="fa fa-desktop fa-3x"></i>Môn Học<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li class="nav nav-second-level">
-                                <a class="@Html.Raw(ViewBag.ac == 9 ? "active-menu" : "")" href="@Url.Action("DanhSachMonHoc", "QLMH")">Danh sách môn học</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 10 ? "active-menu" : "")" href="@Url.Action("ThemMoiMonHoc", "QLMH")">Thêm mới môn học</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 11 || ViewBag.ac == 12? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Lớp<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 11 ? "active-menu" : "")" href="@Url.Action("DanhSachLop", "QLL" )">Danh sách lớp</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 12 ? "active-menu" : "")" href="@Url.Action("ThemMoiLop", "QLL")">Thêm mới lớp</a>
-                            </li>
-                        </ul>
-
-                    </li>
-
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 4 || ViewBag.ac == 5? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i>Khoa<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 4 ? "active-menu" : "")" href="@Url.Action("DanhSachKhoa", "QLK" )">Danh sách khoa</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 5 ? "active-menu" : "")" href="@Url.Action("ThemMoiKhoa", "QLK")">Thêm khoa</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Điểm<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 13 ? "active-menu" : "")" href="@Url.Action("DanhSachDiem", "QLD" )">Danh sách điểm</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 14 ? "active-menu" : "")" href="@Url.Action("ThemMoiDiem", "QLD")">Nhập điểm</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Tài khoản & phân quyền<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 13 ? "active-menu" : "")" href="@Url.Action("DanhSachTaiKhoan", "Role" )">Danh sách tài khoản</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 15 || ViewBag.ac == 16? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Kì<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 15 ? "active-menu" : "")" href="@Url.Action("DanhSachHocKi", "QLHK" )">Danh sách học kì</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 15 ? "active-menu" : "")" href="@Url.Action("ThemMoiHocKi", "QLHK")">Thêm học kì mới</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 17 || ViewBag.ac == 18? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Bổng<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")" href="@Url.Action("DanhSachHocBong", "QLHB" )">Danh sách học bổng</a>
-                            </li>
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")" href="@Url.Action("ThemHocBong", "QLHB")">Thêm học bổng</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#" class="@Html.Raw(ViewBag.ac == 19 || ViewBag.ac == 20? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="@Html.Raw(ViewBag.ac == 19 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVienDatHocBong", "QLSVDHB" )">Sinh viên đạt học bổng</a>
-                            </li>
-
-                        </ul>
-                    </li>
-                </ul>
-
-            </div>
-
-        </nav>
-
-        <!-- /. NAV SIDE  -->
-        <div id="page-wrapper">
-            @RenderBody()
 
 
-            <!-- /. PAGE INNER  -->
-        </div>
+
+
+
+
         <!-- /. PAGE WRAPPER  -->
+        <!-- /. WRAPPER  -->
+        <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+        <!-- METISMENU SCRIPTS -->
+        <script src="~/Content/assets/js/jquery.metisMenu.js"></script>
+        <!-- MORRIS CHART SCRIPTS -->
+        <script src="~/Content/assets/js/morris/raphael-2.1.0.min.js"></script>
+        <script src="~/Content/assets/js/morris/morris.js"></script>
+        <!-- CUSTOM SCRIPTS -->
+        <script src="~/Content/assets/js/custom.js"></script>
+
     </div>
-    <!-- /. WRAPPER  -->
-    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
-    <!-- METISMENU SCRIPTS -->
-    <script src="~/Content/assets/js/jquery.metisMenu.js"></script>
-    <!-- MORRIS CHART SCRIPTS -->
-    <script src="~/Content/assets/js/morris/raphael-2.1.0.min.js"></script>
-    <script src="~/Content/assets/js/morris/morris.js"></script>
-    <!-- CUSTOM SCRIPTS -->
-    <script src="~/Content/assets/js/custom.js"></script>
-
-
 </body>
 </html>

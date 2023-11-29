@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1ae86a4689da4f56a595a3de65fb5297" Name="Diagram1">
+      <Diagram DiagramId="c2b0cca43a36429fb47c60807258cd0b" Name="Diagram1">
         <EntityTypeShape EntityType="QuanliSVModel.Account" Width="1.5" PointX="0.75" PointY="9.875" IsExpanded="true" />
         <EntityTypeShape EntityType="QuanliSVModel.Class" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="QuanliSVModel.Cours" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
@@ -17,6 +17,7 @@
         <EntityTypeShape EntityType="QuanliSVModel.Scholarship" Width="1.5" PointX="8.25" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="QuanliSVModel.Semester" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="QuanliSVModel.Student" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanliSVModel.sysdiagram" Width="1.5" PointX="7.75" PointY="9.75" IsExpanded="true" />
         <AssociationConnector Association="QuanliSVModel.FK_Role_Accounts" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK__Students__ClassI__4CA06362" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_Classes_Departments" ManuallyRouted="false" />
@@ -25,7 +26,7 @@
         <AssociationConnector Association="QuanliSVModel.FK__Courses__Semeste__4E88ABD4" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK__Grades__CourseID__534D60F1" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK__Students__Depart__4D94879B" ManuallyRouted="false" />
-        <AssociationConnector Association="QuanliSVModel.FK_Role_Function" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanliSVModel.FK_Role_Function_Role" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_GradeBySemester_Grades" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_GradeBySemester_Scholarships" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_GradeBySemester_Semesters" ManuallyRouted="false" />

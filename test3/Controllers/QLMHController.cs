@@ -20,7 +20,7 @@ namespace test3.Controllers
     public class QLMHController : Controller
     {
         QuanliSVEntities db = new QuanliSVEntities();
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
         public ActionResult DanhSachMonHoc(int? page, int? pageSize)
         {
             if (page == null)
@@ -34,7 +34,7 @@ namespace test3.Controllers
             var monHoc = db.Courses.Include(c => c.Department).Include(c => c.Semester).ToList();
             return View(monHoc.ToPagedList((int)page, (int)pageSize));
         }
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
         public ActionResult Search(string searchField, string searchValue, int? page)
         {
             List<Cours> searchResults = new List<Cours>();
@@ -74,7 +74,7 @@ namespace test3.Controllers
         }
 
 
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
         [HttpGet]
         public ActionResult ThemMoiMonHoc()
         {
@@ -97,7 +97,7 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachMonHoc");
         }
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {

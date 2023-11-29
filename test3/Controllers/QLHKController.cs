@@ -20,7 +20,7 @@ namespace test3.Controllers
     {
         // GET: QLSV
         QuanliSVEntities db = new QuanliSVEntities();
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
         public ActionResult DanhSachHocKi(int? page, int? pageSize)
         {
             if (page == null)

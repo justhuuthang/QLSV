@@ -12,13 +12,12 @@ namespace test3.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Role
+    public partial class sysdiagram
     {
-        public int AccountID { get; set; }
-        public string Group { get; set; }
-        public string Description { get; set; }
-    
-        public virtual Account Account { get; set; }
-        public virtual Function_Role Function_Role { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }
