@@ -36,7 +36,7 @@ namespace test3.Controllers
             int pageNumber = page ?? 1;
             int pageSize = 10;
             IPagedList<Department> pagedResults = searchResults.ToPagedList(pageNumber, pageSize);
-
+            TempData["SearchValue"] = searchValue;
             return View("DanhSachKhoa", pagedResults);
         }
         [Role_User]

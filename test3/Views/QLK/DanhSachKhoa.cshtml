@@ -11,7 +11,7 @@
     <div class="form-group">
         <div style="display: flex">
             <label for="DepartmentName" class="col-md-5 control-label" style="margin-top:7px">Tên khoa: </label>
-            <input name="searchValue" type="text" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <input name="searchValue" type="text" class="form-control" value="@TempData["SearchValue"]" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             @Html.ActionLink("Export", "ExportKhoa", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
         </div>
