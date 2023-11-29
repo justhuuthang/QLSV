@@ -9,14 +9,16 @@
 <form action="/QLMH/Search" method="get">
     <div class="form-group">
         <div style="display: flex">
-            <select name="searchField" class="form-control" style="width: 50%;">
+            <div class="col-md-6" style="display:flex">
+            <select name="searchField" class="form-control" style="width: 30%;">
                 <option value="CourseName">Tên môn</option>
                 <option value="SemesterName">Kì</option>
                 <option value="DepartmentName">Khoa</option>
             </select>
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-            @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+            </div>
+            @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 45%;" });
         </div>
     </div>
 </form>
