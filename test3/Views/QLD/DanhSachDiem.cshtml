@@ -57,13 +57,13 @@
                                 <td>@diem.Cours.CourseName</td>
                                 <td>@diem.ExamDate.ToString("dd-MM-yyyy")
                                 <td>@diem.Semester.SemesterName</td>
-                                <td class="editable">
+                                <td width ="150px" class="editable">
                                     <input id="ScoreScale10_@diem.GradeID" class="form-control" name="ScoreScale10_@diem.GradeID" value="@diem.ScoreScale10" oninput="convertGrade(this)" readonly/>
                                 </td>
-                                <td class="editable">
+                                <td width ="150px" class="editable">
                                     <input id="ScoreScale4_@diem.GradeID" class="form-control" name="ScoreScale4_@diem.GradeID" value="@diem.ScoreScale4" readonly />
                                 </td>
-                                <td class="editable">
+                                <td width ="150px" class="editable">
                                     <input id="LetterGrade_@diem.GradeID" class="form-control" name="LetterGrade_@diem.GradeID" value="@diem.LetterGrade" readonly />
                                 </td>
                             </tr>
@@ -153,11 +153,6 @@
         document.getElementById('LetterGrade_'+gradeID).value = letterScore;
     }
 </script>
-<style>
-    .editable {
-        width: 150px; /* Đặt chiều ngang mong muốn, có thể điều chỉnh giảm hoặc tăng theo nhu cầu */
-    }
-</style>
 
 
 
