@@ -50,10 +50,10 @@
                     <tbody>
                         @foreach (var diem in Model)
                         {
-                            <tr data-studentid="@diem.StudentID" data-courseid="@diem.CourseID" data-coursename="@diem.Cours.CourseName" data-examdate="@diem.ExamDate" data-semestername="@diem.Semester.SemesterName" data-scalescore10="@diem.ScoreScale10" data-scalescore4="@diem.ScoreScale4" data-lettergrade="@diem.LetterGrade">
+                            <tr data-studentid="@diem.StudentID" data-courseid="@diem.CourseID" data-examdate="@diem.ExamDate" data-semestername="@diem.Semester.SemesterID" data-scalescore10="@diem.ScoreScale10" data-scalescore4="@diem.ScoreScale4" data-lettergrade="@diem.LetterGrade">
                                 <td>@diem.GradeID</td>
                                 <td>@diem.StudentID</td>
-                                <td>@diem.CourseID</td>
+                                <td>@diem.Student.FullName</td>
                                 <td>@diem.Cours.CourseName</td>
                                 <td>@diem.ExamDate.ToString("dd-MM-yyyy")
                                 <td>@diem.Semester.SemesterName</td>
@@ -97,9 +97,8 @@
 
                     rowData.StudentID = $(this).data('studentid');
                     rowData.CourseID = $(this).data('courseid');
-                    rowData.CourseName = $(this).data('coursename');
                     rowData.ExamDate = $(this).data('examdate');
-                    rowData.SemesterName = $(this).data('semestername');
+                    rowData.SemesterName = $(this).data('semesterid');
                     rowData.ScoreScale10 = $(this).find('.editable input[name^="ScoreScale10_"]').val();
                     rowData.ScoreScale4 = $(this).find('.editable input[name^="ScoreScale4_"]').val();
                     rowData.LetterGrade = $(this).find('.editable input[name^="LetterGrade_"]').val();
@@ -131,28 +130,28 @@
         var grade4;
         var letterScore;
         if (grade10 >= 8.5 && grade10 <= 10.0) {
-            grade4 = 4.0;
+            grade4 = "4,0";
             letterScore = "A";
         } else if (grade10 >= 8.0 && grade10 < 8.5) {
-            grade4 = 3.5;
+            grade4 = "3,5";
             letterScore = "B+";
         }else if (grade10 >= 7.0 && grade10 < 8.0) {
-            grade4 = 3.0;
+            grade4 = "3,0";
             letterScore = "B";
         } else if (grade10 >= 6.5 && grade10 <= 6.9) {
-            grade4 = 2.5;
+            grade4 = "2,5";
             letterScore = "C+";
         } else if (grade10 >= 5.5 && grade10 <= 6.4) {
-            grade4 = 2.0;
+            grade4 = "2,0";
             letterScore = "C";
         } else if (grade10 >= 5.0 && grade10 <= 5.4) {
-            grade4 = 1.5;
+            grade4 = "1,5";
             letterScore = "D+";
         } else if (grade10 >= 4.0 && grade10 < 5.0) {
-            grade4 = 1.0;
+            grade4 = "1,0";
             letterScore = "D";
         } else {
-            grade4 = 0.0;
+            grade4 = "0.0";
             letterScore = "F";
         }
         var row = $(input).closest('tr');

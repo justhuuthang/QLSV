@@ -28,7 +28,7 @@ namespace test3.Controllers
                 pageSize = 10;
             }
 
-            var diem = db.Grades.Include(c => c.Cours).Include(c => c.Semester).ToList();
+            var diem = db.Grades.Include(c => c.Cours).Include(c => c.Semester).Include(c => c.Student).ToList();
             return View(diem.ToPagedList((int)page, (int)pageSize));
         }
         [HttpGet]
