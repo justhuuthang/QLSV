@@ -33,6 +33,7 @@
         <AssociationConnector Association="QuanliSVModel.FK_GradeBySemester_Students" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK__Grades__StudentI__4316F928" ManuallyRouted="false" />
         <AssociationConnector Association="QuanliSVModel.FK_Grades_Semesters" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanliSVModel.FK_Students_Accounts" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

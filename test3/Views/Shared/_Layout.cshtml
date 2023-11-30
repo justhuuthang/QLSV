@@ -304,15 +304,9 @@
                                         <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
-                                        <ul class="nav nav-second-level">
                                             <li>
-                                                <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV")">Danh sách sinh viên</a>
+                                                <a class="@Html.Raw(ViewBag.ac == 3 ? "active-menu" : "")" href="@Url.Action("SVXemThongtin", "QLSV")"><i class="fa fa-dashboard fa-3x"></i>Thông tin sinh viên</a>
                                             </li>
-                                            <li>
-                                                <a class="@Html.Raw(ViewBag.ac == 3 ? "active-menu" : "")" href="@Url.Action("AddNewStudent", "QLSV")">Thêm mới sinh viên</a>
-                                            </li>
-                                        </ul>
                                     </li>
                                 </ul>
 
@@ -340,7 +334,7 @@
 
         <!-- /. PAGE WRAPPER  -->
         <!-- /. WRAPPER  -->
-        <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+        <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->   
         <!-- METISMENU SCRIPTS -->
         <script src="~/Content/assets/js/jquery.metisMenu.js"></script>
         <!-- MORRIS CHART SCRIPTS -->

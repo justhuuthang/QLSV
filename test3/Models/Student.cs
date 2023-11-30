@@ -30,6 +30,7 @@ namespace test3.Models
         public string Email { get; set; }
         public int ClassID { get; set; }
         public int DepartmentID { get; set; }
+        public Nullable<int> UserID { get; set; }
     
         public virtual Class Class { get; set; }
         public virtual Department Department { get; set; }
@@ -37,5 +38,6 @@ namespace test3.Models
         public virtual ICollection<GradeBySemester> GradeBySemesters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Grade> Grades { get; set; }
+        public virtual Account Account { get; set; }
     }
 }

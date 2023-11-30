@@ -132,6 +132,7 @@
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="ClassID" Type="int" Nullable="false" />
           <Property Name="DepartmentID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -188,30 +189,6 @@
             </Principal>
             <Dependent Role="Grades">
               <PropertyRef Name="StudentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Students__ClassI__4CA06362">
-          <End Role="Classes" Type="Self.Classes" Multiplicity="1" />
-          <End Role="Students" Type="Self.Students" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Classes">
-              <PropertyRef Name="ClassID" />
-            </Principal>
-            <Dependent Role="Students">
-              <PropertyRef Name="ClassID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Students__Depart__4D94879B">
-          <End Role="Departments" Type="Self.Departments" Multiplicity="1" />
-          <End Role="Students" Type="Self.Students" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Departments">
-              <PropertyRef Name="DepartmentID" />
-            </Principal>
-            <Dependent Role="Students">
-              <PropertyRef Name="DepartmentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -337,6 +314,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Students_Accounts">
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+          <End Role="Students" Type="Self.Students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -401,14 +390,6 @@
             <End Role="Students" EntitySet="Students" />
             <End Role="Grades" EntitySet="Grades" />
           </AssociationSet>
-          <AssociationSet Name="FK__Students__ClassI__4CA06362" Association="Self.FK__Students__ClassI__4CA06362">
-            <End Role="Classes" EntitySet="Classes" />
-            <End Role="Students" EntitySet="Students" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Students__Depart__4D94879B" Association="Self.FK__Students__Depart__4D94879B">
-            <End Role="Departments" EntitySet="Departments" />
-            <End Role="Students" EntitySet="Students" />
-          </AssociationSet>
           <AssociationSet Name="FK_Classes_Departments" Association="Self.FK_Classes_Departments">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Classes" EntitySet="Classes" />
@@ -445,6 +426,10 @@
             <End Role="Function_Role" EntitySet="Function_Role" />
             <End Role="Role" EntitySet="Role" />
           </AssociationSet>
+          <AssociationSet Name="FK_Students_Accounts" Association="Self.FK_Students_Accounts">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -461,6 +446,7 @@
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Roles" Relationship="Self.FK_Role_Accounts" FromRole="Accounts" ToRole="Role" />
           <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Students" Relationship="QuanliSVModel.FK_Students_Accounts" FromRole="Account" ToRole="Student" />
         </EntityType>
         <EntityType Name="Class">
           <Key>
@@ -607,6 +593,8 @@
           <NavigationProperty Name="Department" Relationship="Self.FK__Students__Depart__4D94879B" FromRole="Students" ToRole="Departments" />
           <NavigationProperty Name="GradeBySemesters" Relationship="Self.FK_GradeBySemester_Students" FromRole="Students" ToRole="GradeBySemester" />
           <NavigationProperty Name="Grades" Relationship="Self.FK__Grades__StudentI__4316F928" FromRole="Students" ToRole="Grades" />
+          <Property Name="UserID" Type="Int32" />
+          <NavigationProperty Name="Account" Relationship="QuanliSVModel.FK_Students_Accounts" FromRole="Student" ToRole="Account" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -919,6 +907,10 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <AssociationSet Name="FK_Students_Accounts" Association="QuanliSVModel.FK_Students_Accounts">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_DanhSachSinhVienDatHocBong_Result">
           <Property Type="Int32" Name="StudentID" Nullable="false" />
@@ -939,6 +931,18 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <Association Name="FK_Students_Accounts">
+          <End Type="QuanliSVModel.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="QuanliSVModel.Student" Role="Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1070,6 +1074,7 @@
           <EntitySetMapping Name="Students">
             <EntityTypeMapping TypeName="QuanliSVModel.Student">
               <MappingFragment StoreEntitySet="Students">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />

@@ -141,7 +141,41 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachSinhVien");
         }
+        [HttpGet]
+        public ActionResult SVXemthongtin()
+        {
+            QuanliSVEntities db = new QuanliSVEntities();
+            var user = SessionConfig.getUser();
+            if (user != null)
+            {
 
+                int userID = user.UserID;
+                var userRoles = db.Roles.Where(r => r.AccountID == userID).Select(r => r.Group).ToList();
+                Session["USER_GROUPS"] = userRoles;
+                if (userRoles.Contains("SV"))
+                {
+                    var sinhVien = db.Students.FirstOrDefault(s => s.UserID == userID);
+                    return View(sinhVien);
+                }
+            }
+            return RedirectToAction("DanhSachSinhVien");
+        }
+        [HttpPost]
+        public ActionResult SVXemthongtin(Student sinhVien)
+        {
+            QuanliSVEntities db = new QuanliSVEntities();
+            var existingStudent = db.Students.FirstOrDefault(s => s.StudentID != sinhVien.StudentID && s.ContactNumber == sinhVien.ContactNumber);
+
+            if (existingStudent != null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Sinh viên khác đã sử dụng số điện thoại này.");
+            }
+
+            db.Entry(sinhVien).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("SVXemThongTin");
+        }
         [HttpGet]
         public ActionResult ImportStudents()
         {

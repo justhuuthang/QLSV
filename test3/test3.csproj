@@ -532,6 +532,7 @@
     <Content Include="Views\QLK\ThemMoiKhoa.cshtml" />
     <Content Include="Views\QLK\DanhSachKhoa.cshtml" />
     <Content Include="Views\QLK\Suathongtin.cshtml" />
+    <Content Include="Views\QLSV\SVXemthongtin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
