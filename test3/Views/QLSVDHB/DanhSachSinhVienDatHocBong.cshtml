@@ -3,7 +3,7 @@
 @using PagedList;
 @model IPagedList<test3.Models.sp_DanhSachSinhVienDatHocBong_Result>
 @{
-    ViewBag.ac = 13;
+    ViewBag.ac = 17;
     test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
     List<test3.Models.Semester> dsKi = db.Semesters.ToList();
 }

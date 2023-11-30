@@ -3,7 +3,7 @@
 @using PagedList;
 @model IPagedList<test3.Models.Department>
 @{
-    ViewBag.ac = 4;
+    ViewBag.ac = 8;
 }
 
 <h2>Danh sách khoa </h2>
@@ -40,9 +40,9 @@
                                 <td>@khoa.DepartmentName</td>
                                 @*<td>@khoa.Description</td>*@
                                 <td>
-                                    <form action="~/QLK/Xoa" method="post">
+                                    <form id="deleteForm_@khoa.DepartmentID" action="~/QLK/Xoa" method="post">
                                         <input type="hidden" name="id" value="@khoa.DepartmentID" />
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@khoa.DepartmentID')">Xóa</button>
                                     </form>
                                 </td>
                                 <td>
@@ -63,4 +63,20 @@
         @Html.PagedListPager(Model, page => Url.Action("DanhSachKhoa", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(departmentID) {
+        Swal.fire({
+            title: 'Xác nhận xóa',
+            text: 'Bạn có chắc chắn muốn xóa khoa này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm_" + departmentID).submit();
+            }
+        });
+    }
+</script>
