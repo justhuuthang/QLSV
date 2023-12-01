@@ -16,7 +16,7 @@
                 <option value="DepartmentName">Khoa</option>
             </select>
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
             </div>
             @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 45%;" });
         </div>
@@ -56,13 +56,13 @@
                                 <td>
                                     <form id="deleteForm_@monHoc.CourseID" action="~/QLMH/Xoa" method="post">
                                         <input type="hidden" name="id" value="@monHoc.CourseID" />
-                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@monHoc.CourseID')">Xóa</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@monHoc.CourseID')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
                                 <td>
                                     <form action="~/QLMH/Suathongtin" method="get">
                                         <input type="hidden" name="id" value="@monHoc.CourseID" />
-                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-wrench" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
                             </tr>

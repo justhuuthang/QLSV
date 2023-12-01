@@ -22,7 +22,7 @@
                     <option value="@loai.SemesterID" @(loai.SemesterID.ToString() == ViewBag.MaKi ? "selected" : "")>@loai.SemesterName</option>
                 }
             </select>
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
             @Html.ActionLink("Export", "ExportSVDHB", "Export", null, new { @class = "btn btn-primary", @style="margin-left: 650px;" })
         </div>
     </div>

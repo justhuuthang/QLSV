@@ -15,7 +15,7 @@
                 <option value="ScholarshipName">Tên học bổng</option>
             </select>
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
             @Html.ActionLink("Export", "ExportHocBong", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
         </div>
     </div>
@@ -54,13 +54,13 @@
                                 <td>
                                     <form action="~/QLHB/Xoa" method="post">
                                         <input type="hidden" name="id" value="@hocBong.ScholarshipID" />
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
                                 <td>
                                     <form action="~/QLHB/Suathongtin" method="get">
                                         <input type="hidden" name="id" value="@hocBong.ScholarshipID " />
-                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-wrench" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
 

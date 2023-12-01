@@ -17,11 +17,13 @@
                 <option value="SemesterID">Kì</option>
             </select>
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-            @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
-            <div>
-                <button id="edit-toggle-btn" class="btn btn-primary">Sửa</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+            @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px; margin-right: 5px;" })
+
+            <div style="display: inline-block;">
+                <button id="edit-toggle-btn" class="btn btn-primary" style="margin-left: 5px;">Sửa</button>
             </div>
+
 
         </div>
     </div>
