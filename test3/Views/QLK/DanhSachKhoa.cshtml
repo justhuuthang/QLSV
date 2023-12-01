@@ -12,7 +12,7 @@
         <div style="display: flex">
             <label for="DepartmentName" class="col-md-5 control-label" style="margin-top:7px">Tên khoa: </label>
             <input name="searchValue" type="text" class="form-control" value="@TempData["SearchValue"]" placeholder="Nhập giá trị cần tìm kiếm" />
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
             @Html.ActionLink("Export", "ExportKhoa", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
         </div>
     </div>
@@ -42,13 +42,13 @@
                                 <td>
                                     <form id="deleteForm_@khoa.DepartmentID" action="~/QLK/Xoa" method="post">
                                         <input type="hidden" name="id" value="@khoa.DepartmentID" />
-                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@khoa.DepartmentID')">Xóa</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@khoa.DepartmentID')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
                                 <td>
                                     <form action="~/QLK/Suathongtin" method="get">
                                         <input type="hidden" name="id" value="@khoa.DepartmentID " />
-                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-wrench" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
 

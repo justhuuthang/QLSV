@@ -12,7 +12,7 @@
         <div style="display: flex">
             <label for="ClassName" class="col-md-5 control-label" style="margin-top:7px">Tên lớp: </label>
             <input value="@TempData["SearchValue"]" name="searchValue" type="text" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
             @Html.ActionLink("Export", "ExportLop", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
         </div>
     </div>
@@ -48,13 +48,13 @@
                                 <td>
                                     <form id="deleteForm_@lop.ClassID" action="~/QLL/Xoa" method="post">
                                         <input type="hidden" name="id" value="@lop.ClassID" />
-                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@lop.ClassID')">Xóa</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@lop.ClassID')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
                                 <td>
                                     <form action="~/QLL/Suathongtin" method="get">
                                         <input type="hidden" name="id" value="@lop.ClassID" />
-                                        <button type="submit" class="btn btn-primary">Sửa</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-wrench" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
                             </tr>

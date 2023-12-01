@@ -35,21 +35,24 @@
                     {
                         <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
                             <div class="navbar-header">
-                                <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
+                                <a class="navbar-brand" href="@Url.Action("DashBoard", "Home")"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
                             </div>
                             <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
                                 <span>Welcome @user.FullName</span>&nbsp;
-                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">
+                                    Logout 
+                                    <i class="fa fa-sign-out  "></i>
+                                </a>
                             </div>
                         </nav>
                         <nav class="navbar-default navbar-side" role="navigation">
                             <div class="sidebar-collapse">
                                 <ul class="nav" id="main-menu">
                                     <li>
-                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-home fa-3x"></i> Dashboard</a>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-user fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV")">Danh sách sinh viên</a>
@@ -61,7 +64,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 4 || ViewBag.ac == 5 ? "active-menu" : "")"><i class="fa fa-desktop fa-3x"></i>Môn Học<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 4 || ViewBag.ac == 5 ? "active-menu" : "")"><i class="fa fa-book fa-3x"></i>Môn Học<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li class="nav nav-second-level">
                                                 <a class="@Html.Raw(ViewBag.ac == 4 ? "active-menu" : "")" href="@Url.Action("DanhSachMonHoc", "QLMH")">Danh sách môn học</a>
@@ -72,7 +75,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 6 || ViewBag.ac == 7 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Lớp<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 6 || ViewBag.ac == 7 ? "active-menu" : "")"><i class="fa fa-users fa-3x"></i> Lớp<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 6 ? "active-menu" : "")" href="@Url.Action("DanhSachLop", "QLL")">Danh sách lớp</a>
@@ -97,7 +100,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 10 || ViewBag.ac == 11 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Điểm<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 10 || ViewBag.ac == 11 ? "active-menu" : "")"><i class="fa fa-pencil-square-o fa-3x"></i> Điểm<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 10 ? "active-menu" : "")" href="@Url.Action("DanhSachDiem", "QLD")">Danh sách điểm</a>
@@ -118,7 +121,7 @@
                                     </li>*@
 
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Kì<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14 ? "active-menu" : "")"><i class="fa fa-calendar fa-3x"></i> Học Kì<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 13 ? "active-menu" : "")" href="@Url.Action("DanhSachHocKi", "QLHK")">Danh sách học kì</a>
@@ -129,7 +132,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 15 || ViewBag.ac == 16 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Bổng<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 15 || ViewBag.ac == 16 ? "active-menu" : "")"><i class="fa fa-briefcase fa-3x"></i> Học Bổng<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 15 ? "active-menu" : "")" href="@Url.Action("DanhSachHocBong", "QLHB")">Danh sách học bổng</a>
@@ -141,7 +144,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")"><i class="fa fa-star fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVienDatHocBong", "QLSVDHB")">Sinh viên đạt học bổng</a>
@@ -166,21 +169,24 @@
                     {
                         <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
                             <div class="navbar-header">
-                                <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
+                                <a class="navbar-brand" href="@Url.Action("DashBoard", "Home")"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
                             </div>
                             <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
                                 <span>Welcome @user.FullName</span>&nbsp;
-                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">
+                                    Logout
+                                    <i class="fa fa-sign-out  "></i>
+                                </a>
                             </div>
                         </nav>
                         <nav class="navbar-default navbar-side" role="navigation">
                             <div class="sidebar-collapse">
                                 <ul class="nav" id="main-menu">
                                     <li>
-                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-home fa-3x"></i> Dashboard</a>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-user fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV")">Danh sách sinh viên</a>
@@ -191,7 +197,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Kì<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14 ? "active-menu" : "")"><i class="fa fa-calendar fa-3x"></i> Học Kì<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 13 ? "active-menu" : "")" href="@Url.Action("DanhSachHocKi", "QLHK")">Danh sách học kì</a>
@@ -202,7 +208,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 15 || ViewBag.ac == 16 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Học Bổng<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 15 || ViewBag.ac == 16 ? "active-menu" : "")"><i class="fa fa-briefcase fa-3x"></i> Học Bổng<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 15 ? "active-menu" : "")" href="@Url.Action("DanhSachHocBong", "QLHB")">Danh sách học bổng</a>
@@ -214,7 +220,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")"><i class="fa fa-star fa-3x"></i> Sinh viên đạt học bổng<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 17 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVienDatHocBong", "QLSVDHB")">Sinh viên đạt học bổng</a>
@@ -239,21 +245,24 @@
                     {
                         <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
                             <div class="navbar-header">
-                                <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
+                                <a class="navbar-brand" href="@Url.Action("DashBoard", "Home")"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
                             </div>
                             <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
                                 <span>Welcome @user.FullName</span>&nbsp;
-                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">
+                                    Logout
+                                    <i class="fa fa-sign-out  "></i>
+                                </a>
                             </div>
                         </nav>
                         <nav class="navbar-default navbar-side" role="navigation">
                             <div class="sidebar-collapse">
                                 <ul class="nav" id="main-menu">
                                     <li>
-                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-home fa-3x"></i> Dashboard</a>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 2 || ViewBag.ac == 3 ? "active-menu" : "")"><i class="fa fa-user fa-3x"></i> Sinh Viên<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 2 ? "active-menu" : "")" href="@Url.Action("DanhSachSinhVien", "QLSV")">Danh sách sinh viên</a>
@@ -264,7 +273,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 10 || ViewBag.ac == 11 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Điểm<span class="fa arrow"></span></a>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 10 || ViewBag.ac == 11 ? "active-menu" : "")"><i class="fa fa-pencil-square-o fa-3x"></i> Điểm<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>
                                                 <a class="@Html.Raw(ViewBag.ac == 10 ? "active-menu" : "")" href="@Url.Action("DanhSachDiem", "QLD")">Danh sách điểm</a>
@@ -291,22 +300,25 @@
                     {
                         <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
                             <div class="navbar-header">
-                                <a class="navbar-brand" href="index.html"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
+                                <a class="navbar-brand" href="@Url.Action("DashBoard", "Home")"><img src="https://media.huce.edu.vn/Media/2_SINHVIEN/FolderFunc/202304/Images/logodhxd-20230421024916-e.png" style="max-height: 40px;"></a>
                             </div>
                             <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
                                 <span>Welcome @user.FullName</span>&nbsp;
-                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">Logout</a>
+                                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger square-btn-adjust">
+                                    Logout
+                                    <i class="fa fa-sign-out  "></i>
+                                </a>
                             </div>
                         </nav>
                         <nav class="navbar-default navbar-side" role="navigation">
                             <div class="sidebar-collapse">
                                 <ul class="nav" id="main-menu">
                                     <li>
-                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                                        <a class="@Html.Raw(ViewBag.ac == 1 ? "active-menu" : "")" href="@Url.Action("DashBoard", "Home")"><i class="fa fa-home fa-3x"></i> Dashboard</a>
                                     </li>
                                     <li>
                                             <li>
-                                                <a class="@Html.Raw(ViewBag.ac == 99 ? "active-menu" : "")" href="@Url.Action("SVXemThongtin", "QLSV")"><i class="fa fa-dashboard fa-3x"></i>Thông tin sinh viên</a>
+                                                <a class="@Html.Raw(ViewBag.ac == 99 ? "active-menu" : "")" href="@Url.Action("SVXemThongtin", "QLSV")"><i class="fa fa-user fa-3x"></i>Thông tin sinh viên</a>
                                             </li>
                                     </li>
                                 </ul>
