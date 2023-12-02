@@ -106,19 +106,19 @@
                                                 <a class="@Html.Raw(ViewBag.ac == 10 ? "active-menu" : "")" href="@Url.Action("DanhSachDiem", "QLD")">Danh sách điểm</a>
                                             </li>
                                             @*<li>
-                                                <a class="@Html.Raw(ViewBag.ac == 11 ? "active-menu" : "")" href="@Url.Action("ThemMoiDiem", "QLD")">Nhập điểm</a>
-                                            </li>*@
+                    <a class="@Html.Raw(ViewBag.ac == 11 ? "active-menu" : "")" href="@Url.Action("ThemMoiDiem", "QLD")">Nhập điểm</a>
+                </li>*@
                                         </ul>
                                     </li>
 
                                     @*<li>
-                                        <a href="#" class="@Html.Raw(ViewBag.ac == 12 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Tài khoản & phân quyền<span class="fa arrow"></span></a>
-                                        <ul class="nav nav-second-level">
-                                            <li>
-                                                <a class="@Html.Raw(ViewBag.ac == 12 ? "active-menu" : "")" href="@Url.Action("DanhSachTaiKhoan", "Role")">Danh sách tài khoản</a>
-                                            </li>
-                                        </ul>
-                                    </li>*@
+            <a href="#" class="@Html.Raw(ViewBag.ac == 12 ? "active-menu" : "")"><i class="fa fa-sitemap fa-3x"></i> Tài khoản & phân quyền<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a class="@Html.Raw(ViewBag.ac == 12 ? "active-menu" : "")" href="@Url.Action("DanhSachTaiKhoan", "Role")">Danh sách tài khoản</a>
+                </li>
+            </ul>
+        </li>*@
 
                                     <li>
                                         <a href="#" class="@Html.Raw(ViewBag.ac == 13 || ViewBag.ac == 14 ? "active-menu" : "")"><i class="fa fa-calendar fa-3x"></i> Học Kì<span class="fa arrow"></span></a>
@@ -152,6 +152,19 @@
 
                                         </ul>
                                     </li>
+
+                                    <li>
+                                        <a href="#" class="@Html.Raw(ViewBag.ac == 18 ? "active-menu" : "")"><i class="fa fa-bell fa-3x"></i> Tin tức<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 18 ? "active-menu" : "")" href="@Url.Action("ThemMoiThongBao", "QLTT")">Thêm tin tức</a>
+                                            </li>
+                                            <li>
+                                                <a class="@Html.Raw(ViewBag.ac == 19 ? "active-menu" : "")" href="@Url.Action("Suathongtin", "QLTT")">Sửa tin tức</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
                                 </ul>
 
                             </div>
