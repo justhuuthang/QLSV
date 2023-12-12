@@ -8,18 +8,18 @@
 <h2>Danh sách môn học </h2>
 <form action="/QLMH/Search" method="get">
     <div class="form-group">
-        <div style="display: flex">
-            <div class="col-md-6" style="display:flex">
+        <div class="col-md-6" style="display:flex">
             <select name="searchField" class="form-control" style="width: 30%;">
-                <option value="CourseName">Tên môn</option>
-                <option value="SemesterName">Kì</option>
-                <option value="DepartmentName">Khoa</option>
+                <option value="CourseName" @(TempData["SearchField"] as string == "CourseName" ? "selected" : "")>Tên môn</option>
+                <option value="SemesterName" @(TempData["SearchField"] as string == "SemesterName" ? "selected" : "")>Kì</option>
+                <option value="DepartmentName" @(TempData["SearchField"] as string == "DepartmentName" ? "selected" : "")>Khoa</option>
             </select>
-            <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <input type="text" name="searchValue" value="@TempData["SearchValue"]" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
-            </div>
-            @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 45%;" });
         </div>
+    </div>
+    <div class="form-group">
+        @Html.ActionLink("Export", "ExportMonHoc", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 5px;" })
     </div>
 </form>
 
@@ -52,7 +52,7 @@
                                 <td>@monHoc.Department.DepartmentName</td>
 
                                 <td>@monHoc.Semester.SemesterName</td>
-                               
+
                                 <td>
                                     <form id="deleteForm_@monHoc.CourseID" action="~/QLMH/Xoa" method="post">
                                         <input type="hidden" name="id" value="@monHoc.CourseID" />
