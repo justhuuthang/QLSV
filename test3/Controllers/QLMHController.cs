@@ -35,13 +35,13 @@ namespace test3.Controllers
             return View(monHoc.ToPagedList((int)page, (int)pageSize));
         }
         /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
+        [HttpGet]
         public ActionResult Search(string searchField, string searchValue, int? page)
         {
             List<Cours> searchResults = new List<Cours>();
 
             switch (searchField)
             {
-
                 case "CourseName":
                     searchResults = db.Courses
                         .Where(s => s.CourseName.Contains(searchValue))
@@ -65,14 +65,14 @@ namespace test3.Controllers
             }
 
             TempData["SearchResults"] = searchResults;
-
+            TempData["SearchField"] = searchField;
+            TempData["SearchValue"] = searchValue;
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             IPagedList<Cours> pagedSearchResults = searchResults.ToPagedList(pageNumber, pageSize);
 
             return View("DanhSachMonHoc", pagedSearchResults);
         }
-
 
         /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
         [HttpGet]
