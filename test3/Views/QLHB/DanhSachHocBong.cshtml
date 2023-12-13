@@ -11,10 +11,10 @@
     <div class="form-group">
         <div style="display: flex">
             <select name="searchField" class="form-control" style="width: 30%;">
-                
-                <option value="ScholarshipName">Tên học bổng</option>
+
+                <option value="ScholarshipName" @(TempData["SearchField"] as string == "ScholarshipName" ? "selected" : "")>Tên học bổng</option>
             </select>
-            <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <input type="text" name="searchValue" value="@TempData["SearchValue"]" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
             <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
             @Html.ActionLink("Export", "ExportHocBong", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
         </div>
@@ -33,7 +33,7 @@
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
                         <th>Điều kiện</th>
-                        
+
                         <th> </th>
 
                     </tr>
@@ -52,9 +52,9 @@
                                 <td>@hocBong.Conditions</td>
 
                                 <td>
-                                    <form action="~/QLHB/Xoa" method="post">
+                                    <form id="deleteForm_@hocBong.ScholarshipID" action="~/QLHB/Xoa" method="post">
                                         <input type="hidden" name="id" value="@hocBong.ScholarshipID" />
-                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@hocBong.ScholarshipID')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
 
@@ -76,4 +76,21 @@
         @Html.PagedListPager(Model, page => Url.Action("DanhSachHocBong", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(scholarshipID) {
+        Swal.fire({
+            title: 'Xác nhận xóa',
+            text: 'Bạn có chắc chắn muốn xóa học bổng này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm_" + scholarshipID).submit();
+            }
+        });
+    }
+</script>
 
