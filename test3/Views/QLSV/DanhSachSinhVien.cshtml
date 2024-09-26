@@ -12,18 +12,20 @@
     <div class="form-group">
         <div style="display: flex">
             <select name="searchField" class="form-control" style="width: 30%;">
-                <option value="MSSV">MSSV</option>
-                <option value="MaLop">Mã Lớp</option>
-                <option value="MaKhoa">Mã Khoa</option>
-                <option value="GioiTinh">Giới Tính</option>
-                <option value="NoiSinh">Nơi Sinh</option>
+                <option value="StudentID" @(TempData["SearchField"] as string == "StudentID" ? "selected" : "")>MSSV</option>
+                <option value="ClassName" @(TempData["SearchField"] as string == "ClassName" ? "selected" : "")>Lớp</option>
+                <option value="DepartmentName" @(TempData["SearchField"] as string == "DepartmentName" ? "selected" : "")>Khoa</option>
             </select>
-            <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-            @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+            <input type="text" name="searchValue" value="@TempData["SearchValue"]" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+            @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px; margin-right: 5px;" })
+            @Html.ActionLink("Import", "ImportStudents", "QLSV", null, new { @class = "btn btn-primary", @style = "margin-left: 5px;" })
+
         </div>
     </div>
 </form>
+
+
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -33,15 +35,14 @@
                     <tr>
                         <th>Mã sinh viên</th>
                         <th>Họ và tên</th>
-                    @*    <th>Ngày sinh</th>*@
+                        <th>Ngày sinh</th>
                         <th>Giới tính</th>
-                        @*<th>Địa chỉ</th>*@
                         <th>Số điện thoại</th>
                         <th>Email</th>
-                        @*<th>Mã lớp</th>
-                        <th>Mã khoa</th>*@
-                        <th> </th>
-
+                        <th>Lớp</th>
+                        <th>Khoa</th>
+                        <th>Edit </th>
+                        <th>Edit </th>
                     </tr>
                 </thead>
                 @if (Model != null && Model.Any())
@@ -52,17 +53,26 @@
                             <tr>
                                 <td>@sinhVien.StudentID</td>
                                 <td>@sinhVien.FullName</td>
-                                @*<td>@sinhVien.DateOfBirth</td>*@
+                                <td>@sinhVien.DateOfBirth.ToString("dd/MM/yyyy")</td>
                                 <td>@(sinhVien.Gender ? "Nam" : "Nữ")</td>
-                                @*<td>@sinhVien.Address</td>*@
                                 <td>@sinhVien.ContactNumber</td>
                                 <td>@sinhVien.Email</td>
-                                @*<td>@sinhVien.ClassID</td>
-                                <td>@sinhVien.DepartmentID</td>*@
-                                <td><a href="~/QLSV/Suathongtin?id=@sinhVien.StudentID">Xem</a></td>
+                                <td>@sinhVien.Class.ClassName</td>
+                                <td>@sinhVien.Department.DepartmentName</td>
 
-                                @*<td><a href="~/QLSV/Xoa?id=@sinhVien.StudentID">Xóa</a></td>
-                                <td><a href="~/QLSV/Suathongtin?id=@sinhVien.StudentID">Sửa</a></td>*@
+                                <td>
+                                    <form id="deleteForm_@sinhVien.StudentID" action="~/QLSV/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@sinhVien.StudentID" />
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@sinhVien.StudentID')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="~/QLSV/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@sinhVien.StudentID" />
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-wrench" aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
+
                             </tr>
                         }
 
@@ -74,4 +84,20 @@
         @Html.PagedListPager(Model, page => Url.Action("DanhSachSinhVien", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(studentID) {
+        Swal.fire({
+            title: 'Xác nhận xóa',
+            text: 'Bạn có chắc chắn muốn xóa sinh viên này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm_" + studentID).submit();
+            }
+        });
+    }
+</script>

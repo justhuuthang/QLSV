@@ -22,7 +22,7 @@ namespace test3.Models
     
         public string FunctionID { get; set; }
         public string FuctionName { get; set; }
-        public string Nhom { get; set; }
+        public string Group { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Role> Roles { get; set; }

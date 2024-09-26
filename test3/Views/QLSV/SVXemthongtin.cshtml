@@ -1,0 +1,160 @@
+﻿@model test3.Models.Student
+
+@{
+    ViewBag.ac = 99;
+}
+
+<h2>Thông tin sinh viên</h2>
+<form action="/QLSV/Suathongtin" method="post" class="form-horizontal">
+    @Html.HiddenFor(model => model.StudentID)
+    @Html.HiddenFor(model => model.UserID)
+    <div class="form-group">
+        <label for="FullName" class="col-md-2 control-label">Tên sinh viên:</label>
+        <div class="col-md-3">
+            <input type="text" name="FullName" id="FullName" class="form-control" value="@Model.FullName" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="DateOfBirth" class="col-md-2 control-label">Ngày sinh:</label>
+        <div class="col-md-3">
+            <input type="date" name="DateOfBirth" id="DateOfBirth" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.DateOfBirth)" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Gender" class="col-md-2 control-label">Giới tính:</label>
+        <div class="col-md-3">
+            <div>
+                @Html.RadioButtonFor(model => model.Gender, true, new { id = "Male", name = "Gender" }) Nam
+                @Html.RadioButtonFor(model => model.Gender, false, new { id = "Female", name = "Gender" }) Nữ
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Address" class="col-md-2 control-label">Địa chỉ:</label>
+        <div class="col-md-3">
+            <textarea name="Address" id="Address" class="form-control" required>@Model.Address</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ContactNumber" class="col-md-2 control-label">Số điện thoại:</label>
+        <div class="col-md-3">
+            <input type="text" name="ContactNumber" id="ContactNumber" class="form-control" value="@Model.ContactNumber" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Email" class="col-md-2 control-label">Email:</label>
+        <div class="col-md-3">
+            <input type="email" name="Email" id="Email" class="form-control" value="@Model.Email" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
+        <div class="col-md-3">
+            @{
+                test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+                List<test3.Models.Department> dsKhoa = db.Departments.ToList();
+            }
+
+            @Html.DropDownListFor(model => model.DepartmentID, new SelectList(dsKhoa, "DepartmentID", "DepartmentName"), "Chọn khoa...", new { @class = "form-control", id = "DepartmentID" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ClassID" class="control-label col-md-2">Lớp:</label>
+        <div class="col-md-3">
+            @{
+                var selectedClassId = Model.ClassID;
+                List<SelectListItem> classList = new List<SelectListItem>();
+                var selectedClass = db.Classes.Find(selectedClassId);
+                classList.Add(new SelectListItem { Text = selectedClass.ClassName, Value = selectedClass.ClassID.ToString(), Selected = true });
+
+            }
+            @Html.DropDownListFor(model => model.ClassID, classList, "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-3" id="error-message" style="color: red" ,font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif"></div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-3">
+            <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
+        </div>
+    </div>
+</form>
+
+<style>
+    .btn-primary-margin {
+        margin-right: 70px;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    $(document).ready(function () {
+        $("#btn-sua").click(function () {
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
+            }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: window.location.origin + '/QLSV/Suathongtin',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Sửa thành công',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.origin + '/QLSV/SVXemThongTin';
+                        } else {
+                        }
+                    });
+                },
+                error: function (response) {
+                    if (response.responseText === "Sinh viên khác đã sử dụng số điện thoại này.") {
+                        $("#error-message").text(response.responseText);
+                    } else {
+                        alert("Sửa thất bại");
+                    }
+                }
+            });
+        });
+    });
+    $(document).ready(function () {
+        $("#DepartmentID").change(function () {
+            var selectedDepartmentId = $(this).val();
+
+            $.ajax({
+                url: '/QLSV/GetClassesByDepartment',
+                type: 'GET',
+                dataType: 'json',
+                data: { departmentId: selectedDepartmentId },
+                success: function (classes) {
+                    var classDropdown = $("#ClassID");
+                    classDropdown.find('option').not(':first').remove();
+                    $.each(classes, function (index, cls) {
+                        classDropdown.append($('<option></option>').attr('value', cls.Value).text(cls.Text));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

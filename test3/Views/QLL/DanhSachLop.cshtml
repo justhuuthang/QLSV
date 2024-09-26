@@ -3,10 +3,20 @@
 @using PagedList;
 @model IPagedList<test3.Models.Class>
 @{
-    ViewBag.ac = 11;
+    ViewBag.ac = 6;
 }
 
 <h2>Danh sách lớp </h2>
+<form action="/QLL/Search" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            <label for="ClassName" class="col-md-5 control-label" style="margin-top:7px">Tên lớp: </label>
+            <input value="@TempData["SearchValue"]" name="searchValue" type="text" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+            @Html.ActionLink("Export", "ExportLop", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+        </div>
+    </div>
+</form>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
@@ -31,11 +41,22 @@
                             <tr>
                                 <td>@lop.ClassID</td>
                                 <td>@lop.ClassName</td>
-                                <td>@(lop.StartDate != null ? lop.StartDate.Value.ToString("dd-MM-yyyy") : "")</td>
-                                <td>@(lop.EndDate != null ? lop.EndDate.Value.ToString("dd-MM-yyyy") : "")</td>
+                                <td>@lop.StartDate.ToString("dd-MM-yyyy")</td>
+                                <td>@lop.EndDate.ToString("dd-MM-yyyy")</td>
                                 <td>@lop.HeadTeacher</td>
                                 <td>@lop.MaxStudents</td>
-                                <td><a href="~/QLL/Suathongtin?id=@lop.ClassID">Xem</a></td>
+                                <td>
+                                    <form id="deleteForm_@lop.ClassID" action="~/QLL/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@lop.ClassID" />
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@lop.ClassID')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="~/QLL/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@lop.ClassID" />
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-wrench" aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
                             </tr>
                         }
 
@@ -44,7 +65,24 @@
 
             </table>
         </div>
-        @Html.PagedListPager(Model, page => Url.Action("DanhSachSinhVien", new { page, pageSize = ViewBag.PageSize }))
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachLop", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(classID) {
+        Swal.fire({
+            title: 'Xác nhận xóa',
+            text: 'Bạn có chắc chắn muốn xóa lớp này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm_" + classID).submit();
+            }
+        });
+    }
+</script>
 

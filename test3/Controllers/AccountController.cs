@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Win32;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using test3.App_Start;
 using test3.Models;
@@ -13,29 +14,32 @@ namespace test3.Controllers
         {
             return View();
         }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Login(Account user)
         {
-            QuanliSVEntities QLSVEntities = new QuanliSVEntities();
-            var status = QLSVEntities.Accounts.FirstOrDefault(m => m.Username == user.Username && m.Password == user.Password);
-
-            if (status == null)
+            using (QuanliSVEntities QLSVEntities = new QuanliSVEntities())
             {
-                ViewBag.LoginFail = "Sai tài khoản hoặc mật khẩu!";
-                return View("Login");
-            }
-            else
-            {
-                // Gán user vào Session sau khi xác thực thành công
-                SessionConfig.setUser(status);
+                var existingUser = QLSVEntities.Accounts.SingleOrDefault(m => m.Username == user.Username);
 
-                // Redirect đến Dashboard
+                if (existingUser == null)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Content("Sai tài khoản hoặc mật khẩu");
+                }
+                if (existingUser.Password != user.Password)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Content("Sai tài khoản hoặc mật khẩu");
+                }
+
+                SessionConfig.setUser(existingUser);
                 return RedirectToAction("DashBoard", "Home");
             }
+        }
 
-    }
-    public ActionResult Logout()
+        public ActionResult Logout()
         {
             SessionConfig.setUser(null);
             return RedirectToAction("Login", "Account");
@@ -49,6 +53,15 @@ namespace test3.Controllers
         public ActionResult Register(Account user)
         {
             QuanliSVEntities db = new QuanliSVEntities();
+            string email = Request["Email"];
+
+            var users = db.Accounts.FirstOrDefault(s => s.Email == email);
+
+            if (users != null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Người dùng đã tồn tại");
+            }
             db.Accounts.Add(user);
             db.SaveChanges();
             return RedirectToAction("Login");

@@ -23,13 +23,15 @@ namespace test3.Models
     
         public int ClassID { get; set; }
         public string ClassName { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
         public string HeadTeacher { get; set; }
-        public Nullable<int> MaxStudents { get; set; }
+        public int MaxStudents { get; set; }
+        public int DepartmentID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
+        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cours> Courses { get; set; }
     }

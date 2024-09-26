@@ -11,21 +11,21 @@
                 @Html.HiddenFor(model => model.StudentID)
 
                 <div class="form-group">
-                    <label for="FullName" class="col-md-2 control-label">Full Name:</label>
+                    <label for="FullName" class="col-md-2 control-label">Tên sinh viên:</label>
                     <div class="col-md-3">
                         <input type="text" name="FullName" id="FullName" class="form-control" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="DateOfBirth" class="col-md-2 control-label">Date of Birth:</label>
+                    <label for="DateOfBirth" class="col-md-2 control-label">Ngày sinh:</label>
                     <div class="col-md-3">
                         <input type="date" name="DateOfBirth" id="DateOfBirth" class="form-control" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="Gender" class="col-md-2 control-label">Gender:</label>
+                    <label for="Gender" class="col-md-2 control-label">Giới tính:</label>
                     <div class="col-md-3">
                         <div>
                             @Html.RadioButtonFor(model => model.Gender, true, new { id = "Male", name = "Gender" }) Nam
@@ -35,14 +35,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="Address" class="col-md-2 control-label">Address:</label>
+                    <label for="Address" class="col-md-2 control-label">Địa chỉ:</label>
                     <div class="col-md-3">
                         <textarea name="Address" id="Address" class="form-control" required></textarea>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="ContactNumber" class="col-md-2 control-label">Contact Number:</label>
+                    <label for="ContactNumber" class="col-md-2 control-label">Số điện thoại:</label>
                     <div class="col-md-3">
                         <input type="text" name="ContactNumber" id="ContactNumber" class="form-control" required>
                     </div>
@@ -70,14 +70,13 @@
                 <div class="form-group">
                     <label class="control-label col-md-2" for="ClassID">Tên lớp:</label>
                     <div class="col-md-3">
-                        @{
-                            List<test3.Models.Class> dslop = db.Classes.ToList();
-                        }
-
-                        @Html.DropDownListFor(model => model.ClassID, new SelectList(dslop, "ClassID", "ClassName"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
+                        @Html.DropDownListFor(model => model.ClassID, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Chọn lớp...", new { @class = "form-control", id = "ClassID" })
                     </div>
                 </div>
-                <div id="error-message" style="color: red;"></div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-3" id="error-message" style="color: red" ,font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif"></div>
+                </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-3">
                         <input type="button" value="Thêm" id="btn-them" class="btn btn-primary">
@@ -91,12 +90,31 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     $(document).ready(function () {
         $("#btn-them").click(function () {
             var form = $('form')[0];
             if (form.checkValidity() === false) {
                 form.reportValidity();
+                return;
+            }
+            var dob = new Date($("#DateOfBirth").val());
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+
+            if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            if (age < 18) {
+                $("#error-message").text("Sinh viên phải lớn hơn 18 tuổi.");
+                return;
+            }
+            var phoneNumber = $("#ContactNumber").val();
+            var phoneRegex = /^\d{10}$/; 
+            if (!phoneRegex.test(phoneNumber)) {
+                $("#error-message").text("Số điện thoại không đúng định dạng.");
                 return;
             }
             var formData = new FormData(form);
@@ -109,7 +127,19 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
+                    Swal.fire({
+                        title: 'Thêm thành công',
+                        text: 'Bạn có muốn quay trở lại danh sách sinh viên không?',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có',
+                        cancelButtonText: 'Không'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.origin + '/QLSV/DanhSachSinhVien';
+                        } else {
+                        }
+                    });
                 },
                 error: function (response) {
                     if (response.responseText === "Sinh viên đã tồn tại với số điện thoại này.") {
@@ -121,5 +151,26 @@
             });
         });
     });
+    $(document).ready(function () {
+        $("#DepartmentID").change(function () {
+            var selectedDepartmentId = $(this).val();
 
+            $.ajax({
+                url: '/QLSV/GetClassesByDepartment',
+                type: 'GET',
+                dataType: 'json',
+                data: { departmentId: selectedDepartmentId },
+                success: function (classes) {
+                    var classDropdown = $("#ClassID");
+                    classDropdown.find('option').not(':first').remove();
+                    $.each(classes, function (index, cls) {
+                        classDropdown.append($('<option></option>').attr('value', cls.Value).text(cls.Text));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
     </script>

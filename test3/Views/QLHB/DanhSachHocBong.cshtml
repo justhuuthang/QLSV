@@ -1,0 +1,96 @@
+﻿@*@model List<test3.Models.SinhVien>*@
+@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.Scholarship>
+@{
+    ViewBag.ac = 15;
+}
+
+<h2>Danh sách học bổng </h2>
+<form action="/QLHB/Search" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            <select name="searchField" class="form-control" style="width: 30%;">
+
+                <option value="ScholarshipName" @(TempData["SearchField"] as string == "ScholarshipName" ? "selected" : "")>Tên học bổng</option>
+            </select>
+            <input type="text" name="searchValue" value="@TempData["SearchValue"]" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+            @Html.ActionLink("Export", "ExportHocBong", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+        </div>
+    </div>
+</form>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Mã học bổng</th>
+                        <th>Tên học bổng</th>
+                        <th>Mô tả</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Điều kiện</th>
+
+                        <th> </th>
+
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var hocBong in Model)
+                        {
+                            <tr>
+                                <td>@hocBong.ScholarshipID</td>
+                                <td>@hocBong.ScholarshipName</td>
+                                <td>@hocBong.Description</td>
+                                <td>@hocBong.StartDate.ToString("dd/MM/yyyy")</td>
+                                <td>@hocBong.EndDate.ToString("dd/MM/yyyy")</td>
+                                <td>@hocBong.Conditions</td>
+
+                                <td>
+                                    <form id="deleteForm_@hocBong.ScholarshipID" action="~/QLHB/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@hocBong.ScholarshipID" />
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@hocBong.ScholarshipID')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
+
+                                <td>
+                                    <form action="~/QLHB/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@hocBong.ScholarshipID " />
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-wrench" aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+
+            </table>
+        </div>
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachHocBong", new { page, pageSize = ViewBag.PageSize }))
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(scholarshipID) {
+        Swal.fire({
+            title: 'Xác nhận xóa',
+            text: 'Bạn có chắc chắn muốn xóa học bổng này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm_" + scholarshipID).submit();
+            }
+        });
+    }
+</script>
+

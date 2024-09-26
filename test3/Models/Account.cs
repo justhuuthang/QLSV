@@ -18,6 +18,7 @@ namespace test3.Models
         public Account()
         {
             this.Roles = new HashSet<Role>();
+            this.Students = new HashSet<Student>();
         }
     
         public int UserID { get; set; }
@@ -25,8 +26,11 @@ namespace test3.Models
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string Email { get; set; }
+        public string FullName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Role> Roles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Student> Students { get; set; }
     }
 }

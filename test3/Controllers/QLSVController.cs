@@ -11,14 +11,19 @@ using PagedList;
 using System.Data.Entity.Validation;
 using test3.App_Start;
 using System.Net;
+using OfficeOpenXml;
+using PagedList.Mvc;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace test3.Controllers
 {
+    [Role_User/*(Group = "ADMIN,CTSV")*/]
     public class QLSVController : Controller
     {
         // GET: QLSV
         QuanliSVEntities db = new QuanliSVEntities();
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
+        
         public ActionResult DanhSachSinhVien(int? page, int? pageSize)
         {
             if (page == null)
@@ -29,14 +34,12 @@ namespace test3.Controllers
             {
                 pageSize = 10;
             }
-            var sinhVien = db.Students.ToList();
+            var sinhVien = db.Students.Include(c => c.Class).Include(c => c.Department).ToList();
             return View(sinhVien.ToPagedList((int)page, (int)pageSize));
         }
         [HttpGet]
-        public ActionResult Search(string searchField, string searchValue)
+        public ActionResult Search(string searchField, string searchValue, int? page)
         {
-            searchValue = searchValue.ToLower(); // Chuyển giá trị tìm kiếm về chữ thường
-
             List<Student> searchResults = new List<Student>();
 
             switch (searchField)
@@ -47,28 +50,32 @@ namespace test3.Controllers
                         searchResults = db.Students.Where(s => s.StudentID == studentID).ToList();
                     }
                     break;
-                case "FullName":
-                    searchResults = db.Students.Where(s => s.FullName.ToLower().Contains(searchValue.ToLower())).ToList();
+
+                case "ClassName":
+                    searchResults = db.Students
+                        .Where(s => s.Class.ClassName.Contains(searchValue))
+                        .ToList();
                     break;
-                case "DateOfBirth":
-                    if (DateTime.TryParse(searchValue, out DateTime dob))
-                    {
-                        searchResults = db.Students.Where(s => s.DateOfBirth == dob).ToList();
-                    }
+
+                case "DepartmentName":
+                    searchResults = db.Students
+                        .Where(s => s.Class.Department.DepartmentName.Contains(searchValue))
+                        .ToList();
                     break;
-                case "ContactNumber":
-                    searchResults = db.Students.Where(s => s.ContactNumber.ToLower().Contains(searchValue.ToLower())).ToList();
-                    break;
-                case "Email":
-                    searchResults = db.Students.Where(s => s.Email.ToLower().Contains(searchValue.ToLower())).ToList();
-                    break;
+
                 default:
                     break;
             }
 
-            return View("DanhSachSinhVien", searchResults);
+            TempData["SearchResults"] = searchResults;
+            TempData["SearchField"] = searchField;
+            TempData["SearchValue"] = searchValue;
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            IPagedList<Student> pagedSearchResults = searchResults.ToPagedList(pageNumber, pageSize);
+
+            return View("DanhSachSinhVien", pagedSearchResults);
         }
-        [Role_User]
         [HttpGet]
         public ActionResult AddNewStudent()
         {
@@ -92,7 +99,14 @@ namespace test3.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhSachSinhVien");
         }
-
+        public ActionResult Xoa(int id)
+        {
+            QuanliSVEntities db = new QuanliSVEntities();
+            var sinhVien = db.Students.Find(id);
+            db.Students.Remove(sinhVien);
+            db.SaveChanges();
+            return RedirectToAction("DanhSachSinhVien");
+        }
         [HttpGet]
         public ActionResult Suathongtin(int id)
         {
@@ -106,60 +120,110 @@ namespace test3.Controllers
 
             if (sinhVien == null)
             {
-                // Sinh viên không tồn tại, xử lý theo ý của bạn, có thể chuyển hướng hoặc hiển thị thông báo lỗi
                 return RedirectToAction("DanhSachSinhVien");
             }
-
-            ViewBag.KhoaCu = sinhVien.DepartmentID;
-            ViewBag.LopCu = sinhVien.ClassID;
             return View(sinhVien);
         }
 
         [HttpPost]
-        public ActionResult Suathongtin(Student sinhVien, string action)
+        public ActionResult Suathongtin(Student sinhVien)
         {
             QuanliSVEntities db = new QuanliSVEntities();
-            var existingStudent = db.Students.Find(sinhVien.StudentID);
+            var existingStudent = db.Students.FirstOrDefault(s => s.StudentID != sinhVien.StudentID && s.ContactNumber == sinhVien.ContactNumber);
 
-            if (existingStudent == null)
+            if (existingStudent != null)
             {
-                // Sinh viên không tồn tại, xử lý theo ý của bạn
-                return RedirectToAction("DanhSachSinhVien");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Sinh viên khác đã sử dụng số điện thoại này.");
             }
 
-            if (action == "Xóa")
-            {
-                // Xóa sinh viên
-                db.Students.Remove(existingStudent);
-                db.SaveChanges();
-
-                return RedirectToAction("DanhSachSinhVien");
-            }
-            else if (action == "Sửa")
-            {
-                // Cập nhật thông tin sinh viên
-                existingStudent.FullName = sinhVien.FullName;
-                existingStudent.DateOfBirth = sinhVien.DateOfBirth;
-                existingStudent.Gender = sinhVien.Gender;
-                existingStudent.Address = sinhVien.Address;
-                existingStudent.ContactNumber = sinhVien.ContactNumber;
-                existingStudent.Email = sinhVien.Email;
-                existingStudent.ClassID = sinhVien.ClassID;
-                existingStudent.DepartmentID = sinhVien.DepartmentID;
-
-                // Lưu thay đổi vào cơ sở dữ liệu
-                db.SaveChanges();
-
-                return RedirectToAction("DanhSachSinhVien");
-            }
-
-            // Nếu không phải là "Sửa" hoặc "Xóa", quay lại View với dữ liệu nhập
-            return View(sinhVien);
+            db.Entry(sinhVien).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("DanhSachSinhVien");
         }
+        [HttpGet]
+        public ActionResult SVXemthongtin()
+        {
+            QuanliSVEntities db = new QuanliSVEntities();
+            var user = SessionConfig.getUser();
+            if (user != null)
+            {
 
+                int userID = user.UserID;
+                var userRoles = db.Roles.Where(r => r.AccountID == userID).Select(r => r.Group).ToList();
+                Session["USER_GROUPS"] = userRoles;
+                if (userRoles.Contains("SV"))
+                {
+                    var sinhVien = db.Students.FirstOrDefault(s => s.UserID == userID);
+                    return View(sinhVien);
+                }
+            }
+            return RedirectToAction("DanhSachSinhVien");
+        }
+        [HttpPost]
+        public ActionResult SVXemthongtin(Student sinhVien)
+        {
+            QuanliSVEntities db = new QuanliSVEntities();
+            var existingStudent = db.Students.FirstOrDefault(s => s.StudentID != sinhVien.StudentID && s.ContactNumber == sinhVien.ContactNumber);
 
+            if (existingStudent != null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Sinh viên khác đã sử dụng số điện thoại này.");
+            }
 
+            db.Entry(sinhVien).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("SVXemThongTin");
+        }
+        [HttpGet]
+        public ActionResult ImportStudents()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ImportStudents(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                using (var package = new ExcelPackage(file.InputStream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    int rowCount = worksheet.Dimension.Rows;
 
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+                        Student newStudent = new Student
+                        {
+                            FullName = worksheet.Cells[row, 2].Value?.ToString(),
+                            DateOfBirth = Convert.ToDateTime(worksheet.Cells[row, 3].Value),
+                            Gender = worksheet.Cells[row, 4].Value?.ToString() == "Nam" ? true : false,
+                            Address = worksheet.Cells[row, 5].Value?.ToString(),
+                            ContactNumber = worksheet.Cells[row, 6].Value?.ToString(),
+                            Email = worksheet.Cells[row, 7].Value?.ToString(),
+                            ClassID =Convert.ToInt32(worksheet.Cells[row, 8].Value?.ToString()),
+                            DepartmentID = Convert.ToInt32(worksheet.Cells[row, 9].Value?.ToString())
+                        };
+
+                        db.Students.Add(newStudent);
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            return RedirectToAction("DanhSachSinhVien");
+        }
+        [HttpGet]
+        public ActionResult GetClassesByDepartment(int departmentId)
+        {
+            var classes = db.Classes.Where(c => c.DepartmentID == departmentId).ToList();
+            var classList = classes.Select(c => new SelectListItem
+            {
+                Value = c.ClassID.ToString(), 
+                Text = c.ClassName 
+            }).ToList();
+            return Json(classList, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

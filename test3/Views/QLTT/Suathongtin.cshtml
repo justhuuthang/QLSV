@@ -1,0 +1,161 @@
+﻿@model test3.Models.Notification
+
+@{
+    ViewBag.ac = 19;
+}
+
+<form action="/QLTT/LayThongBaoTheoID" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            <label for="ClassName" class="col-md-5 control-label" style="margin-top:7px">Mã thông báo: </label>
+            <input value="@TempData["SearchValue"]" name="searchValue" type="text" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button  style="margin-right:600px" type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+            @*@Html.ActionLink("Export", "ExportLop", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })*@
+        </div>
+    </div>
+</form>
+<div class="panel body">
+
+    <form action="/QLTT/Suathongtin" method="post" class="form-horizontal">
+        <div class="form-group">
+            <label for="NotificationID" class="col-md-2 control-label">Mã thông báo:</label>
+            <div class="col-md-3">
+                <input type="text" name="NotificationID" id="NotificationID" value="@ViewBag.NotificationID" class="form-control" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="NotificationName" class="col-md-2 control-label">Tên thông báo:</label>
+            <div class="col-md-3">
+                <input type="text" name="NotificationName" id="NotificationName" value="@ViewBag.NotificationName" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Date" class="col-md-2 control-label">Ngày:</label>
+            <div class="col-md-3">
+                <input type="date" name="Date" id="Date" value="@(((DateTime?)ViewBag.Date)?.ToString("yyyy-MM-dd"))" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="NotificationContent" class="col-md-2 control-label">Nội dung:</label>
+            <div class="col-md-3">
+                <textarea name="NotificationContent" id="NotificationContent" class="form-control" rows="4" cols="20">@ViewBag.NotificationContent</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-3" value="@ViewBag.Error" id="error-message" style="color: red" ,font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-3">
+                <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
+                <input type="button" id="btn-xoa" name="action" value="Xoá" class="btn btn-primary">
+            </div>
+        </div>
+
+    </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btn-sua").click(function () {
+                var form = $('form')[1];
+                if (form.checkValidity() === false) {
+                    form.reportValidity();
+                    return;
+                }
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "POST",
+                    data: formData,
+                    contentType: "application/json; charset=utf-8",
+                    url: window.location.origin + '/QLTT/Suathongtin',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Sửa thành công',
+                            text: 'Bạn có muốn quay trở lại trang dashboard không?',
+                            icon: 'success',
+                            showCancelButton: true,
+                            confirmButtonText: 'Có',
+                            cancelButtonText: 'Không'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = window.location.origin + '/Home/DashBoard';
+                            } else {
+                                // Xử lý khi người dùng nhấn "Không"
+                            }
+                        });
+                    },
+                    error: function (response) {
+                        if (response.responseText === "Thông báo đã tồn tại.") {
+                            $("#error-message").text(response.responseText);
+                        } else {
+                            alert("Sửa thất bại");
+                        }
+                    }
+                });
+            });
+            $("#searchButton").click(function () {
+                $.ajax({
+                    error: function (response) {
+                        if (response.responseText === "Không tìm thấy thông báo") {
+                            $("#error-message").text(response.responseText);
+                        }
+                    }
+                });
+            });
+            var searchValue = $("#NotificationID").val();
+            $("#btn-xoa").click(function () {
+                if (searchValue !== "") {
+                    Swal.fire({
+                        title: 'Cảnh báo',
+                        text: 'Bạn có chắc chắn muốn xoá thông báo này?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có',
+                        cancelButtonText: 'Không'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var form = $('form')[1];
+                            var formData = new FormData(form);
+                            formData.append('action', 'Xóa');
+
+                            $.ajax({
+                                type: "POST",
+                                data: formData,
+                                url: window.location.origin + '/QLTT/Suathongtin',
+                                processData: false,
+                                contentType: false,
+                                cache: false,
+                                success: function (response) {
+                                    Swal.fire('Đã xoá!', 'Thông báo đã được xoá.', 'success')
+                                        .then(() => {
+                                            window.location.href = window.location.origin + '/Home/DashBoard';
+                                        });
+                                },
+                                error: function (response) {
+                                    $("#error-message").text("Không tìm thấy thông báo.");
+                                }
+                            });
+                        } else {
+                            // Xử lý khi người dùng nhấn "Không"
+                        }
+                    });
+                } else {
+                    $("#error-message").text("Không có thông báo cần xoá.");
+                }
+            });
+        });
+    </script>
+
+
+
+
+
+

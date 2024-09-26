@@ -15,7 +15,7 @@ namespace test3.Models
     public partial class Role
     {
         public int AccountID { get; set; }
-        public string FunctionID { get; set; }
+        public string Group { get; set; }
         public string Description { get; set; }
     
         public virtual Account Account { get; set; }

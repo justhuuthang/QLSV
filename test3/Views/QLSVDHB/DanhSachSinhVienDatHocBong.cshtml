@@ -1,0 +1,93 @@
+﻿@*@model List<test3.Models.SinhVien>*@
+@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.sp_DanhSachSinhVienDatHocBong_Result>
+@{
+    ViewBag.ac = 17;
+    test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+    List<test3.Models.Semester> dsKi = db.Semesters.ToList();
+}
+
+<h2>Danh sách sinh viên đạt học bổng </h2>
+
+<form method="get" class="form-horizontal">
+    <div class="form-group">
+        
+        <div style="display:flex">
+            
+            <select name="MaKi" class="form-control" style="width: 30%; margin-left:20px;">
+                <option value="SemesterName">Chọn học kì</option>
+                @foreach (var loai in dsKi)
+                {
+                    <option value="@loai.SemesterID" @(loai.SemesterID.ToString() == ViewBag.MaKi ? "selected" : "")>@loai.SemesterName</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+            @Html.ActionLink("Export", "ExportSVDHB", "Export", null, new { @class = "btn btn-primary", @style="margin-left: 650px;" })
+        </div>
+    </div>
+</form>
+
+
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Mã sinh viên</th>
+                        <th>Họ tên</th>
+                        <th>Kì</th>
+                        <th>Điểm trung bình</th>
+                        <th>Học bổng</th>
+
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var diem in Model)
+                        {
+                            <tr>
+                                <td>@diem.StudentID</td>
+                                <td>@diem.FullName</td>
+                                <td>@diem.SemesterName</td>
+                                <td>@diem.AverageScore</td>
+                                <td>@diem.HocBong</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+            </table>
+            @Html.PagedListPager(Model, page => Url.Action("DanhSachSinhVienDatHocBong", new { page, pageSize = ViewBag.PageSize }))
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        text-align: center;
+    }
+
+    .btn-container {
+        margin-left: 15px;
+    }
+
+    #dataTables-example_wrapper .dataTables_paginate {
+        margin-top: 20px;
+    }
+</style>
+

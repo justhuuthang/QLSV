@@ -1,41 +1,98 @@
-﻿using Microsoft.Ajax.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using test3.App_Start;
 using test3.Models;
+using PagedList;
 
 namespace test3.Controllers
 {
-    namespace test3.Controllers
+    public class HomeController : Controller
     {
-        public class HomeController : Controller
+        // GET: QLSV
+        QuanliSVEntities db = new QuanliSVEntities();
+        public ActionResult DashBoard(int? page, int? pageSize)
         {
-            
-            // GET: QLSV
-            QLSVController db = new QLSVController();
-            [Role_User]
-            public ActionResult DashBoard()
+            if (page == null)
             {
-                
-                return View(/*danhSachTinTuc*/); 
-                /*List<TinTuc> danhSachTinTuc = db.TinTucs.ToList();*/
-                
+                page = 1;
             }
-            public ActionResult LoiPhanQuyen() {
+            if (pageSize == null)
+            {
+                pageSize = 10;
+            }
+            var thongBao = db.Notifications.ToList();
+            return View(thongBao.ToPagedList((int)page, (int)pageSize));
+        }
+        public ActionResult LoiPhanQuyen() {
                 return View();
             }
-            /*public ActionResult Xoa(int id)
+
+            [HttpGet]
+            public ActionResult ThemMoiThongBao()
             {
-                QLSVController db = new QLSVController();
-                var tinTuc = db.TinTucs.Find(id);
-                db.TinTucs.Remove(tinTuc);
+                return View();
+            }
+
+            [HttpPost]
+            public ActionResult ThemMoiThongBao(Notification thongBao)
+            {
+                QuanliSVEntities db = new QuanliSVEntities();
+                db.Notifications.Add(thongBao);
                 db.SaveChanges();
                 return RedirectToAction("DashBoard");
-            }*/
+            }
 
+        [HttpGet]
+        public ActionResult Suathongtin(int id)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("DashBoard");
+            }
+
+            QuanliSVEntities db = new QuanliSVEntities();
+            var lop = db.Notifications.Find(id);
+
+            if (lop == null)
+            {
+                return RedirectToAction("DashBoard");
+            }
+
+            return View(lop);
         }
+
+        [HttpPost]
+        public ActionResult Suathongtin(Notification lop, string action)
+        {
+            QuanliSVEntities db = new QuanliSVEntities();
+            var existingClass = db.Notifications.Find(lop.NotificationID);
+
+            if (existingClass == null)
+            {
+                return RedirectToAction("DashBoard");
+            }
+
+            if (action == "Xóa")
+            {
+                db.Notifications.Remove(existingClass);
+                db.SaveChanges();
+
+                return RedirectToAction("DashBoard");
+            }
+            else if (action == "Sửa")
+            {
+                existingClass.NotificationName = lop.NotificationName;
+                existingClass.NotificationContent = lop.NotificationContent;
+                existingClass.Date = lop.Date;
+
+                db.SaveChanges();
+
+                return RedirectToAction("DashBoard");
+            }
+
+            return View(lop);
+        }
+
     }
-}
+    }

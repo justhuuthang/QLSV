@@ -1,4 +1,6 @@
-﻿@*@model List<test3.Models.TinTuc>*@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.Notification>
 @{
     ViewBag.Title = "DanhSachTinTuc";
     ViewBag.ac = 1;
@@ -14,24 +16,23 @@
                     <tr>
                         <th style="background-color: #e99856">ID</th>
                         <th style="background-color: #e99856">Tiêu đề</th>
-                        <th style="background-color: #e99856">Nội dung</th>
                         <th style="background-color: #e99856">Ngày</th>
-                        <th style="background-color: #e99856">Edit</th>
+                        <th style="background-color: #e99856">Nội dung</th>
                     </tr>
                 </thead>
-                @*<tbody>
+                <tbody>
                     @foreach (var tintuc in Model)
                     {
                         <tr>
-                            <td>@tintuc.Id</td>
-                            <td>@tintuc.TieuDe</td>
-                            <td>@tintuc.NoiDung</td>
-                            <td>@(tintuc.Ngay != null ? tintuc.Ngay.Value.ToString("dd/MM/yyyy") : "")</td>
-                            <td><a href="~/Home/Xoa?id=@tintuc.Id">Xóa</a></td>
+                            <td>@tintuc.NotificationID</td>
+                            <td>@tintuc.NotificationName</td>
+                            <td>@tintuc.Date.ToString("dd-MM-yyyy")</td>
+                            <td>@tintuc.NotificationContent</td>
                         </tr>
                     }
-                </tbody>*@
+                </tbody>
             </table>
         </div>
+        @Html.PagedListPager(Model, page => Url.Action("DashBoard", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>

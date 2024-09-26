@@ -1,0 +1,87 @@
+﻿
+@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<test3.Models.Semester>
+@{
+    ViewBag.ac = 13;
+}
+
+<h2>Danh sách học kì </h2>
+<!-- Advanced Tables -->
+<form action="/QLHK/Search" method="get">
+    <div class="form-group">
+        <div style="display: flex">
+            <select name="searchField" class="form-control" style="width: 30%;">
+                <option value="SemesterName" @(TempData["SearchField"] as string == "SemesterName" ? "selected" : "")>Học kì</option>
+            </select>
+            <input type="text" name="searchValue" value="@TempData["SearchValue"]" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+            @Html.ActionLink("Export", "ExportHocKi", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+        </div>
+    </div>
+</form>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Mã học kì </th>
+                        <th>Tên học kì </th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    <tbody>
+                        @foreach (var hocKi in Model)
+                        {
+                            <tr>
+                                <td>@hocKi.SemesterID</td>
+                                <td>@hocKi.SemesterName</td>
+
+                                <td>@hocKi.StartDate.ToString("dd/MM/yyyy")</td>
+
+                                <td>@hocKi.EndDate.ToString("dd/MM/yyyy") </td>
+                                <td>
+                                    <form id="deleteForm_@hocKi.SemesterID" action="~/QLHK/Xoa" method="post">
+                                        <input type="hidden" name="id" value="@hocKi.SemesterID" />
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@hocKi.SemesterID')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="~/QLHK/Suathongtin" method="get">
+                                        <input type="hidden" name="id" value="@hocKi.SemesterID" />
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-wrench" aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+
+            </table>
+        </div>
+        @Html.PagedListPager(Model, page => Url.Action("DanhSachHocKi", new { page, pageSize = ViewBag.PageSize }))
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(semesterID) {
+        Swal.fire({
+            title: 'Xác nhận xóa',
+            text: 'Bạn có chắc chắn muốn xóa học kì này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm_" + semesterID).submit();
+            }
+        });
+    }
+</script>

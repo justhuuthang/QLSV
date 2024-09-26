@@ -18,8 +18,10 @@ namespace test3.Models
         public int SemesterID { get; set; }
         public int GradeID { get; set; }
         public decimal AverageScore { get; set; }
+        public int ScholarshipID { get; set; }
     
         public virtual Grade Grade { get; set; }
+        public virtual Scholarship Scholarship { get; set; }
         public virtual Semester Semester { get; set; }
         public virtual Student Student { get; set; }
     }

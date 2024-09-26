@@ -5,15 +5,8 @@
 }
 
 <h2>Thông tin lớp</h2>
-<form action="/QLL/Suathongtin" method="post" class="form-horizontal">
+<form action="/QLHB/Suathongtin" method="post" class="form-horizontal">
     @Html.HiddenFor(model => model.ClassID)
-
-    <div class="form-group">
-        <label for="CLassID" class="col-md-2 control-label">Mã lớp:</label>
-        <div class="col-md-3">
-            <input type="text" name="ClassID" id="ClassID" class="form-control" value="@Model.ClassID" required>
-        </div>
-    </div>
 
     <div class="form-group">
         <label for="ClassName" class="col-md-2 control-label">Tên lớp:</label>
@@ -25,7 +18,7 @@
     <div class="form-group">
         <label for="StartDate" class="col-md-2 control-label">Ngày bắt đầu:</label>
         <div class="col-md-3">
-            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.StartDate)" required>
+            <input type="date" name="StartDate" id="StartDate" class="form-control" value="@String.Format("{0:yyyy-MM-dd}", Model.StartDate)" required />
         </div>
     </div>
 
@@ -39,26 +32,94 @@
     <div class="form-group">
         <label for="HeadTeacher" class="col-md-2 control-label">Giảng viên:</label>
         <div class="col-md-3">
-            <input type="text" name="HeadTeacher" id="HeadTeacher" class="form-control" value="@Model.HeadTeacher" required>
+            <input type="text" name="HeadTeacher" class="form-control" id="HeadTeacher" value="@Model.HeadTeacher" required>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="MaxStudents" class="col-md-2 control-label">Số lượng sinh viên:</label>
+        <label for="MaxStudents" class="col-md-2 control-label">Sinh viên tối đa:</label>
         <div class="col-md-3">
-            <input type="text" name="MaxStudents" id="MaxStudents" class="form-control" value="@Model.MaxStudents" required>
+            <input type="text" name="MaxStudents" class="form-control" id="MaxStudents" value="@Model.MaxStudents" required>
         </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="DepartmentID">Tên khoa:</label>
+        <div class="col-md-3">
+            @{
+                test3.Models.QuanliSVEntities db = new test3.Models.QuanliSVEntities();
+                List<test3.Models.Department> dsKhoa = db.Departments.ToList();
+            }
+
+            @Html.DropDownListFor(model => model.DepartmentID, new SelectList(dsKhoa, "DepartmentID", "DepartmentName"), "Chọn khoa...", new { @class = "form-control", id = "DepartmentID" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-3" id="error-message" style="color: red" ,font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif"></div>
     </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-3">
-
-            <input type="submit" name="action" value="Sửa" class="btn btn-primary btn-primary-margin">
-            <input type="submit" name="action" value="Xóa" class="btn btn-primary">
+            <input type="button" id="btn-sua" name="action" value="Sửa" class="btn btn-primary">
         </div>
     </div>
 
     <div>
-        @Html.ActionLink("Back to List", "DanhSachLop")
+        @Html.ActionLink("Back to List", "DanhSachHocBong")
     </div>
 </form>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    $(document).ready(function () {
+        $("#btn-sua").click(function () {
+            var startDate = new Date($("#StartDate").val());
+            var endDate = new Date($("#EndDate").val());
+
+            if (startDate > endDate) {
+                $("#error-message").text("Ngày kết thúc phải sau ngày bắt đầu.");
+                return;
+            }
+            var form = $('form')[0];
+            if (form.checkValidity() === false) {
+                form.reportValidity();
+                return;
+            }
+            var formData = new FormData(form);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: window.location.origin + '/QLL/Suathongtin',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Sửa thành công',
+                        text: 'Bạn có muốn quay trở lại danh sách lớp không?',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có',
+                        cancelButtonText: 'Không'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.origin + '/QLL/DanhSachLop';
+                        } else {
+                        }
+                    });
+                },
+
+                error: function (response) {
+                    if (response.responseText === "Tên lớp đã tồn tại.") {
+                        $("#error-message").text(response.responseText);
+                    } else {
+                        alert("Sửa thất bại");
+                    }
+                }
+            });
+        });
+    });
+
+</script>
+

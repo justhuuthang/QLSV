@@ -21,11 +21,11 @@ namespace test3.Models
         }
     
         public int GradeID { get; set; }
-        public Nullable<int> StudentID { get; set; }
-        public Nullable<int> CourseID { get; set; }
-        public Nullable<System.DateTime> ExamDate { get; set; }
-        public Nullable<int> SemesterID { get; set; }
-        public Nullable<decimal> ScoreScale10 { get; set; }
+        public int StudentID { get; set; }
+        public int CourseID { get; set; }
+        public System.DateTime ExamDate { get; set; }
+        public int SemesterID { get; set; }
+        public decimal ScoreScale10 { get; set; }
         public Nullable<decimal> ScoreScale4 { get; set; }
         public string LetterGrade { get; set; }
     

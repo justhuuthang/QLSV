@@ -3,7 +3,7 @@
 @using PagedList;
 @model IPagedList<test3.Models.Grade>
 @{
-    ViewBag.ac = 13;
+    ViewBag.ac = 10;
 }
 
 <h2>Danh sách điểm </h2>
@@ -17,19 +17,27 @@
                 <option value="SemesterID">Kì</option>
             </select>
             <input type="text" name="searchValue" class="form-control" placeholder="Nhập giá trị cần tìm kiếm" />
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-            @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px;" })
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+            @Html.ActionLink("Export", "ExportSinhVien", "Export", null, new { @class = "btn btn-primary", @style = "margin-left: 600px; margin-right: 5px;" })
+
+            <div style="display: inline-block;">
+                <button id="edit-toggle-btn" class="btn btn-primary" style="margin-left: 5px;">Sửa</button>
+            </div>
+
+
         </div>
     </div>
 </form>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <table class="table table-striped table-bordered table-hover" id="data-table">
                 <thead>
                     <tr>
-                        <th>Mã sinh viên</th>
-                        <th>Mã môn</th>
+                        <th>Mã điểm</th>
+                        <th>Mã sv</th>
+                        <th>Tên sinh viên</th>
+                        <th>Tên môn</th>
                         <th>Ngày thi</th>
                         <th>Kì</th>
                         <th>Điểm hệ 10</th>
@@ -44,15 +52,22 @@
                     <tbody>
                         @foreach (var diem in Model)
                         {
-                            <tr>
+                            <tr data-studentid="@diem.StudentID" data-courseid="@diem.CourseID" data-examdate="@diem.ExamDate" data-semestername="@diem.Semester.SemesterID" data-scalescore10="@diem.ScoreScale10" data-scalescore4="@diem.ScoreScale4" data-lettergrade="@diem.LetterGrade">
+                                <td>@diem.GradeID</td>
                                 <td>@diem.StudentID</td>
+                                <td>@diem.Student.FullName</td>
                                 <td>@diem.Cours.CourseName</td>
-                                <td>@(diem.ExamDate != null ? diem.ExamDate.Value.ToString("dd-MM-yyyy") : "")</td>
+                                <td>@diem.ExamDate.ToString("dd-MM-yyyy")
                                 <td>@diem.Semester.SemesterName</td>
-                                <td>@diem.ScoreScale10</td>
-                                <td>@diem.ScoreScale4</td>
-                                <td>@diem.LetterGrade</td>
-                                <td><a href="~/QLD/Suathongtin?id=@diem.GradeID">Xem</a></td>
+                                <td width ="150px" class="editable">
+                                    <input id="ScoreScale10_@diem.GradeID" class="form-control" name="ScoreScale10_@diem.GradeID" value="@diem.ScoreScale10" oninput="convertGrade(this)" readonly/>
+                                </td>
+                                <td width ="150px" class="editable">
+                                    <input id="ScoreScale4_@diem.GradeID" class="form-control" name="ScoreScale4_@diem.GradeID" value="@diem.ScoreScale4" readonly />
+                                </td>
+                                <td width ="150px" class="editable">
+                                    <input id="LetterGrade_@diem.GradeID" class="form-control" name="LetterGrade_@diem.GradeID" value="@diem.LetterGrade" readonly />
+                                </td>
                             </tr>
                         }
 
@@ -64,4 +79,90 @@
         @Html.PagedListPager(Model, page => Url.Action("DanhSachDiem", new { page, pageSize = ViewBag.PageSize }))
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#edit-toggle-btn').on('click', function () {
+            var buttonText = $(this).text();
+
+            if (buttonText === 'Sửa') {
+                $(this).text('Lưu');
+                $('.editable input[name^="ScoreScale10_"]').prop('readonly', false);
+                $('.editable').each(function () {
+                    $(this).addClass('edit-field');
+                });
+            } else {
+                $(this).text('Sửa');
+                var tableData = [];
+
+                $('#data-table tbody tr').each(function () {
+                    var rowData = {};
+
+                    rowData.StudentID = $(this).data('studentid');
+                    rowData.CourseID = $(this).data('courseid');
+                    rowData.ExamDate = $(this).data('examdate');
+                    rowData.SemesterName = $(this).data('semesterid');
+                    rowData.ScoreScale10 = $(this).find('.editable input[name^="ScoreScale10_"]').val();
+                    rowData.ScoreScale4 = $(this).find('.editable input[name^="ScoreScale4_"]').val();
+                    rowData.LetterGrade = $(this).find('.editable input[name^="LetterGrade_"]').val();
+                    tableData.push(rowData);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: window.location.origin + '/QLD/Suathongtin',
+                    data: { updatedData: tableData },
+                    success: function (response) {
+                        window.location.href = window.location.origin + '/QLD/DanhSachDiem';
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Lỗi khi cập nhật dữ liệu:", error);
+                    }
+                });
+
+                $('.editable').each(function () {
+                    $(this).prop('contenteditable', false);
+                    $(this).removeClass('edit-field');
+                });
+            }
+            return false;
+        });
+    });
+    function convertGrade(input) {
+        var grade10 = parseFloat(input.value);
+        var grade4;
+        var letterScore;
+        if (grade10 >= 8.5 && grade10 <= 10.0) {
+            grade4 = "4,0";
+            letterScore = "A";
+        } else if (grade10 >= 8.0 && grade10 < 8.5) {
+            grade4 = "3,5";
+            letterScore = "B+";
+        }else if (grade10 >= 7.0 && grade10 < 8.0) {
+            grade4 = "3,0";
+            letterScore = "B";
+        } else if (grade10 >= 6.5 && grade10 <= 6.9) {
+            grade4 = "2,5";
+            letterScore = "C+";
+        } else if (grade10 >= 5.5 && grade10 <= 6.4) {
+            grade4 = "2,0";
+            letterScore = "C";
+        } else if (grade10 >= 5.0 && grade10 <= 5.4) {
+            grade4 = "1,5";
+            letterScore = "D+";
+        } else if (grade10 >= 4.0 && grade10 < 5.0) {
+            grade4 = "1,0";
+            letterScore = "D";
+        } else {
+            grade4 = "0.0";
+            letterScore = "F";
+        }
+        var row = $(input).closest('tr');
+        var gradeID = row.find('td:first').text();
+        //console.log(gradeID);
+        document.getElementById('ScoreScale4_'+gradeID).value = grade4;
+        document.getElementById('LetterGrade_'+gradeID).value = letterScore;
+    }
+</script>
+
+
 

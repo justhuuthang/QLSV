@@ -11,16 +11,18 @@ using PagedList;
 using System.Data.Entity.Validation;
 using test3.App_Start;
 using System.Net;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace test3.Controllers
 {
     public class QLMHController : Controller
     {
-        // GET: QLSV
         QuanliSVEntities db = new QuanliSVEntities();
-        [Role_User(FunctionID = "Admin_XemDanhSach")]
-        public ActionResult ListSubjects(int? page, int? pageSize)
-        { 
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
+        public ActionResult DanhSachMonHoc(int? page, int? pageSize)
+        {
             if (page == null)
             {
                 page = 1;
@@ -29,114 +31,115 @@ namespace test3.Controllers
             {
                 pageSize = 10;
             }
-
             var monHoc = db.Courses.Include(c => c.Department).Include(c => c.Semester).ToList();
             return View(monHoc.ToPagedList((int)page, (int)pageSize));
+        }
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
+        [HttpGet]
+        public ActionResult Search(string searchField, string searchValue, int? page)
+        {
+            List<Cours> searchResults = new List<Cours>();
 
+            switch (searchField)
+            {
+                case "CourseName":
+                    searchResults = db.Courses
+                        .Where(s => s.CourseName.Contains(searchValue))
+                        .ToList();
+                    break;
+
+                case "SemesterName":
+                    searchResults = db.Courses
+                        .Where(s => s.Semester.SemesterName.Contains(searchValue))
+                        .ToList();
+                    break;
+
+                case "DepartmentName":
+                    searchResults = db.Courses
+                        .Where(s => s.Department.DepartmentName.Contains(searchValue))
+                        .ToList();
+                    break;
+
+                default:
+                    break;
+            }
+
+            TempData["SearchResults"] = searchResults;
+            TempData["SearchField"] = searchField;
+            TempData["SearchValue"] = searchValue;
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            IPagedList<Cours> pagedSearchResults = searchResults.ToPagedList(pageNumber, pageSize);
+
+            return View("DanhSachMonHoc", pagedSearchResults);
         }
 
-
-
-        [Role_User]
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
         [HttpGet]
-        public ActionResult AddNewSubject()
+        public ActionResult ThemMoiMonHoc()
         {
             return View();
         }
-
-
         [HttpPost]
-        public ActionResult AddNewSubject(Cours monHoc)
+        public ActionResult ThemMoiMonHoc(Cours monHoc)
         {
             string courseName = Request["CourseName"];
 
-            var existingStudent = db.Courses.FirstOrDefault(c => c.CourseName == courseName);
+            var existingCours = db.Courses.FirstOrDefault(s => s.CourseName == courseName);
 
-            if (existingStudent != null)
+            if (existingCours != null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content("Môn học đã tồn tại với tên này.");
+                return Content("Môn học đã tồn tại .");
             }
 
             db.Courses.Add(monHoc);
             db.SaveChanges();
-            return RedirectToAction("ListSubjects");
+            return RedirectToAction("DanhSachMonHoc");
         }
-
-
-
-
-
-
-
-
-        [Role_User]
+        /*[Role_User(FunctionID = "Admin_XemDanhSach")]*/
         [HttpGet]
-        public ActionResult Information(int id)
+        public ActionResult Suathongtin(int id)
         {
             if (id == 0)
             {
-                // Giá trị id không hợp lệ, xử lý theo ý của bạn, có thể chuyển hướng hoặc hiển thị thông báo lỗi
-                return RedirectToAction("ListSubjects");
+                return RedirectToAction("DanhSachMonHoc");
             }
 
             QuanliSVEntities db = new QuanliSVEntities();
-            var monHoc = db.Courses.Include(c => c.Department).Include(c => c.Semester).FirstOrDefault(c => c.CourseID == id);
+            var monHoc = db.Courses.Find(id);
 
             if (monHoc == null)
             {
-                // Sinh viên không tồn tại, xử lý theo ý của bạn, có thể chuyển hướng hoặc hiển thị thông báo lỗi
-                return RedirectToAction("ListSubjects");
+                return RedirectToAction("DanhSachMonHoc");
             }
-
-            ViewBag.KhoaCu = monHoc.DepartmentID;
-            ViewBag.LopCu = monHoc.ClassID;
             return View(monHoc);
         }
-
         [HttpPost]
-        public ActionResult Information(Cours monHoc, string action)
+        public ActionResult Suathongtin(Cours monHoc)
         {
             QuanliSVEntities db = new QuanliSVEntities();
-            var existingStudent = db.Courses.Find(monHoc.CourseID);
+            var existingCourse = db.Courses.FirstOrDefault(s => s.CourseID != monHoc.CourseID && s.CourseName == monHoc.CourseName);
 
-            if (existingStudent == null)
+            if (existingCourse != null)
             {
-                // Sinh viên không tồn tại, xử lý theo ý của bạn
-                return RedirectToAction("ListSubjects");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("Môn học đã tồn tại.");
             }
 
-            if (action == "Xóa")
-            {
-                // Xóa sinh viên
-                db.Courses.Remove(existingStudent);
-                db.SaveChanges();
-
-                return RedirectToAction("ListSubjects");
-            }
-            else if (action == "Sửa")
-            {
-                // Cập nhật thông tin sinh viên
-                existingStudent.CourseName = monHoc.CourseName;
-                existingStudent.Description = monHoc.Description;
-                existingStudent.Credits = monHoc.Credits;
-                existingStudent.DepartmentID = monHoc.DepartmentID;
-                existingStudent.SemesterID = monHoc.SemesterID;
-                existingStudent.ClassID = monHoc.ClassID;
-
-
-                // Lưu thay đổi vào cơ sở dữ liệu
-                db.SaveChanges();
-
-                return RedirectToAction("ListSubjects");
-            }
-
-            // Nếu không phải là "Sửa" hoặc "Xóa", quay lại View với dữ liệu nhập
-            return View(monHoc);
+            db.Entry(monHoc).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("DanhSachMonHoc");
         }
-
-        
-
+        public ActionResult Xoa(int id)
+        {
+            QuanliSVEntities db = new QuanliSVEntities();
+            var monHoc = db.Courses.Find(id);
+            db.Courses.Remove(monHoc);
+            db.SaveChanges();
+            return RedirectToAction("DanhSachMonHoc");
+        }
+   
 
 
     }

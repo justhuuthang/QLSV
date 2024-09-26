@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Import Students";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Import Students</h2>
+
+@using (Html.BeginForm("ImportStudents", "QLSV", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <label for="file">Select Excel File:</label>
+        <input type="file" name="file" id="file" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Import</button>
+}

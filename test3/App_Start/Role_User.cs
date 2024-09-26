@@ -12,17 +12,9 @@ namespace test3.App_Start
 {
     public class Role_User : AuthorizeAttribute
     {
-        QuanliSVEntities db =  new QuanliSVEntities();
-        public string FunctionID { get; set; }
-        /*public bool kiemtra(int accountID, string functionID)
-        {
-            var dem = db.Roles.Count(m => m.AccountID == accountID & m.FunctionID == functionID);
-            if (dem > 0)
-            {
-                return true;
-            }
-            else { return false; }
-        }*/
+        QuanliSVEntities db = new QuanliSVEntities();
+        public string Group { get; set; }
+
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             var user = SessionConfig.getUser();
@@ -35,20 +27,32 @@ namespace test3.App_Start
                 }));
                 return;
             }
-               if(string.IsNullOrEmpty(FunctionID) == false)
+
+            /*var userGroup = Group.Split(',');
+            bool hasValidFunction = false;
+
+            foreach (var userGroups in userGroup)
             {
-                var check = new role().kiemtra(user.UserID, FunctionID);
-                if(check == false)
+                if (!string.IsNullOrEmpty(userGroups))
                 {
-                    filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                    var check = new role().kiemtra(user.UserID, userGroups);
+                    if (check)
                     {
-                        controller = "Home",
-                        action = "LoiPhanQuyen"
-                    }));
-                    return;
+                        hasValidFunction = true;
+                        break;
+                    }
                 }
             }
-            return;
+            if (!hasValidFunction)
+            {
+                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                {
+                    controller = "Home",
+                    action = "LoiPhanQuyen"
+                }));
+                return;
+            }*/
         }
     }
+
 }
